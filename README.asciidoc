@@ -2,6 +2,14 @@
 Team 3161
 v0.1, 20 December 2014
 
+== WORK IN PROGRESS
+This repository is very barren! Please check back after the
+link:http://www.usfirst.org/roboticsprograms/frc/calendar/frc-kickoff-2015[FRC 2015 Kickoff Event]
+on 3 January 2015. At Kickoff, the new control systems update will be released,
+and shortly after we hope to be publishing a ported version of last year's
+library, provided as a ready-to-go Eclipse project with all of our sources, and
+pre-build binaries (JARs) available through our website as well.
+
 == What is this?
 Yggdrasil is the name of the reusable FRC Java libraries which FRC 3161 provides,
 free of charge and open to any usage (as permitted by the BSD 2-clause license),
