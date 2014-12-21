@@ -36,17 +36,9 @@ having a background thread monitor a limit switch to ensure that a motor
 controller shuts off, even if the main robot class' logic fails to check for
 this condition.
 
-As an example, 3161's 2014 main robot code is called Iapetus and is a subclass
-of ThreadedAutoRobot. Our major component groups include our shooting mechanism,
-encapsulated in the class Shooter, which is a subclass of Subsystem. This
-subsystem automatically takes care of ensuring that our winch does not overdraw,
-and that our arm maintains position using PID control. We also have a Subsystem
-that handles PID-corrected driving in autonomous mode, which is in PIDDrivetrain.
-This drivetrain continuously corrects itself to reach PID targets, while the
-autonomous script thread is able to request these targets and go to sleep until
-they are reached.
-
-image:doc/Yggdrasil.svg["Yggdrasil Diagram SVG",height=480]
+For an example of a complete FRC robot software project using an earlier (and
+no longer maintained) version of this library, please see
+link:https://github.com/FRC3161/Iapetus2014[Iapetus].
 
 == Other Libraries
 Late in the 2014 season, 3161 forked Team 254's
