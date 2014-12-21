@@ -1,4 +1,0 @@
-Yggdrasil
-=========
-
-FRC Java Library
