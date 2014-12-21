@@ -9,6 +9,10 @@ based upon the software developed by 3161 for the 2014 season. For more informat
 about the team, or the robot for which this code was originally written, please
 visit http://team3161.ca.
 
+Pre-built JARs, ready to be included directly into your own FRC Java projects, are
+available
+link:https://cloud.team3161.ca/download/yggdrasil/[here].
+
 == Introduction
 Yggdrasil is the name of the library which FRC 3161 uses and publishes for other
 teams to use as they please.
