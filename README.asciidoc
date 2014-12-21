@@ -50,7 +50,8 @@ source directory. These have been modified from Team 254's originally published
 versions.
 
 == Class Overview
-Javadocs for all of these classes are available link:doc/javadoc/index.html[here].
+Javadocs for all of these classes are available
+link:https://cdn.rawgit.com/FRC3161/Iapetus2014/master/doc/javadoc/index.html[here].
 
 === IO (ca.team3161.lib.utils.io)
 File and DriverStation IO classes
