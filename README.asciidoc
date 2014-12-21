@@ -7,7 +7,7 @@ Yggdrasil is the name of the reusable FRC Java libraries which FRC 3161 provides
 free of charge and open to any usage (as permitted by the BSD 2-clause license),
 based upon the software developed by 3161 for the 2014 season. For more information
 about the team, or the robot for which this code was originally written, please
-visit http://team3161.ca.
+visit link:http://team3161.ca[3161's Homepage].
 
 Pre-built JARs, ready to be included directly into your own FRC Java projects, are
 available
