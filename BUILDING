@@ -1,0 +1,9 @@
+For building this library standalone, rather than using Eclipse and the default
+Ant XML build file, simply use the provided 'library-build.xml'.
+
+Dependencies:
+- Java 8-compatible JDK
+- FRC 2015+ Java Libraries
+- Apache Ant (build)
+- Asciidoctor (documentation generation, optional)
+That's all!
