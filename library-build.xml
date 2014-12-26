@@ -31,6 +31,8 @@
 
   <target name="docs" depends="init"
           description="generate documentation" >
+      <mkdir dir="${doc}"/>
+      <mkdir dir="${javadoc-dir}"/>
       <javadoc sourcepath="${src}" destdir="${javadoc-dir}" source="8">
         <classpath>
           <pathelement path="${classpath}"/>
