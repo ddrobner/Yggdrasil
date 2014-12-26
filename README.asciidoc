@@ -20,6 +20,13 @@ visit link:http://team3161.ca[3161's Homepage].
 Pre-built JARs, ready to be included directly into your own FRC Java projects, are
 available
 link:https://cloud.team3161.ca/download/yggdrasil/[here].
+Build status (and alternative download links) are available
+link:http://cloud.team3161.ca:8080/dashboard[here]. Note that CruiseControl seems
+a bit buggy and reports Yggdrasil as 'Discontinued' - this is not the case, Yggdrasil
+is certainly in development and builds are planned to be made available very shortly
+after any changes are made. 'Release' builds will be made available through the first
+direct download link, rather than through CruiseControl, and will be named with
+-RELEASE included in the JAR name.
 
 == Introduction
 Yggdrasil is the name of the library which FRC 3161 uses and publishes for other
