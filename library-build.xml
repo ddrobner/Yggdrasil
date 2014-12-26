@@ -42,7 +42,7 @@
         </classpath>
       </javadoc>
       <exec executable="asciidoctor">
-        <arg line="README.asciidoc -D doc/"/>
+        <arg line="-D doc/ README.asciidoc"/>
       </exec>
   </target>
 
