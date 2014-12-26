@@ -54,6 +54,12 @@
     <jar jarfile="${dist}/lib/${ant.project.name}-${DSTAMP}-${TSTAMP}.jar" basedir="${build}"/>
   </target>
 
+  <target name="release" depends="dist"
+          description="generate the distribution, but tag the JAR as -RELEASE" >
+      <mkdir dir="${dist}/lib"/>
+      <jar jarfile="${dist}/lib/${ant.project.name}-${DSTAMP}-RELEASE.jar" basedir="${build}"/>
+  </target>
+
   <target name="clean"
         description="clean up" >
     <!-- Delete the ${build} and ${dist} directory trees -->
