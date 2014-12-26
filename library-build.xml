@@ -6,6 +6,8 @@
   <property name="src" location="src"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
+  <property name="doc"   location="doc"/>
+  <property name="javadoc-dir" location="${doc}/javadoc"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -27,7 +29,22 @@
     </javac>
   </target>
 
-  <target name="dist" depends="compile"
+  <target name="docs" depends="init"
+          description="generate documentation" >
+      <javadoc sourcepath="${src}" destdir="${javadoc-dir}" source="8">
+        <classpath>
+          <pathelement path="${classpath}"/>
+          <pathelement location="lib/squawk.jar"/>
+          <pathelement location="lib/wpilibj.jar"/>
+          <pathelement location="lib/networktables-crio.jar"/>
+        </classpath>
+      </javadoc>
+      <exec executable="asciidoctor">
+        <arg line="README.asciidoctor -D doc/"/>
+      </exec>
+  </target>
+
+  <target name="dist" depends="compile,docs"
         description="generate the distribution" >
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
@@ -41,5 +58,6 @@
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
+    <delete dir="${javadoc-dir}"/>
   </target>
 </project>
