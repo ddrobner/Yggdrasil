@@ -20,7 +20,7 @@ visit link:http://team3161.ca[3161's Homepage].
 
 Pre-built JARs, ready to be included directly into your own FRC Java projects, are
 available
-link:https://cloud.team3161.ca/download/yggdrasil/[here].
+link:http://cloud.team3161.ca/download/yggdrasil/[here].
 Build status (and alternative download links) are available
 link:http://cloud.team3161.ca:8080/dashboard[here]. Note that CruiseControl seems
 a bit buggy and reports Yggdrasil as 'Discontinued' - this is not the case, Yggdrasil
