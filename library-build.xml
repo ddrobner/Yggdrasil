@@ -65,13 +65,7 @@
             <property name="dist-suffix" value="-${DSTAMP}-${TSTAMP}"/>
         </then>
         <else>
-            <propertyregex
-                    property="git.tag"
-                    input="${git.tagstring}"
-                    regexp="tags\/(.*)"
-                    select="\1"
-                    casesensitive="false" />
-            <property name="dist-suffix" value="-${git.tag}-RELEASE"/>
+            <property name="dist-suffix" value="-${git.tagstring}-RELEASE"/>
         </else>
     </if>
 
