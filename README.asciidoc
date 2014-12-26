@@ -70,7 +70,7 @@ versions.
 
 == Class Overview
 Javadocs for all of these classes are available
-link:http://cloud.team3161.ca/download/yggdrasil/release/latest/doc/javadoc[here
+link:http://cloud.team3161.ca/download/yggdrasil/release/latest/javadoc[here
 (latest release - click here if viewing this page on GitHub or from 3161's homepage)] or
 link:./javadoc/index.html[here (the current build you're in -
 click here if viewing this page through CruiseControl)].
