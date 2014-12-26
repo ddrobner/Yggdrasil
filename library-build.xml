@@ -55,14 +55,27 @@
         description="generate the distribution" >
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
+    <exec executable="git" outputproperty="git.tagstring">
+        <arg line="describe --exact-match HEAD"/>
+    </exec>
 
-    <jar jarfile="${dist}/lib/${ant.project.name}-${DSTAMP}-${TSTAMP}.jar" basedir="${build}"/>
-  </target>
+    <if>
+        <contains string="${git.tagstring}" substring="No names found"/>
+        <then>
+            <property name="dist-suffix" value="-${DSTAMP}-${TSTAMP}"/>
+        </then>
+        <else>
+            <propertyregex
+                    property="git.tag"
+                    input="${git.tagstring}"
+                    regexp="tags\/(.*)"
+                    select="\1"
+                    casesensitive="false" />
+            <property name="dist-suffix" value="-${git.tag}-RELEASE"/>
+        </else>
+    </if>
 
-  <target name="release" depends="dist"
-          description="generate the distribution, but tag the JAR as -RELEASE" >
-      <mkdir dir="${dist}/lib"/>
-      <jar jarfile="${dist}/lib/${ant.project.name}-${DSTAMP}-RELEASE.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}.jar" basedir="${build}"/>
   </target>
 
   <target name="clean"
