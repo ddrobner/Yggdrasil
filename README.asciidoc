@@ -39,6 +39,17 @@ such class has at least skeleton documentation explaining its purpose, but for
 ease of reference and a high-level overview, this document will explain the
 concepts behind the Yggdrasil libraries.
 
+== QuickStart
+
+=== Download
+See
+link:http://cloud.team3161.ca/download/yggdrasil/latest[here] for the latest release
+downloads.
+
+=== Documentation
+Javadoc documentation for the latest release is available
+link:http://cloud.team3161.ca/download/yggdrasil/latest/javadoc[here].
+
 == Design
 The design intended by these libraries are a main robot class, subclassed
 from ThreadedAutoRobot, which defines the robot's behaviour in autonomous,
