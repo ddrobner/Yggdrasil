@@ -1,6 +1,7 @@
 = Yggdrasil
 Team 3161
 v0.1, 20 December 2014
+:sectanchors:
 
 == WORK IN PROGRESS
 This repository is very barren! Please check back after the
