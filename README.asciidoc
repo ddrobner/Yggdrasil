@@ -70,7 +70,9 @@ versions.
 
 == Class Overview
 Javadocs for all of these classes are available
-link:https://cdn.rawgit.com/FRC3161/Iapetus2014/master/doc/javadoc/index.html[here].
+link:https://cdn.rawgit.com/FRC3161/Iapetus2014/master/doc/javadoc/index.html[here
+(latest - click here if viewing this page on GitHub)] or
+link:./javadoc/index.html[here (click here if viewing this page through CruiseControl)].
 
 === IO (ca.team3161.lib.utils.io)
 File and DriverStation IO classes
