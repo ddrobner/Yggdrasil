@@ -1,4 +1,9 @@
 <project name="Yggdrasil" default="dist" basedir=".">
+    <taskdef resource="net/sf/antcontrib/antlib.xml">
+      <classpath>
+          <pathelement location="${basedir}/antlib/ant-contrib/ant-contrib-1.0b3.jar"/>
+      </classpath>
+    </taskdef>
     <description>
         Apache Ant build file for Yggdrasil
     </description>
