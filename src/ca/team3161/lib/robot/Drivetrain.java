@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * * Redistributions of source code must retain the above copyright notice, this
 *   list of conditions and the following disclaimer.
-* 
+*
 * * Redistributions in binary form must reproduce the above copyright notice, this
 *   list of conditions and the following disclaimer in the documentation and/or
 *   other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -37,7 +37,7 @@ import java.util.Vector;
 public class Drivetrain implements SpeedController {
     private final Vector motorControllers;
     private float inversion = 1.0f;
-    
+
     /**
      * Create a new Drivetrain instance
      * @param controllerArray an array of SpeedController objects. May be
@@ -54,7 +54,7 @@ public class Drivetrain implements SpeedController {
             motorControllers.addElement(controllerArray[i]);
         }
     }
-    
+
     /**
      * Invert all PWM values for this Drivetrain.
      * @param inverted whether the PWM values should be inverted or not
@@ -68,7 +68,7 @@ public class Drivetrain implements SpeedController {
         }
         return this;
     }
-    
+
     /**
      * The current speed of this Drivetrain
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
@@ -94,7 +94,7 @@ public class Drivetrain implements SpeedController {
         }
         return result;
     }
-    
+
     /**
      * Set the pwm value (-1.0 to 1.0)
      * @param pwm the PWM value to assign to each SpeedController in the collection
@@ -108,11 +108,11 @@ public class Drivetrain implements SpeedController {
             controller.set(inversion * pwm);
         }
     }
-    
+
     /**
      * Don't use this!
      * @param pwm the PWM value to assign to each SpeedController in the collection
-     * @param syncGroup
+     * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
     public void set(double pwm, final byte syncGroup) {
         // PWM value must be between -1 and 1
@@ -123,7 +123,7 @@ public class Drivetrain implements SpeedController {
             controller.set(inversion * pwm, syncGroup);
         }
     }
-    
+
     /**
      * Disable each SpeedController in the collection
      */
@@ -134,10 +134,10 @@ public class Drivetrain implements SpeedController {
             controller.disable();
         }
     }
-    
+
     /**
      * Call pidWrite on each SpeedController in this collection
-     * @param output 
+     * @param output Set the output to the value calculated by PIDController
      */
     public void pidWrite(final double output) {
         final Enumeration e = motorControllers.elements();

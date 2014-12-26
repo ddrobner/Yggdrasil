@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * * Redistributions of source code must retain the above copyright notice, this
 *   list of conditions and the following disclaimer.
-* 
+*
 * * Redistributions in binary form must reproduce the above copyright notice, this
 *   list of conditions and the following disclaimer in the documentation and/or
 *   other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -32,19 +32,19 @@ import edu.wpi.first.wpilibj.GenericHID;
  * and deadzone
  */
 public class Joystick {
-    
+
     private JoystickMode mode;
     private float inversion;
     private final float DEADZONE;
     private final GenericHID backingHID;
-    
+
     /**
      * @param port which USB port this is plugged into, as reported by the Driver Station
      */
     public Joystick(final int port) {
         this(port, 0.0f);
     }
-    
+
     /**
      * @param port which USB port this is plugged into, as reported by the Driver Station
      * @param deadzone Axis values less than this in absolute value will be ignored
@@ -52,7 +52,7 @@ public class Joystick {
     public Joystick(final int port, final float deadzone) {
         this(port, deadzone, new LinearJoystickMode());
     }
-    
+
     /**
      * @param port which USB port this is plugged into, as reported by the Driver Station
      * @param deadzone Axis values less than this in absolute value will be ignored
@@ -64,7 +64,7 @@ public class Joystick {
         this.DEADZONE = deadzone;
         this.mode = mode;
     }
-    
+
     /**
      * Invert the Y-Axis of this Joystick
      * @param inverted if the Y-Axis should be inverted
@@ -76,15 +76,15 @@ public class Joystick {
             inversion = 1.0f;
         }
     }
-    
+
     /**
      * Set the JoystickMode after the Joystick has already been constructed
-     * @param mode
+     * @param mode the mode for the Joystick (linear curve, squared curve, etc)
      */
     public void setMode(final JoystickMode mode) {
         this.mode = mode;
     }
-    
+
     /**
      * Get the X-axis reading from this Joystick
      * @return the value
@@ -95,7 +95,7 @@ public class Joystick {
         }
         return mode.adjust(backingHID.getX());
     }
-    
+
     /**
      * Get the Y-axis reading from this Joystick
      * @return the value
@@ -106,7 +106,7 @@ public class Joystick {
         }
         return inversion * mode.adjust(backingHID.getY());
     }
-    
+
     /**
      * Check if a button is pressed
      * @param button identifier for the button to check
@@ -115,7 +115,7 @@ public class Joystick {
     public boolean getButton(final int button) {
         return backingHID.getRawButton(button);
     }
-    
+
     /**
      * Get an arbitrary axis reading from this Joystick
      * @param axis identifier for the axis to check
@@ -124,5 +124,5 @@ public class Joystick {
     public double getRawAxis(final int axis) {
         return backingHID.getRawAxis(axis);
     }
-    
+
 }

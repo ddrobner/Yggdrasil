@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * * Redistributions of source code must retain the above copyright notice, this
 *   list of conditions and the following disclaimer.
-* 
+*
 * * Redistributions in binary form must reproduce the above copyright notice, this
 *   list of conditions and the following disclaimer in the documentation and/or
 *   other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -35,17 +35,17 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * checking Timer objects.
  */
 public abstract class ThreadedAutoRobot extends IterativeRobot {
-    
+
     private static final int MAX_AUTO_PERIOD_LENGTH = GameConstants.AUTONOMOUS.SECONDS * 1000;
     private volatile int accumulatedTime = 0;
     private final Object modeLock = new Object();
     private Thread autoThread;
-    
+
     /**
      * The DriverStation virtual LCD display panel instance
      */
     protected final DriverStationLCD dsLcd = DriverStationLCD.getInstance();
-    
+
     /** DO NOT override this in subclasses!
      * At the start of the autonomous period, spawn and start a new Thread
      * using the behaviour described in the concrete subclass implementation's
@@ -72,21 +72,21 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
         }, "AUTO THREAD");
         autoThread.start();
     }
-    
+
     /**
     * IterativeRobot defines this, but we do not want it to be possible for anything
     * but teleopThreadsafe to be used during teleop. We can't remove or hide it,
     * so we make it empty and final instead.
     */
     public final void teleopContinuous() { }
-    
+
     /**
      * Add a delay to the autonomous routine.
      * This also ensures that the autonomous routine does not continue
      * to run after the FMS notifies us that the autonomous period
      * has ended.
-     * @param millis
-     * @throws InterruptedException 
+     * @param millis how many milliseconds to wait for (approximate)
+     * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
     public final void waitFor(long millis) throws InterruptedException {
         accumulatedTime += millis;
@@ -98,7 +98,7 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
             throw new InterruptedException("Auto is over!");
         }
     }
-    
+
     /**
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
@@ -112,12 +112,12 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
             teleopThreadsafe();
         }
     }
-    
+
     /**
      * Called once when the robot enters the teleop mode.
      */
     public abstract void teleopInit();
-    
+
     /**
      * Periodically called during robot teleop mode to enable operator control.
      * This is the only way teleop mode should be handled - do not directly call
@@ -129,7 +129,7 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
 
     /**
      * The one-shot autonomous "script" to be run in a new Thread
-     * @throws Exception
+     * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
      */
     public abstract void autonomousThreaded() throws Exception;
 }

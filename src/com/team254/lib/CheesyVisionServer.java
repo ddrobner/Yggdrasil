@@ -27,8 +27,8 @@ public class CheesyVisionServer {
      * Providing a port number is only effective upon the first invocation of
      * this method. Subsequent calls to getInstance() effectively ignore the
      * parameter.
-     * @param port
-     * @return 
+     * @param port the port to (attempt to) open a socket on
+     * @return the vision server instance
      */
     public static synchronized CheesyVisionServer getInstance(final int port) {
         if (INSTANCE == null) {
@@ -61,7 +61,7 @@ public class CheesyVisionServer {
         if (!counting) {
             return;
         }
-        
+
         if (left) {
             ++leftCount;
         }
@@ -148,7 +148,7 @@ public class CheesyVisionServer {
             }
         }
     }
-    
+
     private class ServerTask implements Runnable {
         // This method listens for incoming connections and spawns new
         // VisionServerConnectionHandlers to handle them

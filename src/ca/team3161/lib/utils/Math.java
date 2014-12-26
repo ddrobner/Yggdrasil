@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  * * Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
- * 
+ *
  * * Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -31,8 +31,8 @@ public class Math {
      * for doubles, with 5-12% usual error margin (extreme cases up to 25%). BE
      * AWARE THAT THIS IS NOT VERY PRECISE!
      *
-     * @param base
-     * @param exponent
+     * @param base the number to be raised to a power
+     * @param exponent the power to raise 'base' to
      * @return result
      */
     public static double fastPow1(final double base, final double exponent) {
@@ -46,8 +46,8 @@ public class Math {
      * exponentiation for doubles, with slightly different errors than fastPow1
      * but potentially even faster.
      *
-     * @param base
-     * @param exponent
+     * @param base the number to be raised to a power
+     * @param exponent the power to raise 'base' to
      * @return result
      */
     public static double fastPow2(final double base, final double exponent) {
@@ -59,8 +59,8 @@ public class Math {
     /**
      * Naive implementation of Math.pow for integers
      *
-     * @param base
-     * @param exponent
+     * @param base the number to be raised to a power
+     * @param exponent the power to raise 'base' to
      * @return the result. Returns -1 if exponent was negative
      */
     public static long pow(final int base, int exponent) {
@@ -78,8 +78,8 @@ public class Math {
     /**
      * Naive implementation of Math.pow for floats
      *
-     * @param base
-     * @param exponent
+     * @param base the number to be raised to a power
+     * @param exponent the power to raise 'base' to
      * @return the result. Returns -1 if exponent was negative
      */
     public static float pow(final float base, int exponent) {
@@ -97,8 +97,8 @@ public class Math {
     /**
      * Naive implementation of Math.pow for doubles
      *
-     * @param base
-     * @param exponent
+     * @param base the number to be raised to a power
+     * @param exponent the power to raise 'base' to
      * @return the result. Returns -1 if exponent was negative
      */
     public static double pow(final double base, int exponent) {
@@ -116,7 +116,7 @@ public class Math {
     /**
      * Bit-level hackery. Fast implementation that approximates ln (log base e)
      * imprecisely, but maybe precise enough?
-     * @param val
+     * @param val the number for which to compute the natural logarithm
      * @return the result
      */
     public double ln(double val) {
