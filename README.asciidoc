@@ -28,6 +28,8 @@ after any changes are made. 'Release' builds will be made available through the 
 direct download link, rather than through CruiseControl, and will be named with
 -RELEASE included in the JAR name.
 
+Development for Yggdrasil happens on link:https://github.com/FRC3161/Yggdrasil[our GitHub].
+
 == Introduction
 Yggdrasil is the name of the library which FRC 3161 uses and publishes for other
 teams to use as they please.
@@ -49,6 +51,13 @@ downloads.
 === Documentation
 Javadoc documentation for the latest release is available
 link:http://cloud.team3161.ca/download/yggdrasil/latest/javadoc[here].
+
+=== Development
+Do you want to help contribute to Yggdrasil? Awesome! Please visit our
+link:https://github.com/FRC3161/Yggdrasil[GitHub]. From there you can fork Yggdrasil,
+make changes to your copy, and submit pull requests. Please give us your name and
+team number (if applicable) when you submit your pull request so we can give you
+proper credit!
 
 == Design
 The design intended by these libraries are a main robot class, subclassed
