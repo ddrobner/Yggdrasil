@@ -86,6 +86,9 @@ link:http://cloud.team3161.ca/download/yggdrasil/release/latest/javadoc[here
 link:./javadoc/index.html[here (the current build you're in -
 click here if viewing this page through CruiseControl)].
 
+//// TODO: remove these descriptions from this README and move them solely
+//// into the javadocs
+
 === IO (ca.team3161.lib.utils.io)
 File and DriverStation IO classes
 
