@@ -48,7 +48,7 @@ link:http://cloud.team3161.ca/download/yggdrasil/latest[here] for the latest rel
 downloads.
 
 === Documentation
-Javadoc documentation for the latest release is available
+Javadoc documentation for the latest release is available online
 link:http://cloud.team3161.ca/download/yggdrasil/latest/javadoc[here].
 
 === Development
