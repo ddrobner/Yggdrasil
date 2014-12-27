@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * * Redistributions of source code must retain the above copyright notice, this
 *   list of conditions and the following disclaimer.
-* 
+*
 * * Redistributions in binary form must reproduce the above copyright notice, this
 *   list of conditions and the following disclaimer in the documentation and/or
 *   other materials provided with the distribution.
-* 
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -41,7 +41,7 @@ public class Assert {
             throw new AssertionException();
         }
     }
-    
+
     /**
      * Assert a condition is true
      * @param reason why the condition should hold
@@ -60,7 +60,7 @@ public class Assert {
     public static void assertFalse(boolean condition) {
         assertTrue(!condition);
     }
-    
+
     /**
      * Assert a condition is false
      * @param reason why the condition should not hold
@@ -69,7 +69,7 @@ public class Assert {
     public static void assertFalse(String reason, boolean condition) {
         assertTrue(reason, !condition);
     }
-    
+
     /**
      * Assert a reference is not null
      * @param obj throw an exception if this reference is null
@@ -79,7 +79,7 @@ public class Assert {
             throw new NullPointerException();
         }
     }
-    
+
     /**
      * Assert a reference is not null
      * @param reason why the reference cannot be null
@@ -92,8 +92,11 @@ public class Assert {
     }
 
     /**
-     * Really just a RuntimeException in disguise (more immediately obvious
-     * name to appear in stack traces)
+     * Indicates that an Assert statement has failed. This is intended to cause
+     * a crash and halt your robot code, leaving the cRIO/RoboRIO responsible for
+     * stopping all motor controllers, relays, etc. If you ever find yourself
+     * using a try/catch to catch an AssertionException, this is a very strong
+     * indicator that you are using Assert incorrectly.
      */
     public static class AssertionException extends RuntimeException {
 

@@ -1,16 +1,16 @@
 /* Copyright (c) 2014, FRC3161
 * All rights reserved.
-* 
+*
 * Redistribution and use in source and binary forms, with or without modification,
 * are permitted provided that the following conditions are met:
-* 
+*
 * * Redistributions of source code must retain the above copyright notice, this
 *   list of conditions and the following disclaimer.
-* 
+*
 * * Redistributions in binary form must reproduce the above copyright notice, this
 *   list of conditions and the following disclaimer in the documentation and/or
-*   other materials provided with the distribution. 
-* 
+*   other materials provided with the distribution.
+*
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -25,8 +25,16 @@
 
 package ca.team3161.lib.utils.controls;
 
+/**
+ * A JoystickMode which squares the Joystick's raw input, but preserves
+ * sign.
+ * 0.5 on an axis becomes 0.25, for example, but -0.5 becomes -0.25.
+ */
 public class SquaredJoystickMode implements JoystickMode {
-    
+
+    /**
+     * {@inheritDoc}
+     */
     public double adjust(final double raw) {
         final double negate;
         if (raw < 0.0d) {
@@ -36,5 +44,5 @@ public class SquaredJoystickMode implements JoystickMode {
         }
         return negate * Math.abs(raw * raw);
     }
-    
+
 }
