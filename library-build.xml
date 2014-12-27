@@ -70,6 +70,14 @@
     </if>
 
     <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}-javadoc.jar" basedir="${javadoc-dir}"/>
+    <zip destfile="${dist}/lib/${ant.project.name}${dist-suffix}-all.zip" whenempty="fail" duplicate="fail">
+        <fileset dir="${dist}/lib"/>
+        <fileset file="LICENSE"/>
+        <fileset file="README.asciidoc"/>
+        <fileset file="${doc}/README.html"/>
+        <fileset file="definitelynotreal"/>
+    </zip>
   </target>
 
   <target name="clean"
