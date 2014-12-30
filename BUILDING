@@ -1,5 +1,4 @@
-For building this library standalone, rather than using Eclipse and the default
-Ant XML build file, simply use the provided 'library-build.xml'.
+To build this library, simply invoke 'ant'.
 
 Dependencies:
 - Java 8-compatible JDK
