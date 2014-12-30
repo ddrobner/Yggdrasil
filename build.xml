@@ -60,7 +60,10 @@
     </exec>
 
     <if>
-        <contains string="${git.tagstring}" substring="No names found"/>
+        <or>
+            <contains string="${git.tagstring}" substring="No names found"/>
+            <contains string="${git.tagstring}" substring="fatal"/>
+        </or>
         <then>
             <property name="dist-suffix" value="-${DSTAMP}-${TSTAMP}"/>
         </then>
