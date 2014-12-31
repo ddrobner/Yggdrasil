@@ -29,6 +29,8 @@ package ca.team3161.lib.utils.controls;
  * Interface for "Mode" objects which apply some function to a Joystick's input.
  * Examples include squaring the raw input values from the Joystick so that, for
  * example, a raw reading of 0.5 on the X axis will instead read out as 0.25.
+ * Implementing a JoystickMode is also how one might handle setting an input
+ * deadband on their Joysticks.
  */
 public interface JoystickMode {
 

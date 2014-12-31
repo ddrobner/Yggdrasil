@@ -28,89 +28,89 @@ package ca.team3161.lib.utils.controls;
 import edu.wpi.first.wpilibj.GenericHID;
 
 /**
- * A thin wrapper over the FRC Joystick class, with built-in Y-axis inversion
- * and deadzone
+ * A thin wrapper over the FRC Joystick class, configurable with per-axis filtering "modes"
  */
 public class Joystick {
 
-    private JoystickMode mode;
-    private float inversion;
-    private final float DEADZONE;
     private final GenericHID backingHID;
+    private JoystickMode xAxisMode = new LinearJoystickMode();
+    private JoystickMode yAxisMode = new LinearJoystickMode();
 
     /**
-     * @param port which USB port this is plugged into, as reported by the Driver Station
+     * Construct a new Joystick, using simple LinearJoystickModes for both axes
+     * @param port the port the Joystick is plugged into
      */
     public Joystick(final int port) {
-        this(port, 0.0f);
+        this(port, new LinearJoystickMode(), new LinearJoystickMode());
     }
 
     /**
-     * @param port which USB port this is plugged into, as reported by the Driver Station
-     * @param deadzone Axis values less than this in absolute value will be ignored
+     * Construct a new Joystick
+     * @param port the port the Joystick is plugged into. Must be non-negative.
+     * @param xAxisMode the mode for the X axis. Must not be null.
+     * @param yAxisMode the mode for the Y axis. Must not be null.
      */
-    public Joystick(final int port, final float deadzone) {
-        this(port, deadzone, new LinearJoystickMode());
-    }
-
-    /**
-     * @param port which USB port this is plugged into, as reported by the Driver Station
-     * @param deadzone Axis values less than this in absolute value will be ignored
-     * @param mode the joystick input scaling mode
-     */
-    public Joystick(final int port, final float deadzone, final JoystickMode mode) {
-        this.backingHID = new edu.wpi.first.wpilibj.Joystick(port);
-        this.inversion = 1.0f;
-        this.DEADZONE = deadzone;
-        this.mode = mode;
-    }
-
-    /**
-     * Invert the Y-Axis of this Joystick
-     * @param inverted if the Y-Axis should be inverted
-     */
-    public void setInverted(final boolean inverted) {
-        if (inverted) {
-            inversion = -1.0f;
-        } else {
-            inversion = 1.0f;
+    public  Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
+        if (port < 0) {
+            throw new IllegalArgumentException("Port cannot be negative, was: " + Integer.toString(port));
         }
+        if (xAxisMode == null) {
+            throw new NullPointerException("JoystickModes cannot be null - received null X axis mode");
+        }
+        if (yAxisMode == null) {
+            throw new NullPointerException("JoystickModes cannot be null - received null Y axis mode");
+        }
+        this.backingHID = new edu.wpi.first.wpilibj.Joystick(port);
+        this.xAxisMode = xAxisMode;
+        this.yAxisMode = yAxisMode;
     }
 
     /**
-     * Set the JoystickMode after the Joystick has already been constructed
-     * @param mode the mode for the Joystick (linear curve, squared curve, etc)
+     * Set the JoystickMode for the X axis, after the Joystick has already been constructed
+     * @param xAxisMode the mode for the Joystick X axis (linear curve, squared curve, etc)
      */
-    public void setMode(final JoystickMode mode) {
-        this.mode = mode;
+    public void setXAxisMode(final JoystickMode xAxisMode) {
+        if (xAxisMode == null) {
+            throw new NullPointerException();
+        }
+        this.xAxisMode = xAxisMode;
+    }
+
+
+    /**
+     * Set the JoystickMode for the X axis, after the Joystick has already been constructed
+     * @param yAxisMode the mode for the Joystick Y axis (linear curve, squared curve, etc)
+     */
+    public void setYAxisMode(final JoystickMode yAxisMode) {
+        if (yAxisMode == null) {
+            throw new NullPointerException();
+        }
+        this.yAxisMode = yAxisMode;
     }
 
     /**
-     * Get the X-axis reading from this Joystick
+     * Get the X-axis reading from this Joystick, adjusted by the xAxisMode
      * @return the value
+     * @see ca.team3161.lib.utils.controls.Joystick#setXAxisMode(JoystickMode)
      */
     public double getX() {
-        if (Math.abs(backingHID.getX()) < DEADZONE) {
-            return 0.0;
-        }
-        return mode.adjust(backingHID.getX());
+        return xAxisMode.adjust(backingHID.getX());
     }
 
     /**
-     * Get the Y-axis reading from this Joystick
+     * Get the Y-axis reading from this Joystick, adjusted by the yAxisMode
      * @return the value
+     * @see ca.team3161.lib.utils.controls.Joystick#setYAxisMode(JoystickMode)
      */
     public double getY() {
-        if (Math.abs(backingHID.getY()) < DEADZONE) {
-            return 0.0;
-        }
-        return inversion * mode.adjust(backingHID.getY());
+        return yAxisMode.adjust(backingHID.getY());
     }
 
     /**
      * Check if a button is pressed
      * @param button identifier for the button to check
      * @return the button's pressed state
+     * @see edu.wpi.first.wpilibj.Joystick#getRawButton(int)
      */
     public boolean getButton(final int button) {
         return backingHID.getRawButton(button);
@@ -120,9 +120,18 @@ public class Joystick {
      * Get an arbitrary axis reading from this Joystick
      * @param axis identifier for the axis to check
      * @return the value
+     * @see edu.wpi.first.wpilibj.Joystick#getRawAxis(int)
      */
     public double getRawAxis(final int axis) {
         return backingHID.getRawAxis(axis);
+    }
+
+    /**
+     * Get the FRC/WPI-library Generic Human Interface Device which this Joystick wraps
+     * @return the backing HID
+     */
+    public GenericHID getBackingHID() {
+        return backingHID;
     }
 
 }
