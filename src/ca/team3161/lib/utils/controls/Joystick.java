@@ -75,7 +75,7 @@ public class Joystick {
         }
         this.xAxisMode = xAxisMode;
     }
-    
+
     /**
      * Set the JoystickMode for the X axis, after the Joystick has already been constructed
      * @param yAxisMode the mode for the Joystick Y axis (linear curve, squared curve, etc)
