@@ -40,6 +40,6 @@ public interface JoystickMode {
      * @param raw the value to adjust
      * @return the adjusted value
      */
-    double adjust(final double raw);
+    double adjust(double raw);
 
 }
