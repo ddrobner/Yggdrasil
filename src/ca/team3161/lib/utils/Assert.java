@@ -30,7 +30,7 @@ package ca.team3161.lib.utils;
  * an exception if these conditions do not hold. Useful for debugging and during
  * development.
  */
-public class Assert {
+public final class Assert {
 
     private Assert(){}
 
