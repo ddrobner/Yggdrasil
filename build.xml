@@ -103,7 +103,7 @@
           description="generates a report of code convention violations."
           if="checkstyle-jar-available"
           >
-    <mkdir dir="${dist}/lib"/>
+    <mkdir dir="${dist}"/>
     <checkstyle config="${checkstyle}/checkstyle.xml"
                 failureProperty="checkstyle.failure"
                 failOnViolation="false">
