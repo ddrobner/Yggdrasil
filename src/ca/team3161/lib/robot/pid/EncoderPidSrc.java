@@ -28,14 +28,14 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.Encoder;
 
 /**
- * A PID source that returns values as encoder ticks
+ * A PID source that returns values as encoder ticks.
  */
-public class EncoderPidSrc implements PIDSrc {
+public final class EncoderPidSrc implements PIDSrc {
 
     private final Encoder enc;
     
     /**
-     * Create a new EncoderPidSrc instance
+     * Create a new EncoderPidSrc instance.
      * @param enc an Encoder object to use as a PIDSrc
      */
     public EncoderPidSrc(final Encoder enc) {
@@ -43,7 +43,7 @@ public class EncoderPidSrc implements PIDSrc {
     }
     
     /**
-     * Retrieve the original sensor used to construct this PIDSrc
+     * Retrieve the original sensor used to construct this PIDSrc.
      * @return the Encoder
      */
     public Encoder getSensor() {
@@ -51,8 +51,7 @@ public class EncoderPidSrc implements PIDSrc {
     }
     
     /**
-     * Inherited from PIDSrc
-     * @return the measured value of this PIDSrc
+     * {@inheritDoc}
      */
     public float getValue() {
         return enc.get();

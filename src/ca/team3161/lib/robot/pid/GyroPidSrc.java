@@ -28,14 +28,15 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.Gyro;
 
 /**
- * A PID source that returns values as degrees of rotation
+ * A PID source that returns values as degrees of rotation.
  */
-public class GyroPidSrc implements AnglePidSrc {
-    
+public final class GyroPidSrc implements AnglePidSrc {
+
+    public static final float MAX_ANGLE = 360.0f;
     private final Gyro gyro;
     
     /**
-     * Create a new GyroPidSrc instance
+     * Create a new GyroPidSrc instance.
      * @param gyro a Gyro object to use as a PIDSrc
      */
     public GyroPidSrc(final Gyro gyro) {
@@ -43,7 +44,7 @@ public class GyroPidSrc implements AnglePidSrc {
     }
     
     /**
-     * Retrieve the original sensor used to create this PIDSrc
+     * Retrieve the original sensor used to create this PIDSrc.
      * @return the Gyro
      */
     public Gyro getSensor() {
@@ -51,27 +52,24 @@ public class GyroPidSrc implements AnglePidSrc {
     }
     
     /**
-     * Inherited from PIDSrc
-     * @return the measured value of this PIDSrc
+     * {@inheritDoc}
      */
     public float getValue() {
-        return (float)gyro.getAngle();
+        return (float) gyro.getAngle();
     }
     
     /**
-     * Inherited from AnglePidSrc
-     * @return the minimum angle of the Gyro (zero degrees)
+     * {@inheritDoc}
      */
     public float getMinAngle() {
         return 0.0f;
     }
     
     /**
-     * Inherited from AnglePidSrc
-     * @return the maximum angle of the Gyro (three hundred and sixty degrees)
+     * {@inheritDoc}
      */
     public float getMaxAngle() {
-        return 360.0f;
+        return MAX_ANGLE;
     }
     
 }

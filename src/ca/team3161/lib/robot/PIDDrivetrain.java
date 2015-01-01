@@ -26,67 +26,35 @@
 package ca.team3161.lib.robot;
 
 import ca.team3161.lib.robot.pid.PID;
+import ca.team3161.lib.robot.pid.SimplePID;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
  * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
  */
-public class PIDDrivetrain extends Subsystem {
-    
+public final class PIDDrivetrain extends Subsystem {
+
+    public static final int SUBSYSTEM_TASK_PERIOD = 20;
+    public static final float PID_PROPORTIONAL = 0.3f;
     private final SpeedController leftDrive, rightDrive;
     private final PID leftEncoder, rightEncoder, turningPid /*gyro*/, bearingPid;
     private volatile float turningDegreesTarget = 0.0f;
     private volatile int leftTicksTarget = 0, rightTicksTarget = 0;
-    private DriveTask t;
+    private Task t;
     private final Object notifier;
     
     /**
      * The task defining the action of driving straight forward (or backward).
      */
-    public DriveTask DRIVE = new DriveTask() {
-        public void run() {
-            final double skew = bearingPid.pid(0.0f);
-            leftDrive.set(leftEncoder.pid(leftTicksTarget) + skew);
-            rightDrive.set(rightEncoder.pid(rightTicksTarget) - skew);
-            if (leftEncoder.atTarget() || rightEncoder.atTarget()) {
-                synchronized (notifier) {
-                    notifier.notifyAll();
-                }
-            }
-            
-            if (bearingPid.atTarget()) {
-                bearingPid.clear();
-            }
-            
-            if (leftEncoder.atTarget()) {
-                leftEncoder.clear();
-            }
-            
-            if (rightEncoder.atTarget()) {
-                rightEncoder.clear();
-            }
-        }
-    };
+    private final Task driveTask = new DriveTask();
     
     /**
      * The task defining the action of turning in place.
      */
-    public DriveTask TURN = new DriveTask() {
-        public void run() {
-            final double pidVal = turningPid.pid(turningDegreesTarget);
-            leftDrive.set(pidVal);
-            rightDrive.set(-pidVal);
-            if (turningPid.atTarget()) {
-                synchronized (notifier) {
-                    notifier.notifyAll();
-                }
-                turningPid.clear();
-            }
-        }
-    };
+    private final Task turnTask = new TurnTask();
     
     /**
-     * Create a new PIDDrivetrain instance
+     * Create a new PIDDrivetrain instance.
      * @param leftDrive the left side drivetrain SpeedController
      * @param rightDrive the right side drivetrain SpeedController
      * @param leftEncoder the left side drivetrain Encoder
@@ -95,18 +63,18 @@ public class PIDDrivetrain extends Subsystem {
      */
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
             final PID leftEncoder, final PID rightEncoder, final PID turningPid) {
-        super(20, true, "PID Drivetrain");
+        super(SUBSYSTEM_TASK_PERIOD, true, "PID Drivetrain");
         this.leftDrive = leftDrive;
         this.rightDrive = rightDrive;
         this.leftEncoder = leftEncoder;
         this.rightEncoder = rightEncoder;
         this.turningPid = turningPid;
-        this.bearingPid = new PID(turningPid.getSrc(), 0.0f, 0.3f, 0.0f, 0.0f);
+        this.bearingPid = new SimplePID(turningPid.getSrc(), 0.0f, PID_PROPORTIONAL, 0.0f, 0.0f);
         this.notifier = new Object();
     }
 
     /**
-     * Require the SpeedControllers and PID objects
+     * Require the SpeedControllers and PID objects.
      */
     protected void defineResources() {
         require(leftDrive);
@@ -123,6 +91,7 @@ public class PIDDrivetrain extends Subsystem {
      * @param degrees how many degrees to turn
      */
     public void turnByDegrees(final float degrees) {
+        setTask(turnTask);
         turningDegreesTarget = degrees;
     }
     
@@ -131,15 +100,16 @@ public class PIDDrivetrain extends Subsystem {
      * @param ticks how many ticks to drive
      */
     public void setTicksTarget(final int ticks) {
+        setTask(driveTask);
         leftTicksTarget = -ticks;
         rightTicksTarget = -ticks;
     }
     
     /**
-     * Change the task from driving straight to turning
+     * Change the Task of this PIDDrivetrain.
      * @param t the task type to switch to
      */
-    public void setTask(final DriveTask t) {
+    private void setTask(final Task t) {
         leftEncoder.clear();
         rightEncoder.clear();
         turningPid.clear();
@@ -148,7 +118,7 @@ public class PIDDrivetrain extends Subsystem {
     }
     
     /**
-     * Reset the state of the drivetrain to fresh
+     * Reset the state of the drivetrain so that it can be cleanly reused.
      */
     public void reset() {
         leftTicksTarget = 0;
@@ -168,7 +138,7 @@ public class PIDDrivetrain extends Subsystem {
     }
     
     /**
-     * Suspends the calling thread until the target is reached, at which point it will be awoken again
+     * Suspends the calling thread until the target is reached, at which point it will be awoken again.
      * @throws InterruptedException if the calling thread is interrupted while waiting
      */
     public void waitForTarget() throws InterruptedException {
@@ -180,7 +150,46 @@ public class PIDDrivetrain extends Subsystem {
     /**
      * An action this PIDDrivetrain may carry out.
      */
-    public abstract class DriveTask implements Runnable {
+    public abstract class Task implements Runnable {
+    }
+
+    private class DriveTask extends Task  {
+        public void run() {
+            final double skew = bearingPid.pid(0.0f);
+            leftDrive.set(leftEncoder.pid(leftTicksTarget) + skew);
+            rightDrive.set(rightEncoder.pid(rightTicksTarget) - skew);
+            if (leftEncoder.atTarget() || rightEncoder.atTarget()) {
+                synchronized (notifier) {
+                    notifier.notifyAll();
+                }
+            }
+
+            if (bearingPid.atTarget()) {
+                bearingPid.clear();
+            }
+
+            if (leftEncoder.atTarget()) {
+                leftEncoder.clear();
+            }
+
+            if (rightEncoder.atTarget()) {
+                rightEncoder.clear();
+            }
+        }
+    }
+
+    private class TurnTask extends Task {
+        public void run() {
+            final double pidVal = turningPid.pid(turningDegreesTarget);
+            leftDrive.set(pidVal);
+            rightDrive.set(-pidVal);
+            if (turningPid.atTarget()) {
+                synchronized (notifier) {
+                    notifier.notifyAll();
+                }
+                turningPid.clear();
+            }
+        }
     }
     
 }

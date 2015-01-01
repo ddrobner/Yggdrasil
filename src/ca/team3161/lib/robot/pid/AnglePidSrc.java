@@ -27,17 +27,19 @@ package ca.team3161.lib.robot.pid;
 
 /**
  * A PID source that specifically returns values to be interpreted as
- * degrees
+ * degrees.
  */
 public interface AnglePidSrc extends PIDSrc {
+
     /**
-     * The minimal angle of this sensor
+     * The minimal angle of this sensor.
      * @return the minimal angle of this sensor
      */
-    public float getMinAngle();
+    float getMinAngle();
+
     /**
-     * The maximal angle of this sensor
+     * The maximal angle of this sensor.
      * @return the maximal angle of this sensor
      */
-    public float getMaxAngle();
+    float getMaxAngle();
 }

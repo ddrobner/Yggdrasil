@@ -23,26 +23,66 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package ca.team3161.lib.utils.controls;
+package ca.team3161.lib.robot.pid;
 
 /**
- * A JoystickMode which squares the Joystick's raw input, but preserves
- * sign.
- * 0.5 on an axis becomes 0.25, for example, but -0.5 becomes -0.25.
+ * A plain, general PID implementation.
+ * {@inheritDoc}
  */
-public final class SquaredJoystickMode implements JoystickMode {
+public class SimplePID extends AbstractPID {
+
+    /**
+     * Create a new SimplePID instance.
+     * @param source   the PIDSrc source sensor
+     * @param deadband filter value - do not act when current error is within this bound
+     * @param kP       P constant
+     * @param kI       I constant
+     * @param kD       D constant
+     */
+    public SimplePID(final PIDSrc source, final float deadband, final float kP, final float kI, final float kD) {
+        super(source, deadband, kP, kI, kD);
+    }
 
     /**
      * {@inheritDoc}
      */
-    public double adjust(final double raw) {
-        final double negate;
-        if (raw < 0.0d) {
-            negate = -1.0d;
-        } else {
-            negate = 1.0d;
+    public float pid(final float target) {
+        float kErr;
+        float pOut;
+        float iOut;
+        float dOut;
+        float output;
+
+        kErr = (float) (target - source.getValue());
+
+        deltaError = prevError - kErr;
+        prevError = kErr;
+        integralError += kErr;
+
+        pOut = kErr * kP;
+        iOut = integralError * kI;
+        dOut = deltaError * kD;
+
+        if (iOut > 1.0f) {
+            iOut = 1.0f;
         }
-        return negate * Math.abs(raw * raw);
+
+        if (Math.abs(kErr) < deadband) {
+            atTarget = true;
+            return 0.0f;
+        } else {
+            atTarget = false;
+        }
+
+        output = (pOut + iOut + dOut);
+
+        if (output > 1.0f) {
+            return 1.0f;
+        }
+        if (output < -1.0f) {
+            return -1.0f;
+        }
+        return output;
     }
 
 }

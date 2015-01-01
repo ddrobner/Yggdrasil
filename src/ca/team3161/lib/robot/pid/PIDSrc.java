@@ -27,12 +27,13 @@ package ca.team3161.lib.robot.pid;
 
 /**
  * A simple interface for allowing different types of sensors to be used for
- * PID loops
+ * PID loops.
  */
 public interface PIDSrc {
+
     /**
-     * The measured value of this PIDSrc
+     * The measured value of this PIDSrc.
      * @return the measured value of this PIDSrc
      */
-    public float getValue();
+    float getValue();
 }

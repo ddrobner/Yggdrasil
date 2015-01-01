@@ -28,16 +28,16 @@ package ca.team3161.lib.utils.controls;
 import edu.wpi.first.wpilibj.GenericHID;
 
 /**
- * A thin wrapper over the FRC Joystick class, configurable with per-axis filtering "modes"
+ * A thin wrapper over the FRC Joystick class, configurable with per-axis filtering "modes".
  */
-public class Joystick {
+public final class Joystick {
 
     private final GenericHID backingHID;
     private JoystickMode xAxisMode = new LinearJoystickMode();
     private JoystickMode yAxisMode = new LinearJoystickMode();
 
     /**
-     * Construct a new Joystick, using simple LinearJoystickModes for both axes
+     * Construct a new Joystick, using simple LinearJoystickModes for both axes.
      * @param port the port the Joystick is plugged into
      */
     public Joystick(final int port) {
@@ -45,12 +45,12 @@ public class Joystick {
     }
 
     /**
-     * Construct a new Joystick
+     * Construct a new Joystick.
      * @param port the port the Joystick is plugged into. Must be non-negative.
      * @param xAxisMode the mode for the X axis. Must not be null.
      * @param yAxisMode the mode for the Y axis. Must not be null.
      */
-    public  Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
+    public Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
         if (port < 0) {
             throw new IllegalArgumentException("Port cannot be negative, was: " + Integer.toString(port));
         }
@@ -66,7 +66,7 @@ public class Joystick {
     }
 
     /**
-     * Set the JoystickMode for the X axis, after the Joystick has already been constructed
+     * Set the JoystickMode for the X axis, after the Joystick has already been constructed.
      * @param xAxisMode the mode for the Joystick X axis (linear curve, squared curve, etc)
      */
     public void setXAxisMode(final JoystickMode xAxisMode) {
@@ -77,7 +77,7 @@ public class Joystick {
     }
 
     /**
-     * Set the JoystickMode for the X axis, after the Joystick has already been constructed
+     * Set the JoystickMode for the X axis, after the Joystick has already been constructed.
      * @param yAxisMode the mode for the Joystick Y axis (linear curve, squared curve, etc)
      */
     public void setYAxisMode(final JoystickMode yAxisMode) {
@@ -88,7 +88,7 @@ public class Joystick {
     }
 
     /**
-     * Get the X-axis reading from this Joystick, adjusted by the xAxisMode
+     * Get the X-axis reading from this Joystick, adjusted by the xAxisMode.
      * @return the value
      * @see ca.team3161.lib.utils.controls.Joystick#setXAxisMode(JoystickMode)
      */
@@ -97,7 +97,7 @@ public class Joystick {
     }
 
     /**
-     * Get the Y-axis reading from this Joystick, adjusted by the yAxisMode
+     * Get the Y-axis reading from this Joystick, adjusted by the yAxisMode.
      * @return the value
      * @see ca.team3161.lib.utils.controls.Joystick#setYAxisMode(JoystickMode)
      */
@@ -106,7 +106,7 @@ public class Joystick {
     }
 
     /**
-     * Check if a button is pressed
+     * Check if a button is pressed.
      * @param button identifier for the button to check
      * @return the button's pressed state
      * @see edu.wpi.first.wpilibj.Joystick#getRawButton(int)
@@ -116,7 +116,7 @@ public class Joystick {
     }
 
     /**
-     * Get an arbitrary axis reading from this Joystick
+     * Get an arbitrary axis reading from this Joystick.
      * @param axis identifier for the axis to check
      * @return the value
      * @see edu.wpi.first.wpilibj.Joystick#getRawAxis(int)
@@ -126,7 +126,7 @@ public class Joystick {
     }
 
     /**
-     * Get the FRC/WPI-library Generic Human Interface Device which this Joystick wraps
+     * Get the FRC/WPI-library Generic Human Interface Device which this Joystick wraps.
      * @return the backing HID
      */
     public GenericHID getBackingHID() {

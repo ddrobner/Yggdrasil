@@ -43,27 +43,24 @@ public final class DriverStationLCD {
     private static final int TIMEOUT_MS = 20;
 
     /**
-     * Command to display text
+     * Command to display text.
      */
     private static final int FULL_DISPLAY_TEXT_CMD = 0x9FFF;
 
     /**
-     * Maximum line length for Driver Station display
+     * Maximum line length for Driver Station display.
      */
     public static final int LINE_LENGTH = 21;
 
     /**
-     * Number of lines for the Driver Station display
+     * Number of lines for the Driver Station display.
      */
     public static final int NUM_LINES = FRCControl.USER_DS_LCD_DATA_SIZE / LINE_LENGTH;
-
-    private final String EMPTY_STRING;
 
     private final byte[][] textBuffer;
 
     /**
-     * Get an instance of the DriverStationLCD
-     *
+     * Get an instance of the DriverStationLCD.
      * @return an instance of the DriverStationLCD
      */
     public static DriverStationLCD getInstance() {
@@ -72,13 +69,9 @@ public final class DriverStationLCD {
 
     /**
      * DriverStationLCD constructor.
-     *
-     * This is only called once the first time GetInstance() is called
+     * This is only called once the first time GetInstance() is called.
      */
     private DriverStationLCD() {
-        final char[] blank_bytes = new char[LINE_LENGTH];
-        Arrays.fill(blank_bytes, ' ');
-        EMPTY_STRING = new String(blank_bytes);
         textBuffer = new byte[NUM_LINES][FRCControl.USER_DS_LCD_DATA_SIZE];
         clear();
     }
@@ -94,16 +87,15 @@ public final class DriverStationLCD {
 
     /**
      * Sets every character on a line to spaces.
-     *
      * @param line The line that is being cleared.
      */
     public void clear(final int line) {
         validateLineNumber(line);
-        println(line, EMPTY_STRING);
+        println(line, emptyLine(LINE_LENGTH));
     }
 
     /**
-     * Clears all lines
+     * Clears all lines.
      */
     public void clear() {
         for (int i = 0; i < NUM_LINES; ++i) {
@@ -114,7 +106,6 @@ public final class DriverStationLCD {
     /**
      * Print formatted text to the Driver Station LCD text buffer. Messages
      * which are too long will be truncated.
-     *
      * @param line The line on the LCD to print to.
      * @param text the text to print
      */
@@ -130,9 +121,12 @@ public final class DriverStationLCD {
         }
     }
 
-    /* Creates a one-dimensional array of the appropriate size, adds the two
+    /**
+     * Creates a one-dimensional array of the appropriate size, adds the two
      * "command bytes" to the beginning, then copies the contents of the 2D
-     * textBuffer into it */
+     * textBuffer into it.
+     * @param buffer the buffer of lines of text to process
+     */
     private byte[] flattenTextBuffer(final byte[][] buffer) {
         synchronized (textBuffer) {
             final byte[] result = new byte[NUM_LINES * LINE_LENGTH + 2];
@@ -147,7 +141,9 @@ public final class DriverStationLCD {
         }
     }
 
-    /* Ensure that we don't try to print to line numbers that don't exist */
+    /**
+     * Ensure that we don't try to print to line numbers that don't exist.
+     */
     private void validateLineNumber(final int lineNumber) {
         if (lineNumber < 0 || NUM_LINES < lineNumber) {
             throw new IndexOutOfBoundsException("Cannot print to line " + lineNumber
@@ -155,12 +151,20 @@ public final class DriverStationLCD {
         }
     }
 
-    /* Get the byte[] behind a String, truncating if it's too long */
+    /**
+     * Get the byte[] behind a String, truncating if it's too long.
+     */
     private byte[] getBytes(final String text) {
         final int length = (text.length() > LINE_LENGTH ? LINE_LENGTH : text.length());
-        final byte[] result = EMPTY_STRING.getBytes();
+        final byte[] result = emptyLine(LINE_LENGTH).getBytes();
         System.arraycopy(text.getBytes(), 0, result, 0, length);
         return result;
+    }
+
+    private static String emptyLine(final int length) {
+        final char[] arr = new char[length];
+        java.util.Arrays.fill(arr, ' ');
+        return String.valueOf(arr);
     }
 
 }

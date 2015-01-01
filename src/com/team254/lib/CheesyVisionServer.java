@@ -11,9 +11,10 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.ServerSocketConnection;
 import javax.microedition.io.SocketConnection;
 
-public class CheesyVisionServer {
+public final class CheesyVisionServer {
 
     public static final int DEFAULT_PORT = 1180;
+    public static final double CLIENT_TIMEOUT_SECONDS = 3.0;
     private static CheesyVisionServer INSTANCE = null;
     private final Thread serverThread = new Thread(new ServerTask());
     private final int port;
@@ -54,7 +55,7 @@ public class CheesyVisionServer {
     }
 
     public boolean hasClientConnection() {
-        return lastHeartbeatTime > 0 && (Timer.getFPGATimestamp() - lastHeartbeatTime) < 3.0;
+        return lastHeartbeatTime > 0 && (Timer.getFPGATimestamp() - lastHeartbeatTime) < CLIENT_TIMEOUT_SECONDS;
     }
 
     private void updateCounts(final boolean left, final boolean right) {
@@ -108,6 +109,8 @@ public class CheesyVisionServer {
 
     // This class handles incoming TCP connections
     private class VisionServerConnectionHandler implements Runnable {
+        public static final int BUFFER_SIZE = 1024;
+        public static final int SLEEP_PERIOD = 50;
         private final SocketConnection connection;
         public VisionServerConnectionHandler(final SocketConnection c) {
             connection = c;
@@ -117,7 +120,7 @@ public class CheesyVisionServer {
             try {
                 final InputStream is = connection.openInputStream();
 
-                final byte[] b = new byte[1024];
+                final byte[] b = new byte[BUFFER_SIZE];
                 final double timeout = 10.0d;
                 double lastHeartbeat = Timer.getFPGATimestamp();
                 lastHeartbeatTime = lastHeartbeat;
@@ -136,7 +139,7 @@ public class CheesyVisionServer {
                         lastHeartbeatTime = lastHeartbeat;
                     }
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(SLEEP_PERIOD);
                     } catch (final InterruptedException ex) {
                         System.out.println("Thread sleep failed.");
                     }
@@ -150,6 +153,9 @@ public class CheesyVisionServer {
     }
 
     private class ServerTask implements Runnable {
+
+        public static final int SLEEP_PERIOD = 100;
+
         // This method listens for incoming connections and spawns new
         // VisionServerConnectionHandlers to handle them
         public void run() {
@@ -161,7 +167,7 @@ public class CheesyVisionServer {
                     t.start();
                     connections.addElement(connection);
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(SLEEP_PERIOD);
                     } catch (final InterruptedException ex) {
                         System.out.println("Thread sleep failed.");
                     }

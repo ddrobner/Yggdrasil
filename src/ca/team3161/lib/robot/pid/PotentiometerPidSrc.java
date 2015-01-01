@@ -29,15 +29,15 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
- * rotation
+ * rotation.
  */
-public class PotentiometerPidSrc implements AnglePidSrc {
+public final class PotentiometerPidSrc implements AnglePidSrc {
     
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
     
     /**
-     * Create a new PotentiometerPidSrc instance
+     * Create a new PotentiometerPidSrc instance.
      * @param pot a Potentiometer object to measure voltages from
      * @param minVolt the minimum measured voltage from the potentiometer at the "small" movement endpoint of the system
      * @param maxVolt the maximum measured voltage from the potentiometer at the "large" movement endpoint of the system
@@ -55,7 +55,7 @@ public class PotentiometerPidSrc implements AnglePidSrc {
     }
     
     /**
-     * Retrieve the original sensor used to construct this PIDSrc
+     * Retrieve the original sensor used to construct this PIDSrc.
      * @return the Potentiometer
      */
     public Potentiometer getSensor() {
@@ -63,17 +63,17 @@ public class PotentiometerPidSrc implements AnglePidSrc {
     }
     
     /**
-     * Inherited from PIDSrc
+     * Inherited from PIDSrc.
      * @return the measured value of this PIDSrc
      */
     public float getValue() {
         final float slope = (maxAngle - minAngle) / (maxVolt - minVolt);
         final float offset = minAngle - slope * minVolt;
-        return (float)(slope * pot.get() + offset);
+        return (float) (slope * pot.get() + offset);
     }
     
     /**
-     * Inherited from AnglePidSrc
+     * Inherited from AnglePidSrc.
      * @return the minimal angle of this sensor
      */
     public float getMinAngle() {
@@ -81,7 +81,7 @@ public class PotentiometerPidSrc implements AnglePidSrc {
     }
     
     /**
-     * Inherited from AnglePidSrc
+     * Inherited from AnglePidSrc.
      * @return the maximal angle of this sensor
      */
     public float getMaxAngle() {

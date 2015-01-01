@@ -36,49 +36,52 @@ import java.util.Vector;
  * and periodically set motor values based on this.
  */
 public abstract class Subsystem {
-    
+
+    public static final int RESOURCE_ACQUIRE_PERIOD = 500;
     /**
-     * A list of resources which this Subsystem requires (see ResourceTracker)
+     * A list of resources which this Subsystem requires.
+     * @see ca.team3161.lib.robot.ResourceTracker
      */
     protected final Vector resources;
     
     /**
-     * The period length between task repeats (milliseconds)
+     * The period length between task repeats (milliseconds).
      */
-    protected final long TASK_TIMEOUT;
+    protected final long timeout;
     
     /**
-     * If this task repeats, or runs once only
+     * If this task repeats, or runs once only.
      */
     protected final boolean repeating;
     
     /**
-     * If this task has been requested for cancellation
+     * If this task has been requested for cancellation.
      */
     protected volatile boolean cancelled;
     
     /**
-     * If this task has been started
+     * If this task has been started.
      */
     protected boolean started;
     
     /**
-     * The background task for this Subsystem
+     * The background task for this Subsystem.
      */
     private Thread thread;
     
     /**
-     * The name to assign to the background task
+     * The name to assign to the background task.
      */
     protected final String threadName;
     
     /**
+     * Define a new robot Subsystem.
      * @param timeout update period (in milliseconds) between task repeats (if any)
      * @param repeating true iff the task is recurring
      * @param threadName the name for the background thread of this Subsystem
      */
     protected Subsystem(final long timeout, final boolean repeating, final String threadName) {
-        TASK_TIMEOUT = timeout;
+        this.timeout = timeout;
         this.resources = new Vector();
         this.repeating = repeating;
         this.cancelled = false;
@@ -87,36 +90,11 @@ public abstract class Subsystem {
     }
     
     private Thread getTaskThread() {
-        return new Thread(new Runnable() {
-            public void run() {
-                if (cancelled) {
-                    return;
-                }
-                if (repeating) {
-                    while (!cancelled) {
-                        try {
-                            acquireResources();
-                            task();
-                            Thread.sleep(TASK_TIMEOUT);
-                        } catch (final Exception e) {
-                        } finally {
-                            releaseResources();
-                        }
-                    }
-                } else {
-                    try {
-                        acquireResources();
-                        task();
-                    } catch (final Exception e) {
-                    } finally {
-                        releaseResources();
-                    }
-                }
-            }
-        }, threadName);
+        return new Thread(new SubsystemTask(), threadName);
     }
     
     /**
+     * Define a required resource for this Subsystem when its task is executed.
      * @param resource a sensor, speed controller, etc. that this subsystem
      * needs exclusive access to during its task
      */
@@ -128,7 +106,7 @@ public abstract class Subsystem {
         Enumeration e = resources.elements();
         while (e.hasMoreElements()) {
             Semaphore s = (Semaphore) e.nextElement();
-            s.takeMillis(500);
+            s.takeMillis(RESOURCE_ACQUIRE_PERIOD);
         }
     }
     
@@ -144,17 +122,18 @@ public abstract class Subsystem {
     }
     
     /**
+     * Check if this Subsystem's task has been canceled.
      * @return if this Subsystem's background task has been canceled
      */
-    public boolean getCancelled() {
+    public final boolean getCancelled() {
         return cancelled;
     }
     
     /**
      * Cancel the background task of this Subsystem (stop it from running, if it
-     * is a recurring task)
+     * is a recurring task).
      */
-    public void cancel() {
+    public final void cancel() {
         cancelled = true;
         if (thread != null) {
             thread.interrupt();
@@ -162,7 +141,7 @@ public abstract class Subsystem {
     }
     
     /**
-     * Start (or restart) this Subsystem's background task
+     * Start (or restart) this Subsystem's background task.
      */
     public final void start() {
         cancelled = false;
@@ -174,14 +153,43 @@ public abstract class Subsystem {
     }
     
     /**
-     * Use require() to define a set of required resources
+     * Define the set of resources required for this Subsystem's task.
+     * @see ca.team3161.lib.robot.Subsystem#require(Object)
      */
     protected abstract void defineResources();
     
     /**
-     * The background task to run
+     * The background task to run.
      * @throws Exception in case the defined task throws any Exceptions
      */
     protected abstract void task() throws Exception;
+
+    private class SubsystemTask implements Runnable {
+        public void run() {
+            if (cancelled) {
+                return;
+            }
+            if (repeating) {
+                while (!cancelled) {
+                    try {
+                        acquireResources();
+                        task();
+                        Thread.sleep(timeout);
+                    } catch (final Exception e) {
+                    } finally {
+                        releaseResources();
+                    }
+                }
+            } else {
+                try {
+                    acquireResources();
+                    task();
+                } catch (final Exception e) {
+                } finally {
+                    releaseResources();
+                }
+            }
+        }
+    }
     
 }

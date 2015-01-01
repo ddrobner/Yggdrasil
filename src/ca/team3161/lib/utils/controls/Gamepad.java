@@ -37,65 +37,65 @@ import edu.wpi.first.wpilibj.GenericHID;
 public interface Gamepad {
 
     /**
-     * Get the backing input device of this Gamepad
+     * Get the backing input device of this Gamepad.
      * @return the backing input device, eg Joystick
      */
-    public GenericHID getBackingHID();
+    GenericHID getBackingHID();
 
     /**
-     * Get the left thumbstick X-axis
+     * Get the left thumbstick X-axis.
      * @return the X-axis of the left thumbstick
      */
-    public float getLeftX();
+    float getLeftX();
 
     /**
-     * Get the left thumbstick Y-axis
+     * Get the left thumbstick Y-axis.
      * @return the Y-axis of the left thumbstick
      */
-    public float getLeftY();
+    float getLeftY();
 
     /**
-     * Get the right thumbstick X-axis
+     * Get the right thumbstick X-axis.
      * @return the X-axis of the right thumbstick
      */
-    public float getRightX();
+    float getRightX();
 
     /**
-     * Get the right thumbstick Y-axis
+     * Get the right thumbstick Y-axis.
      * @return the Y-axis of the right thumbstick
      */
-    public float getRightY();
+    float getRightY();
 
     /**
-     * Get the directional pad horizontal
+     * Get the directional pad horizontal.
      * @return the left/right value of the directional pad
      */
-    public float getDpadHorizontal();
+    float getDpadHorizontal();
 
     /**
-     * Get the directional pad vertical
+     * Get the directional pad vertical.
      * @return the up/down value of the directional pad
      */
-    public float getDpadVertical();
+    float getDpadVertical();
 
     /**
-     * Get the value of a button on the controller
+     * Get the value of a button on the controller.
      * @param button which button to check. The mapping from values here to
      * actual buttons will depend on the specific Gamepad implementation
      * @return whether the specified button is currently pressed or not
      */
-    public boolean getButton(int button);
+    boolean getButton(int button);
 
     /**
-     * Invert the Y-axes of the left and right thumbsticks
+     * Invert the Y-axes of the left and right thumbsticks.
      * @param inverted if the thumbsticks are to be inverted
      * @return this Gamepad instance
      */
-    public Gamepad setInverted(boolean inverted);
+    Gamepad setInverted(boolean inverted);
 
     /**
-     * Check if this Gamepad's thumbstick Y-axes are inverted
+     * Check if this Gamepad's thumbstick Y-axes are inverted.
      * @return whether the Y-axes of the thumbsticks are inverted
      */
-    public boolean getInverted();
+    boolean getInverted();
 }

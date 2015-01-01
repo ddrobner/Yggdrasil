@@ -32,8 +32,10 @@ package ca.team3161.lib.utils;
  */
 public class Assert {
 
+    private Assert(){}
+
     /**
-     * Assert a condition is true
+     * Assert that a condition is true.
      * @param condition throw an exception if the given condition does not hold
      */
     public static void assertTrue(boolean condition) {
@@ -43,7 +45,7 @@ public class Assert {
     }
 
     /**
-     * Assert a condition is true
+     * Assert that a condition is true.
      * @param reason why the condition should hold
      * @param condition throw an exception if the given condition does not hold
      */
@@ -54,7 +56,7 @@ public class Assert {
     }
 
     /**
-     * Assert a condition is false
+     * Assert that a condition is false.
      * @param condition throw an exception if the given condition holds
      */
     public static void assertFalse(boolean condition) {
@@ -62,7 +64,7 @@ public class Assert {
     }
 
     /**
-     * Assert a condition is false
+     * Assert rhat a condition is false.
      * @param reason why the condition should not hold
      * @param condition throw an exception if the given condition holds
      */
@@ -71,7 +73,7 @@ public class Assert {
     }
 
     /**
-     * Assert a reference is not null
+     * Assert that a reference is not null.
      * @param obj throw an exception if this reference is null
      */
     public static void assertNonNull(Object obj) {
@@ -81,7 +83,7 @@ public class Assert {
     }
 
     /**
-     * Assert a reference is not null
+     * Assert that a reference is not null.
      * @param reason why the reference cannot be null
      * @param obj throw an exception if this reference is null
      */
@@ -101,14 +103,14 @@ public class Assert {
     public static class AssertionException extends RuntimeException {
 
         /**
-         * Create a new AssertionException with generic cause
+         * Create a new AssertionException with generic cause.
          */
         public AssertionException() {
             super("Unspecified assertion failure");
         }
 
         /**
-         * Create a new AssertionException
+         * Create a new AssertionException.
          * @param cause the cause for this exception to have occurred
          */
         public AssertionException(String cause) {

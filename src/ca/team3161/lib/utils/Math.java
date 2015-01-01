@@ -24,7 +24,13 @@
  */
 package ca.team3161.lib.utils;
 
-public class Math {
+/**
+ * Some basic math utility methods. Included only because Java Micro Edition
+ * has quite a few gaps in its included math libraries.
+ */
+public final class Math {
+
+    private Math(){}
 
     /**
      * Bit-shifting hackery. Fast implementation that approximates exponentiation
@@ -57,7 +63,7 @@ public class Math {
     }
 
     /**
-     * Naive implementation of Math.pow for integers
+     * Naive implementation of Math.pow for integers.
      *
      * @param base the number to be raised to a power
      * @param exponent the power to raise 'base' to
@@ -76,7 +82,7 @@ public class Math {
     }
 
     /**
-     * Naive implementation of Math.pow for floats
+     * Naive implementation of Math.pow for floats.
      *
      * @param base the number to be raised to a power
      * @param exponent the power to raise 'base' to
@@ -95,7 +101,7 @@ public class Math {
     }
 
     /**
-     * Naive implementation of Math.pow for doubles
+     * Naive implementation of Math.pow for doubles.
      *
      * @param base the number to be raised to a power
      * @param exponent the power to raise 'base' to
@@ -119,7 +125,7 @@ public class Math {
      * @param val the number for which to compute the natural logarithm
      * @return the result
      */
-    public double ln(double val) {
+    public static double ln(double val) {
         final double x = (Double.doubleToLongBits(val) >> 32);
         return (x - 1072632447) / 1512775;
     }
@@ -135,6 +141,7 @@ public class Math {
     }
 
     /**
+     * Round a floating point number to a set number of digits.
      * @param val the double to round
      * @param precision how many significant figures
      * @return the rounded double

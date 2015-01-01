@@ -29,7 +29,7 @@ package ca.team3161.lib.utils.controls;
  * The most basic possible JoystickMode. Simply returns the value it is given
  * with no adjustment.
  */
-public class LinearJoystickMode implements JoystickMode {
+public final class LinearJoystickMode implements JoystickMode {
 
     /**
      * {@inheritDoc}

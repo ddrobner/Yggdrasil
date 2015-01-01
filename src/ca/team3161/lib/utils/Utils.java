@@ -30,6 +30,8 @@ package ca.team3161.lib.utils;
  * the range [-1.0, 1.0], etc.
  */
 public class Utils {
+
+    private Utils(){}
     
     /**
      * @param array an array to print
@@ -55,8 +57,12 @@ public class Utils {
      * @return the normalized value
      */
     public static double normalizePwm(final double val) {
-        if (val < -1.0d) return -1.0d;
-        if (val > 1.0d) return 1.0d;
+        if (val < -1.0d) {
+            return -1.0d;
+        }
+        if (val > 1.0d) {
+            return 1.0d;
+        }
         return val;
     }
 }

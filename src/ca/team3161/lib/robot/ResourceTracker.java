@@ -26,27 +26,30 @@
 package ca.team3161.lib.robot;
 
 import edu.wpi.first.wpilibj.communication.Semaphore;
+
 import java.util.Hashtable;
 
 /**
- * Tracks robot resources (sensors, motor controllers, etc.) to allow Subsystems
+ * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
  * to ensure separation of task runs
  */
 public final class ResourceTracker {
     
-    private static final Hashtable resources = new Hashtable();
-    
+    private static final Hashtable RESOURCES = new Hashtable();
+
+    private ResourceTracker(){}
+
     /**
-     * Get the lock associated with a resource
+     * Acquire the unique lock associated with a resource.
      * @param resource the resource required
      * @return a unique associated lock
      */
     public static Semaphore track(Object resource) {
-        synchronized (resources) {
-            Semaphore s = (Semaphore) resources.get(resource);
+        synchronized (RESOURCES) {
+            Semaphore s = (Semaphore) RESOURCES.get(resource);
             if (s == null) {
                 s = new Semaphore(new Semaphore.Options());
-                resources.put(resource, s);
+                RESOURCES.put(resource, s);
             }
             return s;
         }

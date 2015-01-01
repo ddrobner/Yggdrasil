@@ -34,12 +34,12 @@ import java.util.Vector;
 /**
  * Implements a container for SpeedControllers.
  */
-public class Drivetrain implements SpeedController {
+public final class Drivetrain implements SpeedController {
     private final Vector motorControllers;
     private float inversion = 1.0f;
 
     /**
-     * Create a new Drivetrain instance
+     * Create a new Drivetrain instance.
      * @param controllerArray an array of SpeedController objects. May be
      * all the same type, or may be mixed.
      */
@@ -70,7 +70,7 @@ public class Drivetrain implements SpeedController {
     }
 
     /**
-     * The current speed of this Drivetrain
+     * The current speed of this Drivetrain.
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
      */
     public double get() {
@@ -96,12 +96,12 @@ public class Drivetrain implements SpeedController {
     }
 
     /**
-     * Set the pwm value (-1.0 to 1.0)
+     * Set the pwm value (-1.0 to 1.0).
      * @param pwm the PWM value to assign to each SpeedController in the collection
      */
     public void set(double pwm) {
         // PWM value must be between -1 and 1
-        pwm = Utils.normalizePwm(pwm);
+        double normalizePwm = Utils.normalizePwm(pwm);
         final Enumeration e = motorControllers.elements();
         while (e.hasMoreElements()) {
             final SpeedController controller = (SpeedController) e.nextElement();
@@ -110,13 +110,13 @@ public class Drivetrain implements SpeedController {
     }
 
     /**
-     * Don't use this!
+     * You probably shouldn't use this. Only included as required by SpeedController interface.
      * @param pwm the PWM value to assign to each SpeedController in the collection
      * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
     public void set(double pwm, final byte syncGroup) {
         // PWM value must be between -1 and 1
-        pwm = Utils.normalizePwm(pwm);
+        double normalizePwm = Utils.normalizePwm(pwm);
         final Enumeration e = motorControllers.elements();
         while (e.hasMoreElements()) {
             final SpeedController controller = (SpeedController) e.nextElement();
@@ -125,7 +125,7 @@ public class Drivetrain implements SpeedController {
     }
 
     /**
-     * Disable each SpeedController in the collection
+     * Disable each SpeedController in the collection.
      */
     public void disable() {
         final Enumeration e = motorControllers.elements();
@@ -136,7 +136,7 @@ public class Drivetrain implements SpeedController {
     }
 
     /**
-     * Call pidWrite on each SpeedController in this collection
+     * Call pidWrite on each SpeedController in this collection.
      * @param output Set the output to the value calculated by PIDController
      */
     public void pidWrite(final double output) {

@@ -29,7 +29,7 @@ package ca.team3161.lib.utils.controls;
  * A JoystickMode which applies the square root function to its input, preserving
  * sign.
  */
-public class SquareRootedJoystickMode {
+public final class SquareRootedJoystickMode {
 
     /**
      * {@inheritDoc}

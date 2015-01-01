@@ -28,7 +28,7 @@ package ca.team3161.lib.robot.pid;
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... get it?)
  */
-public class PIDulum extends PID {
+public final class PIDulum extends AbstractPID {
     
     private final float offsetAngle;
     private final float torqueConstant;
@@ -51,9 +51,7 @@ public class PIDulum extends PID {
     }
     
     /**
-     * Iterate the PID loop
-     * @param target the desired target value. Units depend on the context of this PID
-     * @return the output value to set to eg a SpeedController to reach the specified target
+     * {@inheritDoc}
      */
     public float pid(final float target) {
         float kErr;
@@ -63,7 +61,7 @@ public class PIDulum extends PID {
         float feedForward;
         float output;
 
-        kErr = (float)(target - source.getValue());
+        kErr = (float) (target - source.getValue());
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -77,7 +75,7 @@ public class PIDulum extends PID {
             iOut = 1;
         }
         
-        feedForward = torqueConstant * (float)(source.getValue() - offsetAngle);
+        feedForward = torqueConstant * (float) (source.getValue() - offsetAngle);
         
         if (Math.abs(kErr) < deadband) {
             atTarget = true;

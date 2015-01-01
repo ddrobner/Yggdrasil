@@ -36,21 +36,20 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  */
 public abstract class ThreadedAutoRobot extends IterativeRobot {
 
-    private static final int MAX_AUTO_PERIOD_LENGTH = GameConstants.AUTONOMOUS.SECONDS * 1000;
     private volatile int accumulatedTime = 0;
     private final Object modeLock = new Object();
     private Thread autoThread;
 
     /**
-     * The DriverStation virtual LCD display panel instance
+     * The DriverStation virtual LCD display panel instance.
      */
     protected final DriverStationLCD dsLcd = DriverStationLCD.getInstance();
 
-    /** DO NOT override this in subclasses!
-     * At the start of the autonomous period, spawn and start a new Thread
+    /**
+     * At the start of the autonomous period, start a new background task
      * using the behaviour described in the concrete subclass implementation's
      * autonomousThreaded() method.
-     * This new Thread allows us to use Thread.sleep rather than a timer,
+     * This new background task allows us to use Thread.sleep rather than a timer,
      * while also not disrupting normal background functions of the
      * robot such as feeding the Watchdog or responding to FMS events.
      * modeLock is used to ensure that the robot is never simultaneously
@@ -74,10 +73,11 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
     }
 
     /**
-    * IterativeRobot defines this, but we do not want it to be possible for anything
-    * but teleopThreadsafe to be used during teleop. We can't remove or hide it,
-    * so we make it empty and final instead.
-    */
+     * Not used. Stubbed out IterativeRobot method.
+     * IterativeRobot defines this, but we do not want it to be possible for anything
+     * but teleopThreadsafe to be used during teleop. We can't remove or hide it,
+     * so we make it empty and final instead.
+     */
     public final void teleopContinuous() { }
 
     /**
@@ -90,7 +90,7 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
      */
     public final void waitFor(long millis) throws InterruptedException {
         accumulatedTime += millis;
-        if (accumulatedTime > MAX_AUTO_PERIOD_LENGTH) {
+        if (accumulatedTime > getAutonomousPeriodLengthSeconds()) {
             throw new InterruptedException("Auto is over!");
         }
         Thread.sleep(millis);
@@ -100,6 +100,7 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
     }
 
     /**
+     * Handles running teleopThreadsafe periodically.
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
      * code, will not attempt to run concurrently.
@@ -128,8 +129,14 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
     public abstract void teleopThreadsafe();
 
     /**
-     * The one-shot autonomous "script" to be run in a new Thread
+     * The one-shot autonomous "script" to be run in a new Thread.
      * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
      */
     public abstract void autonomousThreaded() throws Exception;
+
+    /**
+     * Define the length of the Autonomous period, in seconds.
+     * @return the length of the Autonomous period, in seconds.
+     */
+    public abstract int getAutonomousPeriodLengthSeconds();
 }

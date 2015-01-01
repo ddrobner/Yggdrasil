@@ -25,7 +25,12 @@
 
 package ca.team3161.lib.utils.controls;
 
-public class CubedJoystickMode implements JoystickMode {
+/**
+ * A JoystickMode which cubes the Joystick's raw input, but preserves
+ * sign.
+ * 0.8 on an axis becomes 0.512, for example, but -0.8 becomes -0.512.
+ */
+public final class CubedJoystickMode implements JoystickMode {
     
     public double adjust(final double raw) {
         final double negate;
