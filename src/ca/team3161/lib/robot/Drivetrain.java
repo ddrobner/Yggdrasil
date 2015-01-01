@@ -105,7 +105,7 @@ public final class Drivetrain implements SpeedController {
         final Enumeration e = motorControllers.elements();
         while (e.hasMoreElements()) {
             final SpeedController controller = (SpeedController) e.nextElement();
-            controller.set(inversion * pwm);
+            controller.set(inversion * normalizePwm);
         }
     }
 
@@ -120,7 +120,7 @@ public final class Drivetrain implements SpeedController {
         final Enumeration e = motorControllers.elements();
         while (e.hasMoreElements()) {
             final SpeedController controller = (SpeedController) e.nextElement();
-            controller.set(inversion * pwm, syncGroup);
+            controller.set(inversion * normalizePwm, syncGroup);
         }
     }
 
