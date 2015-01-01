@@ -29,7 +29,9 @@ import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 
 /**
- * A thin wrapper over the FRC Joystick class, configurable with per-axis filtering "modes".
+ * A fairly simple class representing a physical Joystick, configurable with
+ * per-axis filtering "modes". Similar to the FRC-provided Joystick class in usage.
+ * @see edu.wpi.first.wpilibj.Joystick
  */
 public final class Joystick {
 
