@@ -18,7 +18,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
          * (details of open-source license...)
       </pre>
     -->
-    <property name="format" value="^(//| \*) Copyright (\([cC]\) )?[\d]{4}(\-[\d]{4})? (FRC3161\.).*$"/>
+    <property name="format" value="^([/]{1,2}\*) Copyright (\([cC]\) )?[\d]{4}(\-[\d]{4})?[,]? FRC3161"/>
     <property name="minimum" value="1"/>
     <property name="maximum" value="10"/>
     <property name="message" value="FRC3161 copyright is missing or malformed."/>
