@@ -100,7 +100,7 @@ public final class Assert {
      * using a try/catch to catch an AssertionException, this is a very strong
      * indicator that you are using Assert incorrectly.
      */
-    public static class AssertionException extends RuntimeException {
+    public static final class AssertionException extends RuntimeException {
 
         /**
          * Create a new AssertionException with generic cause.
