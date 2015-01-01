@@ -25,6 +25,7 @@
 
 package ca.team3161.lib.utils.controls;
 
+import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 
 /**
@@ -51,15 +52,9 @@ public final class Joystick {
      * @param yAxisMode the mode for the Y axis. Must not be null.
      */
     public Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
-        if (port < 0) {
-            throw new IllegalArgumentException("Port cannot be negative, was: " + Integer.toString(port));
-        }
-        if (xAxisMode == null) {
-            throw new NullPointerException("JoystickModes cannot be null - received null X axis mode");
-        }
-        if (yAxisMode == null) {
-            throw new NullPointerException("JoystickModes cannot be null - received null Y axis mode");
-        }
+        Assert.assertTrue("Port cannot be negative, was: " + Integer.toString(port), port > 0);
+        Assert.assertNonNull("JoystickModes cannot be null - received null X axis mode", xAxisMode);
+        Assert.assertNonNull("JoystickModes cannot be null - received null Y axis mode", yAxisMode);
         this.backingHID = new edu.wpi.first.wpilibj.Joystick(port);
         this.xAxisMode = xAxisMode;
         this.yAxisMode = yAxisMode;
@@ -70,9 +65,7 @@ public final class Joystick {
      * @param xAxisMode the mode for the Joystick X axis (linear curve, squared curve, etc)
      */
     public void setXAxisMode(final JoystickMode xAxisMode) {
-        if (xAxisMode == null) {
-            throw new NullPointerException();
-        }
+        Assert.assertNonNull(xAxisMode);
         this.xAxisMode = xAxisMode;
     }
 
@@ -81,9 +74,7 @@ public final class Joystick {
      * @param yAxisMode the mode for the Joystick Y axis (linear curve, squared curve, etc)
      */
     public void setYAxisMode(final JoystickMode yAxisMode) {
-        if (yAxisMode == null) {
-            throw new NullPointerException();
-        }
+        Assert.assertNonNull(yAxisMode);
         this.yAxisMode = yAxisMode;
     }
 
