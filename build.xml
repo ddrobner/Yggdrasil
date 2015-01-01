@@ -1,18 +1,26 @@
 <project name="Yggdrasil" default="dist" basedir=".">
-    <taskdef resource="net/sf/antcontrib/antlib.xml">
-      <classpath>
-          <pathelement location="${basedir}/antlib/ant-contrib/ant-contrib-1.0b3.jar"/>
-      </classpath>
-    </taskdef>
-    <description>
-        Apache Ant build file for Yggdrasil
-    </description>
+  <taskdef resource="net/sf/antcontrib/antlib.xml">
+    <classpath>
+        <pathelement location="${basedir}/antlib/ant-contrib/ant-contrib-1.0b3.jar"/>
+    </classpath>
+  </taskdef>
+  <taskdef resource="checkstyletask.properties">
+    <classpath>
+        <pathelement location="${basedir}/checkstyle/checkstyle-6.2-all.jar"/>
+    </classpath>
+  </taskdef>
+
+  <description>
+      Apache Ant build file for Yggdrasil
+  </description>
+
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
   <property name="doc"   location="doc"/>
   <property name="javadoc-dir" location="${doc}/javadoc"/>
+  <property name="checkstyle" location="checkstyle"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -51,7 +59,7 @@
       </exec>
   </target>
 
-  <target name="dist" depends="compile,docs"
+  <target name="dist" depends="compile,docs,checkstyle"
         description="generate the distribution" >
     <!-- Create the distribution directory -->
     <mkdir dir="${dist}/lib"/>
@@ -81,6 +89,27 @@
         <fileset file="${doc}/README.html"/>
         <fileset file="definitelynotreal"/>
     </zip>
+  </target>
+
+  <target name="checkstyle-available">
+      <condition property="checkstyle-jar-available">
+          <resourcecount when="greater" count="0">
+              <fileset file="${checkstyle}/checkstyle*.jar"/>
+          </resourcecount>
+      </condition>
+  </target>
+
+  <target name="checkstyle" depends="init,checkstyle-available"
+          description="generates a report of code convention violations."
+          if="checkstyle-jar-available"
+          >
+    <mkdir dir="${dist}/lib"/>
+    <checkstyle config="${checkstyle}/checkstyle.xml"
+                failureProperty="checkstyle.failure"
+                failOnViolation="false">
+            <fileset dir="${src}/ca" includes="**/*.java"/>
+            <formatter type="plain" toFile="${dist}/checkstyle.txt" useFile="true"/>
+    </checkstyle>
   </target>
 
   <target name="clean"
