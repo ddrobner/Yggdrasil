@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.Encoder;
 /**
  * A PID source that returns values as encoder ticks.
  */
-public final class EncoderPidSrc implements PIDSrc {
+public final class EncoderPidSrc implements PIDSrc<Encoder> {
 
     private final Encoder enc;
     
@@ -46,6 +46,7 @@ public final class EncoderPidSrc implements PIDSrc {
      * Retrieve the original sensor used to construct this PIDSrc.
      * @return the Encoder
      */
+    @Override
     public Encoder getSensor() {
         return enc;
     }
@@ -53,6 +54,7 @@ public final class EncoderPidSrc implements PIDSrc {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getValue() {
         return enc.get();
     }

@@ -67,6 +67,7 @@ public abstract class AbstractPID implements PID {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final void clear() {
         integralError = 0.0f;
         prevError = 0.0f;
@@ -76,11 +77,13 @@ public abstract class AbstractPID implements PID {
     /**
      * {@inheritDoc}
      */
+    @Override
     public abstract float pid(final float target);
     
     /**
      * {@inheritDoc}
      */
+    @Override
     public final PIDSrc getSrc() {
         return this.source;
     }
@@ -88,6 +91,7 @@ public abstract class AbstractPID implements PID {
     /**
      * {@inheritDoc}
      */
+    @Override
     public final boolean atTarget() {
         return atTarget;
     }

@@ -28,31 +28,38 @@ package ca.team3161.lib.robot;
 import ca.team3161.lib.utils.Assert;
 import ca.team3161.lib.utils.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
-import java.util.Enumeration;
-import java.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Implements a container for SpeedControllers.
  */
 public final class Drivetrain implements SpeedController {
-    private final Vector motorControllers;
+    private final List<SpeedController> speedControllers = new ArrayList<>();
     private float inversion = 1.0f;
 
     /**
      * Create a new Drivetrain instance.
-     * @param controllerArray an array of SpeedController objects. May be
+     * @param controllers a varargs list or array of SpeedController objects. May be
      * all the same type, or may be mixed.
      */
-    public Drivetrain(final SpeedController[] controllerArray) {
-        Assert.assertNonNull("SpeedController array cannot be null", controllerArray);
-        Assert.assertFalse("Must have at least one SpeedController per Drivetrain", controllerArray.length == 0);
-        // Require at least one controller
-        // create the Vector, then copy all the SpeedControllers out of the
-        // array into the Vector
-        motorControllers = new Vector(controllerArray.length);
-        for (int i = 0; i < controllerArray.length; i++) {
-            motorControllers.addElement(controllerArray[i]);
-        }
+    public Drivetrain(final SpeedController ... controllers) {
+        this(Arrays.asList(controllers));
+    }
+
+    /**
+     * Create a new Drivetrain instance.
+     * @param controllers a collection of SpeedControllers for this Drivetrain to manage
+     */
+    public Drivetrain(final Collection<SpeedController> controllers) {
+        Objects.requireNonNull(controllers);
+        Assert.assertTrue("Must have at least one SpeedController per Drivetrain", controllers.size() > 0);
+        speedControllers.addAll(controllers);
     }
 
     /**
@@ -76,23 +83,17 @@ public final class Drivetrain implements SpeedController {
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
         // so simply get the value of the first one.
-        final SpeedController controller = (SpeedController) motorControllers.firstElement();
-        return inversion * controller.get();
+        return inversion * speedControllers.get(0).get();
     }
 
     /**
      * The speeds of all SpeedControllers within this Drivetrain.
      * They should all be nearly identical, other than error due to floating point
      * precision.
-     * @return an array enumerating all the current PWM values of the SpeedController collection (-1.0 to 1.0)
+     * @return a list enumerating all the current PWM values of the SpeedController collection (-1.0 to 1.0)
      */
-    public double[] getAll() {
-        final double[] result = new double[motorControllers.size()];
-        for (int i = 0; i < motorControllers.size(); ++i) {
-            final SpeedController controller = (SpeedController) motorControllers.elementAt(i);
-            result[i] = controller.get();
-        }
-        return result;
+    public List<Double> getAll() {
+        return speedControllers.stream().mapToDouble(SpeedController::get).boxed().collect(Collectors.toList());
     }
 
     /**
@@ -100,13 +101,7 @@ public final class Drivetrain implements SpeedController {
      * @param pwm the PWM value to assign to each SpeedController in the collection
      */
     public void set(double pwm) {
-        // PWM value must be between -1 and 1
-        double normalizePwm = Utils.normalizePwm(pwm);
-        final Enumeration e = motorControllers.elements();
-        while (e.hasMoreElements()) {
-            final SpeedController controller = (SpeedController) e.nextElement();
-            controller.set(inversion * normalizePwm);
-        }
+        speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm)));
     }
 
     /**
@@ -115,24 +110,14 @@ public final class Drivetrain implements SpeedController {
      * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
     public void set(double pwm, final byte syncGroup) {
-        // PWM value must be between -1 and 1
-        double normalizePwm = Utils.normalizePwm(pwm);
-        final Enumeration e = motorControllers.elements();
-        while (e.hasMoreElements()) {
-            final SpeedController controller = (SpeedController) e.nextElement();
-            controller.set(inversion * normalizePwm, syncGroup);
-        }
+        speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm), syncGroup));
     }
 
     /**
      * Disable each SpeedController in the collection.
      */
     public void disable() {
-        final Enumeration e = motorControllers.elements();
-        while (e.hasMoreElements()) {
-            final SpeedController controller = (SpeedController) e.nextElement();
-            controller.disable();
-        }
+        speedControllers.forEach(SpeedController::disable);
     }
 
     /**
@@ -140,11 +125,7 @@ public final class Drivetrain implements SpeedController {
      * @param output Set the output to the value calculated by PIDController
      */
     public void pidWrite(final double output) {
-        final Enumeration e = motorControllers.elements();
-        while (e.hasMoreElements()) {
-            final SpeedController controller = (SpeedController) e.nextElement();
-            controller.pidWrite(output);
-        }
+        speedControllers.forEach(c -> c.pidWrite(output));
     }
 
 }

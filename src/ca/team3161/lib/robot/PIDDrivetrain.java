@@ -29,10 +29,12 @@ import ca.team3161.lib.robot.pid.PID;
 import ca.team3161.lib.robot.pid.SimplePID;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
  */
-public final class PIDDrivetrain extends Subsystem {
+public final class PIDDrivetrain extends RepeatingSubsystem {
 
     public static final int SUBSYSTEM_TASK_PERIOD = 20;
     public static final float PID_PROPORTIONAL = 0.3f;
@@ -63,7 +65,7 @@ public final class PIDDrivetrain extends Subsystem {
      */
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
             final PID leftEncoder, final PID rightEncoder, final PID turningPid) {
-        super(SUBSYSTEM_TASK_PERIOD, true, "PID Drivetrain");
+        super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
         this.leftDrive = leftDrive;
         this.rightDrive = rightDrive;
         this.leftEncoder = leftEncoder;
@@ -154,6 +156,7 @@ public final class PIDDrivetrain extends Subsystem {
     }
 
     private class DriveTask extends Task  {
+        @Override
         public void run() {
             final double skew = bearingPid.pid(0.0f);
             leftDrive.set(leftEncoder.pid(leftTicksTarget) + skew);
@@ -179,6 +182,7 @@ public final class PIDDrivetrain extends Subsystem {
     }
 
     private class TurnTask extends Task {
+        @Override
         public void run() {
             final double pidVal = turningPid.pid(turningDegreesTarget);
             leftDrive.set(pidVal);

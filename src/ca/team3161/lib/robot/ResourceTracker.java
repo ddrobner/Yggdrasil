@@ -25,9 +25,10 @@
 
 package ca.team3161.lib.robot;
 
-import edu.wpi.first.wpilibj.communication.Semaphore;
-
-import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
@@ -35,7 +36,7 @@ import java.util.Hashtable;
  */
 public final class ResourceTracker {
     
-    private static final Hashtable RESOURCES = new Hashtable();
+    private static final Map<Object, ReentrantLock> RESOURCES = new ConcurrentHashMap<>();
 
     private ResourceTracker(){}
 
@@ -44,14 +45,10 @@ public final class ResourceTracker {
      * @param resource the resource required
      * @return a unique associated lock
      */
-    public static Semaphore track(Object resource) {
+    public static Lock track(final Object resource) {
         synchronized (RESOURCES) {
-            Semaphore s = (Semaphore) RESOURCES.get(resource);
-            if (s == null) {
-                s = new Semaphore(new Semaphore.Options());
-                RESOURCES.put(resource, s);
-            }
-            return s;
+            RESOURCES.putIfAbsent(resource, new ReentrantLock());
+            return RESOURCES.get(resource);
         }
     }
     

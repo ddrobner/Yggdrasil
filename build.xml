@@ -35,9 +35,8 @@
     <javac includeantruntime="false" srcdir="${src}" destdir="${build}" source="8" target="8">
       <classpath>
         <pathelement path="${classpath}"/>
-        <pathelement location="lib/squawk.jar"/>
-        <pathelement location="lib/wpilibj.jar"/>
-        <pathelement location="lib/networktables-crio.jar"/>
+        <pathelement location="lib/WPILib.jar"/>
+        <pathelement location="lib/NetworkTables.jar"/>
       </classpath>
     </javac>
   </target>
@@ -49,9 +48,8 @@
       <javadoc sourcepath="${src}" destdir="${javadoc-dir}" source="8">
         <classpath>
           <pathelement path="${classpath}"/>
-          <pathelement location="lib/squawk.jar"/>
-          <pathelement location="lib/wpilibj.jar"/>
-          <pathelement location="lib/networktables-crio.jar"/>
+          <pathelement location="lib/WPILib.jar"/>
+          <pathelement location="lib/NetworkTables.jar"/>
         </classpath>
       </javadoc>
       <exec executable="asciidoctor">

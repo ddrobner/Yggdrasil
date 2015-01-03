@@ -30,7 +30,7 @@ import edu.wpi.first.wpilibj.Gyro;
 /**
  * A PID source that returns values as degrees of rotation.
  */
-public final class GyroPidSrc implements AnglePidSrc {
+public final class GyroPidSrc implements AnglePidSrc<Gyro> {
 
     public static final float MAX_ANGLE = 360.0f;
     private final Gyro gyro;
@@ -47,6 +47,7 @@ public final class GyroPidSrc implements AnglePidSrc {
      * Retrieve the original sensor used to create this PIDSrc.
      * @return the Gyro
      */
+    @Override
     public Gyro getSensor() {
         return gyro;
     }
@@ -54,6 +55,7 @@ public final class GyroPidSrc implements AnglePidSrc {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getValue() {
         return (float) gyro.getAngle();
     }
@@ -61,6 +63,7 @@ public final class GyroPidSrc implements AnglePidSrc {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getMinAngle() {
         return 0.0f;
     }
@@ -68,6 +71,7 @@ public final class GyroPidSrc implements AnglePidSrc {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float getMaxAngle() {
         return MAX_ANGLE;
     }

@@ -4,65 +4,63 @@ package com.team254.lib;
  * @author Tom Bottiglieri Team 254, The Cheesy Poofs
  */
 import edu.wpi.first.wpilibj.Timer;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
-import javax.microedition.io.Connector;
-import javax.microedition.io.ServerSocketConnection;
-import javax.microedition.io.SocketConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public final class CheesyVisionServer {
+public enum CheesyVisionServer {
 
+    INSTANCE;
+
+    private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
     public static final int DEFAULT_PORT = 1180;
     public static final double CLIENT_TIMEOUT_SECONDS = 3.0;
-    private static CheesyVisionServer INSTANCE = null;
-    private final Thread serverThread = new Thread(new ServerTask());
-    private final int port;
-    private final Vector connections = new Vector();
+    private final List<Socket> connections = new ArrayList<>();
     private volatile boolean counting = false, listening = true, curLeftStatus = false, curRightStatus = false;
     private volatile int leftCount = 0, rightCount = 0, totalCount = 0;
     private volatile double lastHeartbeatTime = -1.0d;
-
-    /**
-     * Returns the vison server instance.
-     * Providing a port number is only effective upon the first invocation of
-     * this method. Subsequent calls to getInstance() effectively ignore the
-     * parameter.
-     * @param port the port to (attempt to) open a socket on
-     * @return the vision server instance
-     */
-    public static synchronized CheesyVisionServer getInstance(final int port) {
-        if (INSTANCE == null) {
-            INSTANCE = new CheesyVisionServer(port);
-        }
-        return INSTANCE;
-    }
+    private volatile Future<?> serverJob;
 
     public void start() {
-        serverThread.start();
+        if (serverJob != null) {
+            serverJob.cancel(true);
+        }
+        serverJob = THREAD_POOL.submit(new ServerTask());
     }
 
     public void stop() {
         listening = false;
-    }
-
-    private CheesyVisionServer() {
-        this(DEFAULT_PORT);
-    }
-
-    private CheesyVisionServer(final int port) {
-        this.port = port;
+        serverJob.cancel(true);
+        THREAD_POOL.shutdownNow();
+        final Iterator<Socket> socketIterator = connections.iterator();
+        while (socketIterator.hasNext()) {
+            final Socket socket = socketIterator.next();
+            try {
+                socket.close();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+            socketIterator.remove();
+        }
     }
 
     public boolean hasClientConnection() {
-        return lastHeartbeatTime > 0 && (Timer.getFPGATimestamp() - lastHeartbeatTime) < CLIENT_TIMEOUT_SECONDS;
+        return lastHeartbeatTime > 0 && (Timer.getFPGATimestamp() - lastHeartbeatTime) < CLIENT_TIMEOUT_SECONDS
+                && !connections.isEmpty();
     }
 
     private void updateCounts(final boolean left, final boolean right) {
         if (!counting) {
             return;
         }
-
         if (left) {
             ++leftCount;
         }
@@ -111,15 +109,13 @@ public final class CheesyVisionServer {
     private class VisionServerConnectionHandler implements Runnable {
         public static final int BUFFER_SIZE = 1024;
         public static final int SLEEP_PERIOD = 50;
-        private final SocketConnection connection;
-        public VisionServerConnectionHandler(final SocketConnection c) {
+        private final Socket connection;
+        public VisionServerConnectionHandler(final Socket c) {
             connection = c;
         }
 
         public void run() {
-            try {
-                final InputStream is = connection.openInputStream();
-
+            try (final InputStream is = connection.getInputStream()) {
                 final byte[] b = new byte[BUFFER_SIZE];
                 final double timeout = 10.0d;
                 double lastHeartbeat = Timer.getFPGATimestamp();
@@ -144,33 +140,26 @@ public final class CheesyVisionServer {
                         System.out.println("Thread sleep failed.");
                     }
                 }
-                is.close();
-                connection.close();
             } catch (final IOException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    connection.close();
+                } catch (final IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     private class ServerTask implements Runnable {
-
-        public static final int SLEEP_PERIOD = 100;
-
-        // This method listens for incoming connections and spawns new
-        // VisionServerConnectionHandlers to handle them
         public void run() {
             try {
-                final ServerSocketConnection s = (ServerSocketConnection) Connector.open("serversocket://:" + port);
+                final ServerSocket s = new ServerSocket(DEFAULT_PORT);
                 while (listening) {
-                    final SocketConnection connection = (SocketConnection) s.acceptAndOpen(); // blocks until a connection is made
-                    final Thread t = new Thread(new VisionServerConnectionHandler(connection));
-                    t.start();
-                    connections.addElement(connection);
-                    try {
-                        Thread.sleep(SLEEP_PERIOD);
-                    } catch (final InterruptedException ex) {
-                        System.out.println("Thread sleep failed.");
-                    }
+                    final Socket connection = s.accept();
+                    THREAD_POOL.submit(new VisionServerConnectionHandler(connection));
+                    connections.add(connection);
                 }
             } catch (final IOException e) {
                 System.out.println("Socket failure.");

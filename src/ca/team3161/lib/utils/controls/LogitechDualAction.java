@@ -25,89 +25,88 @@
 
 package ca.team3161.lib.utils.controls;
 
+import ca.team3161.lib.robot.RepeatingSubsystem;
 import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
  */
-public final class LogitechDualAction implements Gamepad {
-    
+public final class LogitechDualAction extends RepeatingSubsystem implements Gamepad {
+
     /**
-     * Left thumbstick X-axis.
+     * {@inheritDoc}.
      */
-    public static final int LEFT_STICK_X = 1;
+    public enum LogitechControls implements Control {
+        LEFT_STICK,
+        RIGHT_STICK,
+        DPAD;
+
+        @Override
+        public int getIdentifier(final Axis axis) {
+            return this.ordinal() * 2 + axis.getIdentifier() + 1;
+        }
+    }
+
     /**
-     * Left thumbstick Y-axis.
+     * {@inheritDoc}.
      */
-    public static final int LEFT_STICK_Y = 2;
+    public enum LogitechButton implements Button {
+        LEFT_BUMPER,
+        RIGHT_BUMPER,
+        LEFT_TRIGGER,
+        RIGHT_TRIGGER,
+        SELECT,
+        START;
+
+        @Override
+        public int getIdentifier() {
+            return super.ordinal() + 5;
+        }
+    }
+
     /**
-     * Right thumbstick X-axis.
+     * {@inheritDoc}.
      */
-    public static final int RIGHT_STICK_X = 3;
-    /**
-     * Right thumbstick Y-axis.
-     */
-    public static final int RIGHT_STICK_Y = 4;
-    /**
-     * Directional pad horizontal.
-     */
-    public static final int DPAD_HORIZONTAL = 5;
-    /**
-     * Directional pad vertical.
-     */
-    public static final int DPAD_VERTICAL = 6;
-    
-    /**
-     * Upper left shoulder button.
-     */
-    public static final int LEFT_BUMPER = 5;
-    /**
-     * Upper right shoulder button.
-     */
-    public static final int RIGHT_BUMPER = 6;
-    /**
-     * Lower left shoulder button.
-     */
-    public static final int LEFT_TRIGGER = 7;
-    /**
-     * Lower right shoulder button.
-     */
-    public static final int RIGHT_TRIGGER = 8;
-    
-    /**
-     * Left function button.
-     */
-    public static final int SELECT = 9;
-    
-    /**
-     * Right function button.
-     */
-    public static final int START = 10;
+    public enum LogitechAxis implements Axis {
+        X,
+        Y,
+        Z;
+
+        @Override
+        public int getIdentifier() {
+            return super.ordinal();
+        }
+    }
 
     /* The actual FIRST-provided input device that we are implementing a
     * convenience wrapper around.
     */
     private final GenericHID backingHID;
-    
-    private float inversion = 1.0f;
-    private final float deadzone;
+    private final Map<Control, JoystickMode> controlsModeMap = new HashMap<>();
+    private final Map<Button, Runnable> buttonBindings = new HashMap<>();
     
     /**
      * Create a new LogitechDualAction gamepad/controller.
      * @param port the USB port for this controller
-     * @param deadzone how large of a deadzone to use
      */
-    public LogitechDualAction(final int port, final float deadzone) {
-        Assert.assertTrue("Gamepad deadzone must be in range [0, 1]", deadzone >= 0.0d && deadzone <= 1.0d);
-        backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID is fine
-        this.deadzone = deadzone;
+    public LogitechDualAction(final int port) {
+        super(20, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(port > 0);
+        backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
+        EnumSet.allOf(LogitechControls.class).stream().forEach(control -> controlsModeMap.put(control, new LinearJoystickMode()));
     }
     
     /**
      * {@inheritDoc}
      */
+    @Override
     public GenericHID getBackingHID() {
         return backingHID;
     }
@@ -118,108 +117,53 @@ public final class LogitechDualAction implements Gamepad {
      * @return the value from this axis, or 0 if the raw value falls within the
      * deadzone
      */
-    private float getAxisHelper(final int axis) {
-        final float val = (float) backingHID.getRawAxis(axis);
-        if (Math.abs(val) < deadzone) {
-            return 0.0f;
+    @Override
+    public double getValue(final Control controls, final Axis axis) {
+        return controlsModeMap.get(controls).adjust(backingHID.getRawAxis(controls.getIdentifier(axis)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getButton(final Button button) {
+        return backingHID.getRawButton(button.getIdentifier());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMode(final Control control, final JoystickMode joystickMode) {
+        controlsModeMap.put(control, joystickMode);
+    }
+
+    public void bind(final Button button, final Runnable binding) {
+        buttonBindings.put(button, binding);
+    }
+
+    public void unbind(final Button button) {
+        buttonBindings.remove(button);
+    }
+
+    public void enableBindings() {
+        start();
+    }
+
+    public void disableBindings() {
+        cancel();
+    }
+
+    @Override
+    protected void defineResources() {
+        // none!
+    }
+
+    @Override
+    protected void task() throws Exception {
+        synchronized (buttonBindings) {
+            buttonBindings.entrySet().stream().filter(e -> getButton(e.getKey())).forEach(e -> e.getValue().run());
         }
-        return val;
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public float getLeftX() {
-        return getAxisHelper(LEFT_STICK_X);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public float getLeftY() {
-        return inversion * getAxisHelper(LEFT_STICK_Y);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public float getRightX() {
-        return getAxisHelper(RIGHT_STICK_X);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public float getRightY() {
-        return inversion * getAxisHelper(RIGHT_STICK_Y);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public float getDpadHorizontal() {
-        return getAxisHelper(DPAD_HORIZONTAL);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public float getDpadVertical() {
-        return -getAxisHelper(DPAD_VERTICAL);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getButton(final int button) {
-        return backingHID.getRawButton(button);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getLeftBumper() {
-        return backingHID.getRawButton(LEFT_BUMPER);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getRightBumper() {
-        return backingHID.getRawButton(RIGHT_BUMPER);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getLeftTrigger() {
-        return backingHID.getRawButton(LEFT_TRIGGER);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getRightTrigger() {
-        return backingHID.getRawButton(RIGHT_TRIGGER);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Gamepad setInverted(final boolean inverted) {
-        if (inverted) {
-            this.inversion = -1.0f;
-        } else {
-            this.inversion = 1.0f;
-        }
-        return this;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean getInverted() {
-        return this.inversion == -1.0d;
     }
 
 } 

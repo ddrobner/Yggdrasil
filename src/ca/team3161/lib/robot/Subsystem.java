@@ -25,100 +25,43 @@
 
 package ca.team3161.lib.robot;
 
-import edu.wpi.first.wpilibj.communication.Semaphore;
-import edu.wpi.first.wpilibj.communication.SemaphoreException;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.locks.Lock;
 
 /**
- * Abstracts a system which uses resources and has some task (recurring or
+ * Abstracts a system which uses resourceLocks and has some task (recurring or
  * one-shot) to be performed. An example is PID control - monitor sensors
  * and periodically set motor values based on this.
  */
 public abstract class Subsystem {
 
-    public static final int RESOURCE_ACQUIRE_PERIOD = 500;
+    protected static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(2);
+
     /**
-     * A list of resources which this Subsystem requires.
+     * A list of resourceLocks which this Subsystem requires.
      * @see ca.team3161.lib.robot.ResourceTracker
      */
-    protected final Vector resources;
-    
-    /**
-     * The period length between task repeats (milliseconds).
-     */
-    protected final long timeout;
-    
-    /**
-     * If this task repeats, or runs once only.
-     */
-    protected final boolean repeating;
-    
-    /**
-     * If this task has been requested for cancellation.
-     */
-    protected volatile boolean cancelled;
-    
-    /**
-     * If this task has been started.
-     */
-    protected boolean started;
-    
-    /**
-     * The background task for this Subsystem.
-     */
-    private Thread thread;
-    
-    /**
-     * The name to assign to the background task.
-     */
-    protected final String threadName;
-    
-    /**
-     * Define a new robot Subsystem.
-     * @param timeout update period (in milliseconds) between task repeats (if any)
-     * @param repeating true iff the task is recurring
-     * @param threadName the name for the background thread of this Subsystem
-     */
-    protected Subsystem(final long timeout, final boolean repeating, final String threadName) {
-        this.timeout = timeout;
-        this.resources = new Vector();
-        this.repeating = repeating;
-        this.cancelled = false;
-        this.started = false;
-        this.threadName = threadName;
-    }
-    
-    private Thread getTaskThread() {
-        return new Thread(new SubsystemTask(), threadName);
-    }
+    protected final List<Lock> resourceLocks = new ArrayList<>();
     
     /**
      * Define a required resource for this Subsystem when its task is executed.
      * @param resource a sensor, speed controller, etc. that this subsystem
      * needs exclusive access to during its task
      */
-    protected final void require(Object resource) {
-        resources.addElement(ResourceTracker.track(resource));
+    protected final void require(final Object resource) {
+        resourceLocks.add(ResourceTracker.track(resource));
     }
     
-    private void acquireResources() throws SemaphoreException {
-        Enumeration e = resources.elements();
-        while (e.hasMoreElements()) {
-            Semaphore s = (Semaphore) e.nextElement();
-            s.takeMillis(RESOURCE_ACQUIRE_PERIOD);
-        }
+    private void acquireResources() throws InterruptedException {
+        resourceLocks.forEach(Lock::tryLock);
     }
     
     private void releaseResources() {
-        Enumeration e = resources.elements();
-        while (e.hasMoreElements()) {
-            Semaphore s = (Semaphore) e.nextElement();
-            try {
-                s.give();
-            } catch (final SemaphoreException se) {
-            }
-        }
+        resourceLocks.forEach(Lock::unlock);
     }
     
     /**
@@ -126,7 +69,11 @@ public abstract class Subsystem {
      * @return if this Subsystem's background task has been canceled
      */
     public final boolean getCancelled() {
-        return cancelled;
+        return (getJob() != null && getJob().isCancelled());
+    }
+
+    public final boolean getStarted() {
+        return getJob() != null && (!getJob().isCancelled() && !getJob().isDone());
     }
     
     /**
@@ -134,26 +81,41 @@ public abstract class Subsystem {
      * is a recurring task).
      */
     public final void cancel() {
-        cancelled = true;
-        if (thread != null) {
-            thread.interrupt();
+        if (getJob() != null) {
+            getJob().cancel(true);
         }
     }
     
     /**
      * Start (or restart) this Subsystem's background task.
      */
-    public final void start() {
-        cancelled = false;
-        if (thread != null) {
-            thread.interrupt();
+    public abstract void start();
+
+    /**
+     * Get this subsystem's task.
+     * @return the current task for this subsystem, if any
+     */
+    protected abstract Future<?> getJob();
+
+    /**
+     * The task for this Subsystem to run.
+     */
+    protected class RunTask implements Runnable {
+        @Override
+        public void run() {
+            try {
+                acquireResources();
+                task();
+            } catch (final Exception e) {
+                e.printStackTrace();
+            } finally {
+                releaseResources();
+            }
         }
-        thread = getTaskThread();
-        thread.start();
     }
     
     /**
-     * Define the set of resources required for this Subsystem's task.
+     * Define the set of resourceLocks required for this Subsystem's task.
      * @see ca.team3161.lib.robot.Subsystem#require(Object)
      */
     protected abstract void defineResources();
@@ -163,33 +125,5 @@ public abstract class Subsystem {
      * @throws Exception in case the defined task throws any Exceptions
      */
     protected abstract void task() throws Exception;
-
-    private class SubsystemTask implements Runnable {
-        public void run() {
-            if (cancelled) {
-                return;
-            }
-            if (repeating) {
-                while (!cancelled) {
-                    try {
-                        acquireResources();
-                        task();
-                        Thread.sleep(timeout);
-                    } catch (final Exception e) {
-                    } finally {
-                        releaseResources();
-                    }
-                }
-            } else {
-                try {
-                    acquireResources();
-                    task();
-                } catch (final Exception e) {
-                } finally {
-                    releaseResources();
-                }
-            }
-        }
-    }
     
 }

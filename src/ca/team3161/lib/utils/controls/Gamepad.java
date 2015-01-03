@@ -25,7 +25,7 @@
 
 package ca.team3161.lib.utils.controls;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.*;
 
 /**
  * An interface defining a Gamepad controller. All Gamepads are expected to
@@ -42,41 +42,7 @@ public interface Gamepad {
      */
     GenericHID getBackingHID();
 
-    /**
-     * Get the left thumbstick X-axis.
-     * @return the X-axis of the left thumbstick
-     */
-    float getLeftX();
-
-    /**
-     * Get the left thumbstick Y-axis.
-     * @return the Y-axis of the left thumbstick
-     */
-    float getLeftY();
-
-    /**
-     * Get the right thumbstick X-axis.
-     * @return the X-axis of the right thumbstick
-     */
-    float getRightX();
-
-    /**
-     * Get the right thumbstick Y-axis.
-     * @return the Y-axis of the right thumbstick
-     */
-    float getRightY();
-
-    /**
-     * Get the directional pad horizontal.
-     * @return the left/right value of the directional pad
-     */
-    float getDpadHorizontal();
-
-    /**
-     * Get the directional pad vertical.
-     * @return the up/down value of the directional pad
-     */
-    float getDpadVertical();
+    double getValue(Control control, Axis axis);
 
     /**
      * Get the value of a button on the controller.
@@ -84,18 +50,29 @@ public interface Gamepad {
      * actual buttons will depend on the specific Gamepad implementation
      * @return whether the specified button is currently pressed or not
      */
-    boolean getButton(int button);
+    boolean getButton(Button button);
+
+    void setMode(Control control, JoystickMode joystickMode);
 
     /**
-     * Invert the Y-axes of the left and right thumbsticks.
-     * @param inverted if the thumbsticks are to be inverted
-     * @return this Gamepad instance
+     * A physical control on a Gamepad, eg a thumbstick or directional pad.
      */
-    Gamepad setInverted(boolean inverted);
+    interface Control {
+        int getIdentifier(Axis axis);
+    }
 
     /**
-     * Check if this Gamepad's thumbstick Y-axes are inverted.
-     * @return whether the Y-axes of the thumbsticks are inverted
+     * An axis for a control, eg horizontal, vertical.
      */
-    boolean getInverted();
+    interface Axis {
+        int getIdentifier();
+    }
+
+    /**
+     * A physical button on a gamepad.
+     */
+    interface Button {
+        int getIdentifier();
+    }
+
 }

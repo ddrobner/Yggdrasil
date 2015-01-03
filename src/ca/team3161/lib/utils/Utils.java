@@ -34,22 +34,6 @@ public class Utils {
     private Utils(){}
     
     /**
-     * @param array an array to print
-     * @return a prettier string representation of the array
-     */
-    public static String arrayToString(final Object[] array) {
-        String result = "[";
-        for (int i = 0; i < array.length; ++i) {
-            result += array[i].toString();
-            if (i < array.length - 1) {
-                result += ", ";
-            }
-        }
-        result += "]";
-        return result;
-    }
-    
-    /**
      * Normalize a PWM value so it remains in the range [-1.0, 1.0]
      * If a value above 1.0 is given, 1.0 is returned. If a value below -1.0
      * is given, -1.0 is returned. For other values, they are simply returned

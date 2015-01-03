@@ -28,6 +28,8 @@ package ca.team3161.lib.utils.controls;
 import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 
+import java.util.Objects;
+
 /**
  * A fairly simple class representing a physical Joystick, configurable with
  * per-axis filtering "modes". Similar to the FRC-provided Joystick class in usage.
@@ -55,8 +57,8 @@ public final class Joystick {
      */
     public Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
         Assert.assertTrue("Port cannot be negative, was: " + Integer.toString(port), port > 0);
-        Assert.assertNonNull("JoystickModes cannot be null - received null X axis mode", xAxisMode);
-        Assert.assertNonNull("JoystickModes cannot be null - received null Y axis mode", yAxisMode);
+        Objects.requireNonNull(xAxisMode);
+        Objects.requireNonNull(yAxisMode);
         this.backingHID = new edu.wpi.first.wpilibj.Joystick(port);
         this.xAxisMode = xAxisMode;
         this.yAxisMode = yAxisMode;
@@ -67,7 +69,7 @@ public final class Joystick {
      * @param xAxisMode the mode for the Joystick X axis (linear curve, squared curve, etc)
      */
     public void setXAxisMode(final JoystickMode xAxisMode) {
-        Assert.assertNonNull(xAxisMode);
+        Objects.requireNonNull(xAxisMode);
         this.xAxisMode = xAxisMode;
     }
 
@@ -76,7 +78,7 @@ public final class Joystick {
      * @param yAxisMode the mode for the Joystick Y axis (linear curve, squared curve, etc)
      */
     public void setYAxisMode(final JoystickMode yAxisMode) {
-        Assert.assertNonNull(yAxisMode);
+        Objects.requireNonNull(yAxisMode);
         this.yAxisMode = yAxisMode;
     }
 

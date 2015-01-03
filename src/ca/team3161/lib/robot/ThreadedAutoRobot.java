@@ -25,8 +25,12 @@
 
 package ca.team3161.lib.robot;
 
-import ca.team3161.lib.utils.io.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A subclass of IterativeRobot. Autonomous is run in a new Thread, leaving the main robot thread
@@ -37,13 +41,8 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 public abstract class ThreadedAutoRobot extends IterativeRobot {
 
     private volatile int accumulatedTime = 0;
-    private final Object modeLock = new Object();
-    private Thread autoThread;
-
-    /**
-     * The DriverStation virtual LCD display panel instance.
-     */
-    protected final DriverStationLCD dsLcd = DriverStationLCD.getInstance();
+    private final Lock modeLock = new ReentrantLock();
+    private Future<?> autoJob;
 
     /**
      * At the start of the autonomous period, start a new background task
@@ -55,30 +54,20 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
      * modeLock is used to ensure that the robot is never simultaneously
      * executing both autonomous and teleop routines at the same time.
      */
+    @Override
     public final void autonomousInit() {
         accumulatedTime = 0;
-        autoThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    synchronized (modeLock) {
-                        autonomousThreaded();
-                    }
-                } catch (Exception e) {
-                    dsLcd.println(0, "AUTO INTERRUPTED!");
-                    e.printStackTrace();
-                }
+        autoJob = Executors.newSingleThreadExecutor().submit(() -> {
+            try {
+                modeLock.lockInterruptibly();
+                autonomousThreaded();
+            } catch (final Exception e) {
+                e.printStackTrace();
+            } finally {
+                modeLock.unlock();
             }
-        }, "AUTO THREAD");
-        autoThread.start();
+        });
     }
-
-    /**
-     * Not used. Stubbed out IterativeRobot method.
-     * IterativeRobot defines this, but we do not want it to be possible for anything
-     * but teleopThreadsafe to be used during teleop. We can't remove or hide it,
-     * so we make it empty and final instead.
-     */
-    public final void teleopContinuous() { }
 
     /**
      * Add a delay to the autonomous routine.
@@ -88,14 +77,14 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
      * @param millis how many milliseconds to wait for (approximate)
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
-    public final void waitFor(long millis) throws InterruptedException {
+    public final void waitFor(final long millis) throws InterruptedException {
         accumulatedTime += millis;
         if (accumulatedTime > getAutonomousPeriodLengthSeconds()) {
-            throw new InterruptedException("Auto is over!");
+            autoJob.cancel(true);
         }
         Thread.sleep(millis);
         if (!isAutonomous()) {
-            throw new InterruptedException("Auto is over!");
+            autoJob.cancel(true);
         }
     }
 
@@ -105,18 +94,20 @@ public abstract class ThreadedAutoRobot extends IterativeRobot {
      * that the autonomous thread and the main robot thread, executing teleop
      * code, will not attempt to run concurrently.
      */
+    @Override
     public final void teleopPeriodic() {
-        if (autoThread != null) {
-            autoThread.interrupt();
+        if (autoJob != null) {
+            autoJob.cancel(true);
         }
-        synchronized (modeLock) {
-            teleopThreadsafe();
-        }
+        modeLock.lock();
+        teleopThreadsafe();
+        modeLock.unlock();
     }
 
     /**
      * Called once when the robot enters the teleop mode.
      */
+    @Override
     public abstract void teleopInit();
 
     /**

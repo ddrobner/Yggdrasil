@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
  * rotation.
  */
-public final class PotentiometerPidSrc implements AnglePidSrc {
+public final class PotentiometerPidSrc implements AnglePidSrc<Potentiometer> {
     
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
@@ -58,6 +58,7 @@ public final class PotentiometerPidSrc implements AnglePidSrc {
      * Retrieve the original sensor used to construct this PIDSrc.
      * @return the Potentiometer
      */
+    @Override
     public Potentiometer getSensor() {
         return pot;
     }
@@ -66,6 +67,7 @@ public final class PotentiometerPidSrc implements AnglePidSrc {
      * Inherited from PIDSrc.
      * @return the measured value of this PIDSrc
      */
+    @Override
     public float getValue() {
         final float slope = (maxAngle - minAngle) / (maxVolt - minVolt);
         final float offset = minAngle - slope * minVolt;
@@ -76,6 +78,7 @@ public final class PotentiometerPidSrc implements AnglePidSrc {
      * Inherited from AnglePidSrc.
      * @return the minimal angle of this sensor
      */
+    @Override
     public float getMinAngle() {
         return minAngle;
     }
@@ -84,6 +87,7 @@ public final class PotentiometerPidSrc implements AnglePidSrc {
      * Inherited from AnglePidSrc.
      * @return the maximal angle of this sensor
      */
+    @Override
     public float getMaxAngle() {
         return maxAngle;
     }

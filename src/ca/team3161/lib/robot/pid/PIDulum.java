@@ -53,6 +53,7 @@ public final class PIDulum extends AbstractPID {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float pid(final float target) {
         float kErr;
         float pOut;
@@ -61,7 +62,7 @@ public final class PIDulum extends AbstractPID {
         float feedForward;
         float output;
 
-        kErr = (float) (target - source.getValue());
+        kErr = target - source.getValue();
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -75,7 +76,7 @@ public final class PIDulum extends AbstractPID {
             iOut = 1;
         }
         
-        feedForward = torqueConstant * (float) (source.getValue() - offsetAngle);
+        feedForward = torqueConstant * (source.getValue() - offsetAngle);
         
         if (Math.abs(kErr) < deadband) {
             atTarget = true;

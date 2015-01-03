@@ -73,27 +73,6 @@ public final class Assert {
     }
 
     /**
-     * Assert that a reference is not null.
-     * @param obj throw an exception if this reference is null
-     */
-    public static void assertNonNull(Object obj) {
-        if (obj == null) {
-            throw new NullPointerException();
-        }
-    }
-
-    /**
-     * Assert that a reference is not null.
-     * @param reason why the reference cannot be null
-     * @param obj throw an exception if this reference is null
-     */
-    public static void assertNonNull(String reason, Object obj) {
-        if (obj == null) {
-            throw new NullPointerException(reason);
-        }
-    }
-
-    /**
      * Indicates that an Assert statement has failed. This is intended to cause
      * a crash and halt your robot code, leaving the cRIO/RoboRIO responsible for
      * stopping all motor controllers, relays, etc. If you ever find yourself

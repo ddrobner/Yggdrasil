@@ -25,15 +25,20 @@
 
 package ca.team3161.lib.robot.pid;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 /**
  * A simple interface for allowing different types of sensors to be used for
  * PID loops.
+ * @param <T> the type of the PIDSource sensor for this PIDSrc (eg encoder)
  */
-public interface PIDSrc {
+public interface PIDSrc<T extends PIDSource> {
 
     /**
      * The measured value of this PIDSrc.
      * @return the measured value of this PIDSrc
      */
     float getValue();
+
+    T getSensor();
 }
