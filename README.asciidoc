@@ -1,6 +1,6 @@
 = Yggdrasil
 Team 3161
-v0.2.3, 1 January 2015
+v0.8.0, 5 January 2015
 :sectanchors:
 
 == WORK IN PROGRESS
@@ -30,6 +30,11 @@ direct download link, rather than through CruiseControl, and will be named with
 -RELEASE included in the JAR name.
 
 Development for Yggdrasil happens on link:https://github.com/FRC3161/Yggdrasil[our GitHub].
+
+Versions 0.8 and up are compatible with the 2015 FRC Control Systems Update and
+Java 8. If for some reason you need to remain compatible with the previous Java
+1.4 Micro Edition environment and the cRIO, you will need to use an older 0.2.x
+version of Yggdrasil.
 
 == Introduction
 Yggdrasil is the name of the library which FRC 3161 uses and publishes for other
