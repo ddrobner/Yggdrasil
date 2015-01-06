@@ -90,7 +90,7 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     /**
-     * Handles running teleopThreadsafe periodically.
+     * Handles running teleopRoutine periodically.
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
      * code, will not attempt to run concurrently.
@@ -101,7 +101,7 @@ public abstract class TitanBot extends IterativeRobot {
             autoJob.cancel(true);
         }
         modeLock.lock();
-        teleopThreadsafe();
+        teleopRoutine();
         modeLock.unlock();
     }
 
@@ -118,7 +118,7 @@ public abstract class TitanBot extends IterativeRobot {
      * resulting in a stack overflow and crashed robot code. teleopContinuous
      * is likewise unsupported.
      */
-    public abstract void teleopThreadsafe();
+    public abstract void teleopRoutine();
 
     /**
      * The one-shot autonomous "script" to be run in a new Thread.
