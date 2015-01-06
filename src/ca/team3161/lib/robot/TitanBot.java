@@ -112,6 +112,12 @@ public abstract class TitanBot extends IterativeRobot {
     public abstract void teleopInit();
 
     /**
+     * Called once each time the robot is turned on.
+     */
+    @Override
+    public abstract void robotInit();
+
+    /**
      * Periodically called during robot teleop mode to enable operator control.
      * This is the only way teleop mode should be handled - do not directly call
      * teleopPeriodic from within this method or unbounded recursion will occur,
