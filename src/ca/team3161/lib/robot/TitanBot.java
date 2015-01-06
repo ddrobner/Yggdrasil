@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -77,12 +78,12 @@ public abstract class TitanBot extends IterativeRobot {
      * @param millis how many milliseconds to wait for (approximate)
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
-    public final void waitFor(final long millis) throws InterruptedException {
-        accumulatedTime += millis;
-        if (accumulatedTime > getAutonomousPeriodLengthSeconds()) {
+    public final void waitFor(final long length, final TimeUnit unit) throws InterruptedException {
+        accumulatedTime += unit.convert(length, TimeUnit.MILLISECONDS);
+        if (accumulatedTime > TimeUnit.SECONDS.toMillis(getAutonomousPeriodLengthSeconds())) {
             autoJob.cancel(true);
         }
-        Thread.sleep(millis);
+        Thread.sleep(unit.convert(length, TimeUnit.MILLISECONDS));
         if (!isAutonomous()) {
             autoJob.cancel(true);
         }
