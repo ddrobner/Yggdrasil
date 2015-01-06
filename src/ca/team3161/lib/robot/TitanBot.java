@@ -38,7 +38,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * autonomous scripts to use convenient semantics such as Thread sleeping rather than periodically
  * checking Timer objects.
  */
-public abstract class ThreadedAutoRobot extends IterativeRobot {
+public abstract class TitanBot extends IterativeRobot {
 
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
