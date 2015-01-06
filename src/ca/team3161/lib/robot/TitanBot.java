@@ -48,7 +48,7 @@ public abstract class TitanBot extends IterativeRobot {
     /**
      * At the start of the autonomous period, start a new background task
      * using the behaviour described in the concrete subclass implementation's
-     * autonomousThreaded() method.
+     * autonomousRoutine() method.
      * This new background task allows us to use Thread.sleep rather than a timer,
      * while also not disrupting normal background functions of the
      * robot such as feeding the Watchdog or responding to FMS events.
@@ -61,7 +61,7 @@ public abstract class TitanBot extends IterativeRobot {
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
             try {
                 modeLock.lockInterruptibly();
-                autonomousThreaded();
+                autonomousRoutine();
             } catch (final Exception e) {
                 e.printStackTrace();
             } finally {
@@ -124,7 +124,7 @@ public abstract class TitanBot extends IterativeRobot {
      * The one-shot autonomous "script" to be run in a new Thread.
      * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
      */
-    public abstract void autonomousThreaded() throws Exception;
+    public abstract void autonomousRoutine() throws Exception;
 
     /**
      * Define the length of the Autonomous period, in seconds.
