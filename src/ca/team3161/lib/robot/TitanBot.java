@@ -75,7 +75,8 @@ public abstract class TitanBot extends IterativeRobot {
      * This also ensures that the autonomous routine does not continue
      * to run after the FMS notifies us that the autonomous period
      * has ended.
-     * @param millis how many milliseconds to wait for (approximate)
+     * @param length how long to wait for (approximate)
+     * @param unit the time units the given delay is in
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
     public final void waitFor(final long length, final TimeUnit unit) throws InterruptedException {
