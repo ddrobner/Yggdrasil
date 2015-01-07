@@ -26,6 +26,7 @@
 
 package ca.team3161.lib.robot;
 
+import java.util.Objects;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +41,7 @@ public abstract class RepeatingSubsystem extends Subsystem {
     private volatile ScheduledFuture<?> job;
 
     public RepeatingSubsystem(final long timeout, final TimeUnit timeUnit) {
+        Objects.requireNonNull(timeUnit);
         this.timeout = timeout;
         this.timeUnit = timeUnit;
     }

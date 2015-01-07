@@ -27,6 +27,8 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.Encoder;
 
+import java.util.Objects;
+
 /**
  * A PID source that returns values as encoder ticks.
  */
@@ -39,6 +41,7 @@ public final class EncoderPidSrc implements PIDSrc<Encoder> {
      * @param enc an Encoder object to use as a PIDSrc
      */
     public EncoderPidSrc(final Encoder enc) {
+        Objects.requireNonNull(enc);
         this.enc = enc;
     }
     

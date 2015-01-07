@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.robot.pid;
 
+import java.util.Objects;
+
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... get it?)
  */
@@ -46,6 +48,7 @@ public final class PIDulum extends AbstractPID {
             final float kP, final float kI, final float kD,
             final float offsetAngle, final float torqueConstant) {
         super(source, deadband, kP, kI, kD);
+        Objects.requireNonNull(source);
         this.offsetAngle = offsetAngle;
         this.torqueConstant = torqueConstant;
     }

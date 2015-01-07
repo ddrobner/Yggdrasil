@@ -29,6 +29,7 @@ import ca.team3161.lib.robot.pid.PID;
 import ca.team3161.lib.robot.pid.SimplePID;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -66,6 +67,11 @@ public final class PIDDrivetrain extends RepeatingSubsystem {
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
             final PID leftEncoder, final PID rightEncoder, final PID turningPid) {
         super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
+        Objects.requireNonNull(leftDrive);
+        Objects.requireNonNull(rightDrive);
+        Objects.requireNonNull(leftEncoder);
+        Objects.requireNonNull(rightEncoder);
+        Objects.requireNonNull(turningPid);
         this.leftDrive = leftDrive;
         this.rightDrive = rightDrive;
         this.leftEncoder = leftEncoder;
@@ -112,6 +118,7 @@ public final class PIDDrivetrain extends RepeatingSubsystem {
      * @param t the task type to switch to
      */
     private void setTask(final Task t) {
+        Objects.requireNonNull(t);
         leftEncoder.clear();
         rightEncoder.clear();
         turningPid.clear();

@@ -27,6 +27,7 @@ package ca.team3161.lib.robot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,6 +54,7 @@ public abstract class Subsystem {
      * needs exclusive access to during its task
      */
     protected final void require(final Object resource) {
+        Objects.requireNonNull(resource);
         resourceLocks.add(ResourceTracker.track(resource));
     }
     

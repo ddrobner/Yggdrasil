@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.robot.pid;
 
+import java.util.Objects;
+
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
  * output values with which a system can reach and maintain a target value.
@@ -56,6 +58,7 @@ public abstract class AbstractPID implements PID {
      */
     public AbstractPID(final PIDSrc source, final float deadband,
             final float kP, final float kI, final float kD) {
+        Objects.requireNonNull(source);
         this.source = source;
         this.deadband = deadband;
         this.kP = kP;

@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.robot.pid;
 
+import java.util.Objects;
+
 /**
  * A plain, general PID implementation.
  * {@inheritDoc}
@@ -41,6 +43,7 @@ public class SimplePID extends AbstractPID {
      */
     public SimplePID(final PIDSrc source, final float deadband, final float kP, final float kI, final float kD) {
         super(source, deadband, kP, kI, kD);
+        Objects.requireNonNull(source);
     }
 
     /**
@@ -53,7 +56,7 @@ public class SimplePID extends AbstractPID {
         float dOut;
         float output;
 
-        kErr = (float) (target - source.getValue());
+        kErr = (target - source.getValue());
 
         deltaError = prevError - kErr;
         prevError = kErr;

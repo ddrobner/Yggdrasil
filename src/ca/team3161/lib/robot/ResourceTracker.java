@@ -26,6 +26,7 @@
 package ca.team3161.lib.robot;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -46,6 +47,7 @@ public final class ResourceTracker {
      * @return a unique associated lock
      */
     public static Lock track(final Object resource) {
+        Objects.requireNonNull(resource);
         synchronized (RESOURCES) {
             RESOURCES.putIfAbsent(resource, new ReentrantLock());
             return RESOURCES.get(resource);

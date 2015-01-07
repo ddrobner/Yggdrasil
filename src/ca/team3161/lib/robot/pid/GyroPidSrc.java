@@ -27,6 +27,8 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.Gyro;
 
+import java.util.Objects;
+
 /**
  * A PID source that returns values as degrees of rotation.
  */
@@ -40,6 +42,7 @@ public final class GyroPidSrc implements AnglePidSrc<Gyro> {
      * @param gyro a Gyro object to use as a PIDSrc
      */
     public GyroPidSrc(final Gyro gyro) {
+        Objects.requireNonNull(gyro);
         this.gyro = gyro;
     }
     
