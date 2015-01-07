@@ -172,20 +172,6 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
      * {@inheritDoc}
      */
     @Override
-    public void bind(final Button button, final Runnable binding) {
-        Objects.requireNonNull(button);
-        Objects.requireNonNull(binding);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + "bind() called with invalid button "
-                                       + button);
-        }
-        bind(button, PressType.PRESS, binding);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void bind(final Button button, final PressType pressType, final Runnable binding) {
         Objects.requireNonNull(button);
         Objects.requireNonNull(pressType);
@@ -201,19 +187,6 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
      * {@inheritDoc}
      */
     @Override
-    public void unbind(final Button button) {
-        Objects.requireNonNull(button);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
-                                       + button);
-        }
-        EnumSet.allOf(PressType.class).stream().forEach(pressType -> unbind(button, pressType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void unbind(final Button button, final PressType pressType) {
         Objects.requireNonNull(button);
         Objects.requireNonNull(pressType);
@@ -223,19 +196,6 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         }
         buttonBindings.entrySet().removeIf(e -> e.getKey().getButton().equals(button)
                                                         && e.getKey().getPressType().equals(pressType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasBinding(final Button button) {
-        Objects.requireNonNull(button);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
-                                       + button);
-        }
-        return buttonBindings.keySet().stream().anyMatch(b -> b.getButton().equals(button));
     }
 
     /**

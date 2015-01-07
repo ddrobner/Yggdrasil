@@ -25,7 +25,9 @@
 
 package ca.team3161.lib.utils.controls;
 
-import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.GenericHID;
+
+import java.util.stream.Stream;
 
 /**
  * An interface defining a Gamepad controller. All Gamepads are expected to
@@ -88,7 +90,9 @@ public interface Gamepad {
      * @param button the button on which to bind an action
      * @param binding the action to be bound
      */
-    void bind(Button button, Runnable binding);
+    default void bind(Button button, Runnable binding) {
+        bind(button, PressType.PRESS, binding);
+    }
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
@@ -108,7 +112,9 @@ public interface Gamepad {
      * Gamepad implementation should not be used as parameters to other Gamepad implementations.
      * @param button the button for which to unbind all actions
      */
-    void unbind(Button button);
+    default void unbind(Button button) {
+        Stream.of(PressType.values()).forEach(t -> unbind(button, t));
+    }
 
     /**
      * Remove a binding for the given button. Buttons should be provided by Gamepad
@@ -126,7 +132,9 @@ public interface Gamepad {
      * @param button the button to check for any bindings
      * @return if the button has any bindings
      */
-    boolean hasBinding(Button button);
+    default boolean hasBinding(Button button) {
+        return Stream.of(PressType.values()).map(pressType -> hasBinding(button, pressType)).anyMatch(t -> t);
+    }
 
     /**
      * Check if a given button has a bound action for a specific button press type. Buttons
