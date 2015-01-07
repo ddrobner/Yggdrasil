@@ -30,11 +30,11 @@ import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
@@ -104,7 +104,7 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         Assert.assertTrue(port > 0);
         this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
-        EnumSet.allOf(LogitechControl.class).stream().forEach(control -> controlsModeMap.put(control, new LinearJoystickMode()));
+        Stream.of(LogitechControl.values()).forEach(control -> controlsModeMap.put(control, new LinearJoystickMode()));
     }
     
     /**
