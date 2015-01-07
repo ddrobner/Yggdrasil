@@ -77,8 +77,8 @@ public interface Gamepad {
      * should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations.
-     * @param control
-     * @param joystickMode
+     * @param control the control on which to set a mode
+     * @param joystickMode the mode to set
      */
     void setMode(Control control, JoystickMode joystickMode);
 

@@ -289,13 +289,21 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
 
         @Override
         public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
 
             final Binding binding = (Binding) o;
 
-            if (!button.equals(binding.button)) return false;
-            if (pressType != binding.pressType) return false;
+            if (!button.equals(binding.button)) {
+                return false;
+            }
+            if (pressType != binding.pressType) {
+                return false;
+            }
 
             return true;
         }
