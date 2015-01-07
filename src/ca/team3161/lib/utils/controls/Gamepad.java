@@ -42,17 +42,114 @@ public interface Gamepad {
      */
     GenericHID getBackingHID();
 
+    /**
+     * Get the USB port (as numbered in the Driver Station) that this Gamepad is plugged into.
+     * @return the USB port number
+     */
+    int getPort();
+
+    /**
+     * Get the value of an axis on a control. Generally between -1.0 and 1.0. Controls
+     * and Axes should be provided by Gamepad implementations supplying their own valid
+     * possible values. Controls and Axes defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations.
+     * @param control the control (eg thumbstick) to check
+     * @param axis the axis of the control to read
+     * @return the value of the axis on the control
+     */
     double getValue(Control control, Axis axis);
 
     /**
-     * Get the value of a button on the controller.
+     * Get the value of a button on the controller. Buttons
+     * should be provided by Gamepad implementations supplying their own valid
+     * possible values. Buttons defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations.
      * @param button which button to check. The mapping from values here to
      * actual buttons will depend on the specific Gamepad implementation
      * @return whether the specified button is currently pressed or not
      */
     boolean getButton(Button button);
 
+    /**
+     * Set a mode to adjust input on one of the controls of this Gamepad. Controls
+     * should be provided by Gamepad implementations supplying their own valid
+     * possible values. Controls defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations.
+     * @param control
+     * @param joystickMode
+     */
     void setMode(Control control, JoystickMode joystickMode);
+
+    /**
+     * Bind a button press on this gamepad to an action to be performed when the button
+     * is pressed. Buttons should be provided by Gamepad implementations supplying their
+     * own valid possible values. Buttons defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations.
+     * @param button the button on which to bind an action
+     * @param binding the action to be bound
+     */
+    void bind(Button button, Runnable binding);
+
+    /**
+     * Bind a button press on this gamepad to an action to be performed when the button
+     * is pressed, released, or periodically while the button is held. Buttons should be
+     * provided by Gamepad implementations supplying their own valid possible values.
+     * Buttons defined by one Gamepad implementation should* not be used as parameters
+     * to other Gamepad implementations.
+     * @param button the button on which to bind an action
+     * @param pressType the type of button press which should trigger the action
+     * @param binding the action to be bound
+     */
+    void bind(Button button, PressType pressType, Runnable binding);
+
+    /**
+     * Remove all bindings for the given button. Buttons should be provided by Gamepad
+     * implementations supplying their own valid possible values. Buttons defined by one
+     * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     * @param button the button for which to unbind all actions
+     */
+    void unbind(Button button);
+
+    /**
+     * Remove a binding for the given button. Buttons should be provided by Gamepad
+     * implementations supplying their own valid possible values. Buttons defined by one
+     * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     * @param button the button for which to unbind an action
+     * @param pressType the type of button press for which to unbind an action
+     */
+    void unbind(Button button, PressType pressType);
+
+    /**
+     * Check if a given button has a bound action. Buttons should be provided by Gamepad
+     * implementations supplying their own valid possible values. Buttons defined by one
+     * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     * @param button the button to check for any bindings
+     * @return if the button has any bindings
+     */
+    boolean hasBinding(Button button);
+
+    /**
+     * Check if a given button has a bound action for a specific button press type. Buttons
+     * should be provided by Gamepad implementations supplying their own valid possible values.
+     * Buttons defined by one Gamepad implementation should not be used as parameters to other
+     * Gamepad implementations.
+     * @param button the button to check for bindings
+     * @param pressType the type of button press to check for bindings
+     * @return if the button has any bindings for the given press type
+     */
+    boolean hasBinding(Button button, PressType pressType);
+
+    /**
+     * Enable button bindings. If bindings are not enabled, then no bound actions will be executed.
+     * By default, bindings are not enabled.
+     */
+    void enableBindings();
+
+    /**
+     * Disable button bindings. If bindings are not enabled, then no bound actions will be executed.
+     * By default, bindings are not enabled.
+     */
+    void disableBindings();
 
     /**
      * A physical control on a Gamepad, eg a thumbstick or directional pad.
@@ -73,6 +170,15 @@ public interface Gamepad {
      */
     interface Button {
         int getIdentifier();
+    }
+
+    /**
+     * Types of button press actions.
+     */
+    enum PressType {
+        PRESS,
+        RELEASE,
+        HOLD,
     }
 
 }
