@@ -177,7 +177,7 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         Objects.requireNonNull(pressType);
         Objects.requireNonNull(binding);
         if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
+            System.err.println("Gamepad on port " + this.port + " bind() called with invalid button "
                                        + button);
         }
         buttonBindings.put(new Binding(button, pressType), binding);
