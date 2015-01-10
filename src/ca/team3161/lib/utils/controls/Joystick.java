@@ -56,7 +56,7 @@ public final class Joystick {
      * @param yAxisMode the mode for the Y axis. Must not be null.
      */
     public Joystick(final int port, final JoystickMode xAxisMode, final JoystickMode yAxisMode) {
-        Assert.assertTrue("Port cannot be negative, was: " + Integer.toString(port), port > 0);
+        Assert.assertTrue("Port cannot be negative, was: " + Integer.toString(port), port >= 0);
         Objects.requireNonNull(xAxisMode);
         Objects.requireNonNull(yAxisMode);
         this.backingHID = new edu.wpi.first.wpilibj.Joystick(port);

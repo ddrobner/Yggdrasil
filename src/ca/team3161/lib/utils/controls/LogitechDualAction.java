@@ -101,7 +101,7 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
      */
     public LogitechDualAction(final int port) {
         super(20, TimeUnit.MILLISECONDS);
-        Assert.assertTrue(port > 0);
+        Assert.assertTrue(port >= 0);
         this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
         Stream.of(LogitechControl.values()).forEach(control -> controlsModeMap.put(control, new LinearJoystickMode()));
