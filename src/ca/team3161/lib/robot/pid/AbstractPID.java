@@ -41,12 +41,12 @@ public abstract class AbstractPID implements PID {
     /**
      * PID constants.
      */
-    protected float deadband, kP, kI, kD, integralError, prevError, deltaError;
+    protected volatile float deadband, kP, kI, kD, integralError, prevError, deltaError;
     
     /**
      * If this PID loop has reached its target.
      */
-    protected boolean atTarget;
+    protected volatile boolean atTarget;
     
     /**
      * Create a new AbstractPID instance.
