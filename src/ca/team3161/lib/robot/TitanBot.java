@@ -80,11 +80,11 @@ public abstract class TitanBot extends IterativeRobot {
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
     public final void waitFor(final long length, final TimeUnit unit) throws InterruptedException {
-        accumulatedTime += unit.convert(length, TimeUnit.MILLISECONDS);
+        accumulatedTime += TimeUnit.MILLISECONDS.convert(length, unit);
         if (accumulatedTime > TimeUnit.SECONDS.toMillis(getAutonomousPeriodLengthSeconds())) {
             autoJob.cancel(true);
         }
-        Thread.sleep(unit.convert(length, TimeUnit.MILLISECONDS));
+        Thread.sleep(TimeUnit.MILLISECONDS.convert(length, unit));
         if (!isAutonomous()) {
             autoJob.cancel(true);
         }
