@@ -90,6 +90,7 @@ public final class PIDDrivetrain extends RepeatingSubsystem {
         require(leftEncoder);
         require(rightEncoder);
         require(turningPid);
+        require(bearingPid);
     }
     
     /**
