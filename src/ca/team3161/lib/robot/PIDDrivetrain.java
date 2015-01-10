@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  */
 public final class PIDDrivetrain extends RepeatingSubsystem {
 
-    public static final int SUBSYSTEM_TASK_PERIOD = 20;
+    public static final long SUBSYSTEM_TASK_PERIOD = 20L;
     private final SpeedController leftDrive, rightDrive;
     private final PID leftEncoder, rightEncoder, turningPid, bearingPid;
     private volatile float turningDegreesTarget = 0.0f;
