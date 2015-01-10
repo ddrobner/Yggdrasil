@@ -86,6 +86,7 @@
         <fileset file="LICENSE"/>
         <fileset file="README.asciidoc"/>
         <fileset file="${doc}/README.html"/>
+        <fileset file="eclipse-build.xml"/>
     </zip>
   </target>
 
