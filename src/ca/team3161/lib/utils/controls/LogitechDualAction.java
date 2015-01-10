@@ -33,6 +33,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -91,8 +92,8 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
     */
     private final GenericHID backingHID;
     private final Map<Control, JoystickMode> controlsModeMap = new HashMap<>();
-    private final Map<Binding, Runnable> buttonBindings = new HashMap<>();
-    private final Map<Button, Boolean> buttonStates = new HashMap<>();
+    private final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
+    private final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
     private final int port;
     
     /**
