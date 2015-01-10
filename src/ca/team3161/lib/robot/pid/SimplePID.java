@@ -49,6 +49,7 @@ public class SimplePID extends AbstractPID {
     /**
      * {@inheritDoc}
      */
+    @Override
     public float pid(final float target) {
         float kErr;
         float pOut;
