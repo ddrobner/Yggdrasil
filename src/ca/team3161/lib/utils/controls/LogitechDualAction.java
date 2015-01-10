@@ -25,22 +25,17 @@
 
 package ca.team3161.lib.utils.controls;
 
-import ca.team3161.lib.robot.RepeatingSubsystem;
-import ca.team3161.lib.utils.Assert;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
  */
-public final class LogitechDualAction extends RepeatingSubsystem implements Gamepad {
+public final class LogitechDualAction extends AbstractController {
 
     /**
      * {@inheritDoc}.
@@ -87,45 +82,17 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         }
     }
 
-    /* The actual FIRST-provided input device that we are implementing a
-    * convenience wrapper around.
-    */
-    private final GenericHID backingHID;
-    private final Map<ModeIdentifier, JoystickMode> controlsModeMap = new HashMap<>();
-    private final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
-    private final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
-    private final int port;
-    
     /**
      * Create a new LogitechDualAction gamepad/controller.
      * @param port the USB port for this controller
      */
     public LogitechDualAction(final int port) {
-        super(20, TimeUnit.MILLISECONDS);
-        Assert.assertTrue(port >= 0);
-        this.port = port;
-        backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
+        super(port, 20, TimeUnit.MILLISECONDS);
         for (final Control control : LogitechControl.values()) {
             for (final Axis axis : LogitechAxis.values()) {
                 controlsModeMap.put(new ModeIdentifier(control, axis), new LinearJoystickMode());
             }
         }
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GenericHID getBackingHID() {
-        return backingHID;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getPort() {
-        return this.port;
     }
 
     /**
@@ -145,7 +112,7 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         }
         return controlsModeMap.entrySet()
                        .stream().filter(e -> e.getKey().getControl().equals(control)
-                                                                && e.getKey().getAxis().equals(axis))
+                                                     && e.getKey().getAxis().equals(axis))
                        .collect(Collectors.toList()).get(0).getValue().adjust(backingHID.getRawAxis(control.getIdentifier(axis)));
     }
 
@@ -160,6 +127,14 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
                                        + button);
         }
         return backingHID.getRawButton(button.getIdentifier());
+    }
+
+    /**
+     *
+     */
+    @Override
+    protected Set<Button> getButtons() {
+        return new HashSet<>(Arrays.asList(LogitechButton.values()));
     }
 
     /**
@@ -220,157 +195,5 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         return buttonBindings.keySet().stream().anyMatch(b -> b.getButton().equals(button) && b.getPressType().equals(pressType));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void enableBindings() {
-        start();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void disableBindings() {
-        cancel();
-    }
-
-    @Override
-    protected void defineResources() {
-        // none!
-    }
-
-    @Override
-    protected void task() throws Exception {
-        final Map<Button, Boolean> previousButtonStates = new HashMap<>(buttonStates);
-        for (final Button button : LogitechButton.values()) {
-            buttonStates.put(button, getButton(button));
-        }
-        synchronized (buttonBindings) {
-            for (final Map.Entry<Binding, Runnable> binding : buttonBindings.entrySet()) {
-                final Button button = binding.getKey().getButton();
-                final PressType pressType = binding.getKey().getPressType();
-                final Runnable action = binding.getValue();
-                switch (pressType) {
-                    case PRESS:
-                        if (buttonStates.get(button) && !previousButtonStates.get(button)) {
-                            action.run();
-                        }
-                        break;
-                    case RELEASE:
-                        if (!buttonStates.get(button) && previousButtonStates.get(button)) {
-                            action.run();
-                        }
-                        break;
-                    case HOLD:
-                        if (buttonStates.get(button)) {
-                            action.run();
-                        }
-                        break;
-                    default:
-                        System.err.println("Gamepad on port " + Integer.toString(getPort())
-                        + " has binding for unknown button press type " + pressType);
-                        break;
-                }
-            }
-        }
-    }
-
-    private static class Binding {
-        private final Button button;
-        private final PressType pressType;
-
-        public Binding(final Button button, final PressType pressType) {
-            Objects.requireNonNull(button);
-            Objects.requireNonNull(pressType);
-            this.button = button;
-            this.pressType = pressType;
-        }
-
-        public Button getButton() {
-            return button;
-        }
-
-        public PressType getPressType() {
-            return pressType;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            final Binding binding = (Binding) o;
-
-            if (!button.equals(binding.button)) {
-                return false;
-            }
-            if (pressType != binding.pressType) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = button.hashCode();
-            result = 31 * result + pressType.hashCode();
-            return result;
-        }
-    }
-
-    private static class ModeIdentifier {
-        private final Control control;
-        private final Axis axis;
-
-        public ModeIdentifier(final Control control, final Axis axis) {
-            Objects.requireNonNull(control);
-            Objects.requireNonNull(axis);
-            this.control = control;
-            this.axis = axis;
-        }
-
-        public Control getControl() {
-            return control;
-        }
-
-        public Axis getAxis() {
-            return axis;
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            final ModeIdentifier that = (ModeIdentifier) o;
-
-            if (!axis.equals(that.axis)) {
-                return false;
-            }
-            if (!control.equals(that.control)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = control.hashCode();
-            result = 31 * result + axis.hashCode();
-            return result;
-        }
-    }
 
 } 
