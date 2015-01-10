@@ -46,6 +46,9 @@ public abstract class RepeatingSubsystem extends Subsystem {
         this.timeUnit = timeUnit;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() {
         if (job != null) {
@@ -54,6 +57,9 @@ public abstract class RepeatingSubsystem extends Subsystem {
         job = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Future<?> getJob() {
         return job;

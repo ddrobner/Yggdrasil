@@ -36,6 +36,9 @@ public abstract class OneshotSubsystem extends Subsystem {
 
     private volatile Future<?> job;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void start() {
         if (job != null) {
@@ -44,6 +47,9 @@ public abstract class OneshotSubsystem extends Subsystem {
         job = SCHEDULED_EXECUTOR_SERVICE.submit(new RunTask());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected Future<?> getJob() {
         return job;
