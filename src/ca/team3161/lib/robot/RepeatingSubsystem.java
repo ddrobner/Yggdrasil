@@ -48,7 +48,10 @@ public abstract class RepeatingSubsystem extends Subsystem {
 
     @Override
     public void start() {
-        job = SCHEDULED_EXECUTOR_SERVICE.schedule(new RunTask(), timeout, timeUnit);
+        if (job != null) {
+            job.cancel(true);
+        }
+        job = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new RunTask(), 0l, timeout, timeUnit);
     }
 
     @Override
