@@ -51,7 +51,7 @@ public abstract class RepeatingSubsystem extends Subsystem {
         if (job != null) {
             job.cancel(true);
         }
-        job = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new RunTask(), 0l, timeout, timeUnit);
+        job = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
 
     @Override
