@@ -38,9 +38,8 @@ import java.util.concurrent.TimeUnit;
 public final class PIDDrivetrain extends RepeatingSubsystem {
 
     public static final int SUBSYSTEM_TASK_PERIOD = 20;
-    public static final float PID_PROPORTIONAL = 0.3f;
     private final SpeedController leftDrive, rightDrive;
-    private final PID leftEncoder, rightEncoder, turningPid /*gyro*/, bearingPid;
+    private final PID leftEncoder, rightEncoder, turningPid, bearingPid;
     private volatile float turningDegreesTarget = 0.0f;
     private volatile int leftTicksTarget = 0, rightTicksTarget = 0;
     private Task t;
@@ -63,9 +62,10 @@ public final class PIDDrivetrain extends RepeatingSubsystem {
      * @param leftEncoder the left side drivetrain Encoder
      * @param rightEncoder the right side drivetrain Encoder
      * @param turningPid an AnglePidSrc (eg Gyro) to maintain a straight heading
+     * @param bearingPid an AnglePidSrc to orient to a vector while stationary
      */
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
-            final PID leftEncoder, final PID rightEncoder, final PID turningPid) {
+            final PID leftEncoder, final PID rightEncoder, final PID turningPid, final PID bearingPid) {
         super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
         Objects.requireNonNull(leftDrive);
         Objects.requireNonNull(rightDrive);
@@ -77,7 +77,7 @@ public final class PIDDrivetrain extends RepeatingSubsystem {
         this.leftEncoder = leftEncoder;
         this.rightEncoder = rightEncoder;
         this.turningPid = turningPid;
-        this.bearingPid = new SimplePID(turningPid.getSrc(), 0.0f, PID_PROPORTIONAL, 0.0f, 0.0f);
+        this.bearingPid = bearingPid;
         this.notifier = new Object();
     }
 
