@@ -1,15 +1,7 @@
 = Yggdrasil
 Team 3161
-v0.8.0, 5 January 2015
+v0.9.0, 10 January 2015
 :sectanchors:
-
-== WORK IN PROGRESS
-This repository is very barren! Please check back after the
-link:http://www.usfirst.org/roboticsprograms/frc/calendar/frc-kickoff-2015[FRC 2015 Kickoff Event]
-on 3 January 2015. At Kickoff, the new control systems update will be released,
-and shortly after we hope to be publishing a ported version of this
-library, as sources on GitHub as well as pre-built binaries (JARs) available
-through our website as well.
 
 == What is this?
 Yggdrasil is the name of the reusable FRC Java libraries which FRC 3161 provides,
@@ -55,6 +47,15 @@ link:http://cloud.team3161.ca/download/yggdrasil/latest[here] for the latest rel
 downloads. Pick a ZIP and download it! The ZIPs contain the compiled class JARs
 as well as the corresponding Javadoc JAR, so this is probably the easiest way
 to make sure that your documentation matches the library you've downloaded.
+Once you've downloaded an '-all' ZIP, unzip it and take note of its contents.
+Then, in your own robot project's main directory, create a subdirectory
+(folder) called 'lib'. Copy the two Yggdrasil JARs into this new 'lib' folder.
+Copy the 'eclipse-build.xml' into your own robot project directory and replace
+the existing 'build.xml' by removing it, then renaming 'eclipse-build.xml' to
+'build.xml'. You're all set and ready to go!
+
+For an example of this, please see
+link:https://github.com/FRC3161/Nidhoggr[Nidhoggr].
 
 === Documentation
 Javadoc documentation for the latest release is available online
