@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -91,7 +92,7 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
     * convenience wrapper around.
     */
     private final GenericHID backingHID;
-    private final Map<Control, JoystickMode> controlsModeMap = new HashMap<>();
+    private final Map<ModeIdentifier, JoystickMode> controlsModeMap = new HashMap<>();
     private final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
     private final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
     private final int port;
@@ -105,7 +106,11 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         Assert.assertTrue(port >= 0);
         this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
-        Stream.of(LogitechControl.values()).forEach(control -> controlsModeMap.put(control, new LinearJoystickMode()));
+        for (final Control control : LogitechControl.values()) {
+            for (final Axis axis : LogitechAxis.values()) {
+                controlsModeMap.put(new ModeIdentifier(control, axis), new LinearJoystickMode());
+            }
+        }
     }
     
     /**
@@ -139,7 +144,10 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
             System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
                                        + control);
         }
-        return controlsModeMap.get(control).adjust(backingHID.getRawAxis(control.getIdentifier(axis)));
+        return controlsModeMap.entrySet()
+                       .stream().filter(e -> e.getKey().getControl().equals(control)
+                                                                && e.getKey().getAxis().equals(axis))
+                       .collect(Collectors.toList()).get(0).getValue().adjust(backingHID.getRawAxis(control.getIdentifier(axis)));
     }
 
     /**
@@ -159,14 +167,15 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
      * {@inheritDoc}
      */
     @Override
-    public void setMode(final Control control, final JoystickMode joystickMode) {
+    public void setMode(final Control control, final Axis axis, final JoystickMode joystickMode) {
         Objects.requireNonNull(control);
+        Objects.requireNonNull(axis);
         Objects.requireNonNull(joystickMode);
         if (!(control instanceof LogitechControl)) {
             System.err.println("Gamepad on port " + this.port + " setMode() called with invalid control "
                                        + control);
         }
-        controlsModeMap.put(control, joystickMode);
+        controlsModeMap.put(new ModeIdentifier(control, axis), joystickMode);
     }
 
     /**
@@ -313,6 +322,54 @@ public final class LogitechDualAction extends RepeatingSubsystem implements Game
         public int hashCode() {
             int result = button.hashCode();
             result = 31 * result + pressType.hashCode();
+            return result;
+        }
+    }
+
+    private static class ModeIdentifier {
+        private final Control control;
+        private final Axis axis;
+
+        public ModeIdentifier(final Control control, final Axis axis) {
+            Objects.requireNonNull(control);
+            Objects.requireNonNull(axis);
+            this.control = control;
+            this.axis = axis;
+        }
+
+        public Control getControl() {
+            return control;
+        }
+
+        public Axis getAxis() {
+            return axis;
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            final ModeIdentifier that = (ModeIdentifier) o;
+
+            if (!axis.equals(that.axis)) {
+                return false;
+            }
+            if (!control.equals(that.control)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = control.hashCode();
+            result = 31 * result + axis.hashCode();
             return result;
         }
     }

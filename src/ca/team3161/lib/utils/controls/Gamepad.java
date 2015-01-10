@@ -76,11 +76,12 @@ public interface Gamepad {
      * Set a mode to adjust input on one of the controls of this Gamepad. Controls
      * should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls defined by one Gamepad implementation should
-     * not be used as parameters to other Gamepad implementations.
+     * not be used as parameters to other Gamepad implementations. Likewise for axes.
      * @param control the control on which to set a mode
+     * @param axis the axis of the control on which to set a mode
      * @param joystickMode the mode to set
      */
-    void setMode(Control control, JoystickMode joystickMode);
+    void setMode(Control control, Axis axis, JoystickMode joystickMode);
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
