@@ -42,12 +42,11 @@ public final class LogitechDualAction extends AbstractController {
      */
     public enum LogitechControl implements Control {
         LEFT_STICK,
-        RIGHT_STICK,
-        DPAD;
+        RIGHT_STICK;
 
         @Override
         public int getIdentifier(final Axis axis) {
-            return this.ordinal() * 2 + axis.getIdentifier() + 1;
+            return this.ordinal() * 2 + axis.getIdentifier();
         }
     }
 
@@ -73,8 +72,7 @@ public final class LogitechDualAction extends AbstractController {
      */
     public enum LogitechAxis implements Axis {
         X,
-        Y,
-        Z;
+        Y;
 
         @Override
         public int getIdentifier() {
