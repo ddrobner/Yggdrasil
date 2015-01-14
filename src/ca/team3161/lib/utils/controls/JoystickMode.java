@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.utils.controls;
 
+import java.util.function.Function;
+
 /**
  * Interface for "Mode" objects which apply some function to a Joystick's input.
  * Examples include squaring the raw input values from the Joystick so that, for
@@ -32,7 +34,7 @@ package ca.team3161.lib.utils.controls;
  * Implementing a JoystickMode is also how one might handle setting an input
  * deadband on their Joysticks.
  */
-public interface JoystickMode {
+public interface JoystickMode extends Function<Double, Double> {
 
     /**
      * Applies some transformation function to the input and returns a result.
@@ -41,5 +43,9 @@ public interface JoystickMode {
      * @return the adjusted value
      */
     double adjust(double raw);
+
+    default Double apply(Double value) {
+        return adjust(value);
+    }
 
 }
