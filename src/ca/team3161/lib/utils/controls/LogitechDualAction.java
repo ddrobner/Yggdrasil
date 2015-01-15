@@ -139,6 +139,10 @@ public final class LogitechDualAction extends AbstractController {
         return backingHID.getRawButton(button.getIdentifier());
     }
 
+    public int getDpad() {
+        return backingHID.getPOV();
+    }
+
     /**
      *
      */
