@@ -54,16 +54,28 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}.
      */
     public enum LogitechButton implements Button {
-        LEFT_BUMPER,
-        RIGHT_BUMPER,
-        LEFT_TRIGGER,
-        RIGHT_TRIGGER,
-        SELECT,
-        START;
+        A(2),
+        B(3),
+        X(1),
+        Y(4),
+        LEFT_STICK_CLICK(11),
+        RIGHT_STICK_CLICK(12),
+        LEFT_BUMPER(5),
+        RIGHT_BUMPER(6),
+        LEFT_TRIGGER(7),
+        RIGHT_TRIGGER(8),
+        SELECT(9),
+        START(10);
+
+        private final int id;
+
+        private LogitechButton(final int id) {
+            this.id = id;
+        }
 
         @Override
         public int getIdentifier() {
-            return super.ordinal() + 5;
+            return this.id;
         }
     }
 
