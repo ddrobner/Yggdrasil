@@ -41,7 +41,14 @@ public abstract class AbstractPID implements PID {
     /**
      * PID constants.
      */
-    protected volatile float deadband, kP, kI, kD, integralError, prevError, deltaError;
+    protected volatile float deadband;
+    protected volatile float kP;
+    protected volatile float kI;
+    protected volatile float kD;
+
+    protected volatile float integralError;
+    protected volatile float prevError;
+    protected volatile float deltaError;
     
     /**
      * If this PID loop has reached its target.
@@ -98,5 +105,19 @@ public abstract class AbstractPID implements PID {
     public final boolean atTarget() {
         return atTarget;
     }
-    
+
+    @Override
+    public void setkP(final float kP) {
+        this.kP = kP;
+    }
+
+    @Override
+    public void setkI(final float kI) {
+        this.kI = kI;
+    }
+
+    @Override
+    public void setkD(final float kD) {
+        this.kD = kD;
+    }
 }

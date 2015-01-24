@@ -54,4 +54,22 @@ public interface PID {
      * @return whether this PID loop has reached the specified target value
      */
     boolean atTarget();
+
+    /**
+     * Set the Proportional constant for this PID.
+     * @param kP the Proportional constant.
+     */
+    void setkP(float kP);
+
+    /**
+     * Set the Integral constant for this PID.
+     * @param kI the Integral constant.
+     */
+    void setkI(float kI);
+
+    /**
+     * Set the Derivative constant for this PID.
+     * @param kD the Derivative constant.
+     */
+    void setkD(float kD);
 }
