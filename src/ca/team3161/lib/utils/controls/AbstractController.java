@@ -29,6 +29,7 @@ package ca.team3161.lib.utils.controls;
 import ca.team3161.lib.robot.RepeatingSubsystem;
 import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,7 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
         super(timeout, timeUnit);
         Assert.assertTrue(port >= 0);
         this.port = port;
-        backingHID = new edu.wpi.first.wpilibj.Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
+        backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
     }
 
     /**
