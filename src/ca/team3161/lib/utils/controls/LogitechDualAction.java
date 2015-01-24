@@ -46,7 +46,7 @@ public final class LogitechDualAction extends AbstractController {
 
         @Override
         public int getIdentifier(final Axis axis) {
-            return this.ordinal() * 2 + axis.getIdentifier();
+            return this.ordinal() * LogitechControl.values().length + axis.getIdentifier();
         }
     }
 
@@ -208,6 +208,5 @@ public final class LogitechDualAction extends AbstractController {
         }
         return buttonBindings.keySet().stream().anyMatch(b -> b.getButton().equals(button) && b.getPressType().equals(pressType));
     }
-
 
 } 
