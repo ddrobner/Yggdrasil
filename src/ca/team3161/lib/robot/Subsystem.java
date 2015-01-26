@@ -40,7 +40,7 @@ import java.util.concurrent.locks.Lock;
  */
 public abstract class Subsystem {
 
-    protected static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(4);
+    protected static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
 
     /**
      * A list of resourceLocks which this Subsystem requires.
