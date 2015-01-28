@@ -31,7 +31,8 @@ package ca.team3161.lib.utils.controls;
  * 0.8 on an axis becomes 0.512, for example, but -0.8 becomes -0.512.
  */
 public final class CubedJoystickMode implements JoystickMode {
-    
+
+    @Override
     public double adjust(final double raw) {
         final double negate;
         if (raw < 0.0d) {

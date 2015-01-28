@@ -35,6 +35,7 @@ public final class SquaredJoystickMode implements JoystickMode {
     /**
      * {@inheritDoc}
      */
+    @Override
     public double adjust(final double raw) {
         final double negate;
         if (raw < 0.0d) {

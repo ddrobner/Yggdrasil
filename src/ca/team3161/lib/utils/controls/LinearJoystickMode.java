@@ -34,6 +34,7 @@ public final class LinearJoystickMode implements JoystickMode {
     /**
      * {@inheritDoc}
      */
+    @Override
     public double adjust(final double raw) {
         return raw;
     }
