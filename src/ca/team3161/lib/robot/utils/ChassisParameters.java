@@ -26,12 +26,25 @@
 
 package ca.team3161.lib.robot.utils;
 
-public class ChassisParameters {
+import static java.lang.Double.compare;
 
+/**
+ * Describes physical attributes of a Robot.
+ */
+public class ChassisParameters {
 
     private final double wheelRadius, wheelBaseLength, wheelBaseWidth, encoderWheelGearRatio, encoderCPR;
 
-    public ChassisParameters(final double wheelRadius, final double wheelBaseLength, final double wheelBaseWidth, final double encoderWheelGearRatio, final double encoderCPR) {
+    /**
+     * Construct a new ChassisParameters object.
+     * @param wheelRadius the radius of the wheels on this Robot's drivetrain
+     * @param wheelBaseLength the length between the furthest forward and further backward axles on this Robot's drivetrain
+     * @param wheelBaseWidth the width between the left and ride side wheels on this Robot's drivetrain
+     * @param encoderWheelGearRatio the gear ratio between the output shaft the encoders are mounted on and the wheels
+     * @param encoderCPR the number of "ticks" the encoders on the drivetrain will count for each full revolution
+     */
+    public ChassisParameters(final double wheelRadius, final double wheelBaseLength, final double wheelBaseWidth,
+                             final double encoderWheelGearRatio, final double encoderCPR) {
         this.wheelRadius = wheelRadius;
         this.wheelBaseLength = wheelBaseLength;
         this.wheelBaseWidth = wheelBaseWidth;
@@ -39,26 +52,49 @@ public class ChassisParameters {
         this.encoderCPR = encoderCPR;
     }
 
+    /**
+     * Get the wheel radius.
+     * @return the wheel radius
+     */
     public double getWheelRadius() {
         return wheelRadius;
     }
 
+    /**
+     * Get the wheelbase length.
+     * @return the wheelbase length
+     */
     public double getWheelBaseLength() {
         return wheelBaseLength;
     }
 
+    /**
+     * Get the wheelbase width.
+     * @return the wheelbase width
+     */
     public double getWheelBaseWidth() {
         return wheelBaseWidth;
     }
 
+    /**
+     * Get the gear ratio between what the encoders measure and what the wheels experience.
+     * @return the gear ratio
+     */
     public double getEncoderWheelGearRatio() {
         return encoderWheelGearRatio;
     }
 
+    /**
+     * Get the number of ticks per revolution for the drivetrain encoders.
+     * @return the number of ticks per revolution
+     */
     public double getEncoderCPR() {
         return encoderCPR;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -70,25 +106,28 @@ public class ChassisParameters {
 
         final ChassisParameters that = (ChassisParameters) o;
 
-        if (Double.compare(that.encoderCPR, encoderCPR) != 0) {
+        if (compare(that.encoderCPR, encoderCPR) != 0) {
             return false;
         }
-        if (Double.compare(that.encoderWheelGearRatio, encoderWheelGearRatio) != 0) {
+        if (compare(that.encoderWheelGearRatio, encoderWheelGearRatio) != 0) {
             return false;
         }
-        if (Double.compare(that.wheelBaseLength, wheelBaseLength) != 0) {
+        if (compare(that.wheelBaseLength, wheelBaseLength) != 0) {
             return false;
         }
-        if (Double.compare(that.wheelBaseWidth, wheelBaseWidth) != 0) {
+        if (compare(that.wheelBaseWidth, wheelBaseWidth) != 0) {
             return false;
         }
-        if (Double.compare(that.wheelRadius, wheelRadius) != 0) {
+        if (compare(that.wheelRadius, wheelRadius) != 0) {
             return false;
         }
 
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result;

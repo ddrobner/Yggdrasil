@@ -38,6 +38,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A Gamepad which allows button bindings and control modes.
+ */
 public abstract class AbstractController extends RepeatingSubsystem implements Gamepad {
 
     /* The actual FIRST-provided input device that we are implementing a
@@ -88,13 +91,16 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
         cancel();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void defineResources() {
         // none!
     }
 
     /**
-     * Get the set of Buttons on this controller
+     * Get the set of Buttons on this controller.
      * @return a set of Buttons
      */
     protected abstract Set<Button> getButtons();
@@ -135,10 +141,18 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
         }
     }
 
+    /**
+     * A (Button, PressType) tuple for identifying button bindings.
+     */
     protected static class Binding {
         private final Button button;
         private final PressType pressType;
 
+        /**
+         * Construct a new Binding identifier.
+         * @param button the button
+         * @param pressType the press type
+         */
         public Binding(final Button button, final PressType pressType) {
             Objects.requireNonNull(button);
             Objects.requireNonNull(pressType);
@@ -146,14 +160,25 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
             this.pressType = pressType;
         }
 
+        /**
+         * Get the button.
+         * @return the button
+         */
         public Button getButton() {
             return button;
         }
 
+        /**
+         * Get the press type.
+         * @return the press type.
+         */
         public PressType getPressType() {
             return pressType;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -175,6 +200,9 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
             return true;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int hashCode() {
             int result = button.hashCode();
@@ -183,10 +211,18 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
         }
     }
 
+    /**
+     * A (Control, Axis) tuple for identifying mode mappings.
+     */
     protected static class ModeIdentifier {
         private final Control control;
         private final Axis axis;
 
+        /**
+         * Construct a new ModeIdentifier.
+         * @param control the control
+         * @param axis the axis
+         */
         public ModeIdentifier(final Control control, final Axis axis) {
             Objects.requireNonNull(control);
             Objects.requireNonNull(axis);
@@ -194,14 +230,25 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
             this.axis = axis;
         }
 
+        /**
+         * Get the control.
+         * @return the control
+         */
         public Control getControl() {
             return control;
         }
 
+        /**
+         * Get the axis.
+         * @return the axis
+         */
         public Axis getAxis() {
             return axis;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public boolean equals(final Object o) {
             if (this == o) {
@@ -223,6 +270,9 @@ public abstract class AbstractController extends RepeatingSubsystem implements G
             return true;
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
         public int hashCode() {
             int result = control.hashCode();

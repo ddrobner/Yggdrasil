@@ -31,7 +31,22 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
+/**
+ * A Position Estimator for Mecanum drivetrains.
+ * @see AbstractPositionEstimator
+ */
 public class MecanumPositionEstimator extends AbstractPositionEstimator {
+
+    /**
+     * Construct a new MecanumPositionEstimator.
+     * @param chassisParameters a physical description of the robot
+     * @param accelerometer an accelerometer
+     * @param gyro a gyroscope
+     * @param frontLeftEncoder the encoder attached to the output of the front left wheel
+     * @param frontRightEncoder the encoder attached to the output of the front right wheel
+     * @param backLeftEncoder the encoder attached to the output of the back left wheel
+     * @param backRightEncoder the encoder attached to the output of the back right wheel
+     */
     public MecanumPositionEstimator(final ChassisParameters chassisParameters,
                                     final Accelerometer accelerometer, final Gyro gyro,
                                     final Encoder frontLeftEncoder, final Encoder frontRightEncoder,

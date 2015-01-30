@@ -28,28 +28,53 @@ package ca.team3161.lib.robot.motion;
 
 import static java.lang.Double.compare;
 
+/**
+ * Represents a Robot position on the field, relative to some known starting position (eg the starting position of the
+ * Robot at the beginning of a match/when it was powered on).
+ */
 public class Position {
 
     private final double x, y, theta;
 
+    /**
+     * Construct a new Position.
+     * @param x net x distance co-ordinate
+     * @param y net y distance co-ordinate
+     * @param theta net change in rotation
+     */
     public Position(final double x, final double y, final double theta) {
         this.x = x;
         this.y = y;
         this.theta = theta;
     }
 
+    /**
+     * Get the net x distance co-ordinate.
+     * @return the net x distance co-ordinate
+     */
     public double getX() {
         return x;
     }
 
+    /**
+     * Get the net y distance co-ordinate.
+     * @return the net y distance co-ordinate
+     */
     public double getY() {
         return y;
     }
 
+    /**
+     * Get the net change in rotation.
+     * @return the net change in rotation
+     */
     public double getTheta() {
         return theta;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
@@ -74,6 +99,9 @@ public class Position {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result;

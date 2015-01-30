@@ -33,6 +33,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+/**
+ * A class representing a LogitechAttack3 joystick. Allows for button bindings and axis scaling/curve modes.
+ */
 public final class LogitechAttack3 extends AbstractController {
 
     /**

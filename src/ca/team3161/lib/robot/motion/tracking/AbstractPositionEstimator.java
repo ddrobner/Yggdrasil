@@ -26,6 +26,9 @@
 
 package ca.team3161.lib.robot.motion.tracking;
 
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 import ca.team3161.lib.robot.RepeatingSubsystem;
 import ca.team3161.lib.robot.motion.Position;
 import ca.team3161.lib.robot.utils.ChassisParameters;
@@ -35,11 +38,15 @@ import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
 import java.util.concurrent.TimeUnit;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-
+/**
+ * Abstract parent for drivetrain-specific classes which integrate accelerometer, gyroscope, and encoder data
+ * in order to estimate total x, y distance travelled and degrees rotated by a robot.
+ */
 public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
 
+    /**
+     * Acceleration due to gravity, in meters per second.
+     */
     public static final double GRAVITATIONAL_ACCELERATION = 9.80665;
     /* global co-ordinates */
     protected double x, y, theta, theta0;
@@ -61,6 +68,17 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
 
     protected double w1, w2, w3, w4;
 
+    /**
+     * Construct a new PositionEstimator. Requires physical parameters of the robot and a collection of sensors from which
+     * to pull various data.
+     * @param chassisParameters physical parameters of the robot
+     * @param accelerometer an accelerometer to measure acceleration
+     * @param gyro a gyroscope to measure rotation
+     * @param frontLeftEncoder an encoder to measure movement of the front left wheel
+     * @param frontRightEncoder an encoder to measure movement of the front right wheel
+     * @param backLeftEncoder an encoder to measure movement of the back left wheel
+     * @param backRightEncoder an encoder to measure movement of the back right wheel
+     */
     public AbstractPositionEstimator(final ChassisParameters chassisParameters,
                                      final Accelerometer accelerometer, final Gyro gyro,
                                      final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
@@ -81,10 +99,18 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
         backRightEncoder.setDistancePerPulse(distancePerPulse);
     }
 
+    /**
+     * Set the initial rotation of the robot. If the robot's initial heading is not to be interpreted as an angle of 0,
+     * use this method to set the correct offset (for example, if your robot begins matches rotated).
+     * @param theta0 the initial angle
+     */
     public void setInitialTheta(final double theta0) {
         this.theta0 = theta0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void defineResources() {
         require(accelerometer);
@@ -95,6 +121,9 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
         require(backRightEncoder);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void task() throws Exception {
         updateTime();
@@ -102,7 +131,7 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
         updateEstimate();
     }
 
-    abstract protected void updateSteerSpecificParameters();
+    protected abstract void updateSteerSpecificParameters();
 
     protected void updateTime() {
         time = System.nanoTime();
@@ -157,11 +186,15 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
         e2 = 0;
         e3 = 0;
         w1 = 0;
-        w2  =0;
+        w2 = 0;
         w3 = 0;
         w4 = 0;
     }
 
+    /**
+     * Get the current estimate of the robot's on-field position.
+     * @return the position estimate
+     */
     public Position getEstimate() {
         return new Position(x, y, theta);
     }
