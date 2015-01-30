@@ -131,6 +131,37 @@ public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
         y = py + dx * dt * sin(theta) + dy * dt * cos(theta);
     }
 
+    public void reset() {
+        x = 0;
+        y = 0;
+        theta = 0;
+        theta0 = 0;
+        dx = 0;
+        dy = 0;
+        dtheta = 0;
+        px = 0;
+        py = 0;
+        ptheta = 0;
+        pAx = 0;
+        pAy = 0;
+        mudx = 0;
+        mudy = 0;
+        mudtheta = 0;
+        time = 0;
+        pt = 0;
+        dt = 0;
+        vx = 0;
+        vy = 0;
+        dw = 0;
+        e1 = 0;
+        e2 = 0;
+        e3 = 0;
+        w1 = 0;
+        w2  =0;
+        w3 = 0;
+        w4 = 0;
+    }
+
     public Position getEstimate() {
         return new Position(x, y, theta);
     }
