@@ -26,6 +26,7 @@
 package ca.team3161.lib.robot.pid;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... get it?)
@@ -38,6 +39,8 @@ public final class PIDulum extends AbstractPID {
     /**
      * @param source the PIDSrc source sensor
      * @param deadband filter value - do not act when current error is within this bound
+     * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
+     * @param deadbandUnit the units for deadbandPeriod
      * @param kP P constant
      * @param kI I constant
      * @param kD D constant
@@ -45,9 +48,10 @@ public final class PIDulum extends AbstractPID {
      * @param torqueConstant "feed forward" term constant to allow the pendulum to hold position against gravity
      */
     public PIDulum(final AnglePidSrc source, final float deadband,
+            final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD,
             final float offsetAngle, final float torqueConstant) {
-        super(source, deadband, kP, kI, kD);
+        super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
         Objects.requireNonNull(source);
         this.offsetAngle = offsetAngle;
         this.torqueConstant = torqueConstant;
@@ -80,12 +84,9 @@ public final class PIDulum extends AbstractPID {
         }
         
         feedForward = torqueConstant * (source.getValue() - offsetAngle);
-        
-        if (Math.abs(kErr) < deadband) {
-            atTarget = true;
+
+        if (atTarget()) {
             return feedForward;
-        } else {
-            atTarget = false;
         }
 
         output = (pOut + iOut + dOut + feedForward);

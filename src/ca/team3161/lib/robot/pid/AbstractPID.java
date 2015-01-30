@@ -26,6 +26,7 @@
 package ca.team3161.lib.robot.pid;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
@@ -37,10 +38,7 @@ public abstract class AbstractPID implements PID {
      * A PIDSrc sensor.
      */
     protected final PIDSrc source;
-    
-    /**
-     * PID constants.
-     */
+
     protected volatile float deadband;
     protected volatile float kP;
     protected volatile float kI;
@@ -49,29 +47,32 @@ public abstract class AbstractPID implements PID {
     protected volatile float integralError;
     protected volatile float prevError;
     protected volatile float deltaError;
-    
-    /**
-     * If this PID loop has reached its target.
-     */
-    protected volatile boolean atTarget;
+
+    protected volatile int deadbandPeriod;
+    protected volatile TimeUnit deadbandUnit;
+    protected volatile long lastTimeNotAtTarget;
     
     /**
      * Create a new AbstractPID instance.
      * @param source the PIDSrc source sensor
-     * @param deadband filter value - do not act when current error is within this bound
+     * @param deadband filter value - do not act when current error is within this bound. This can be disabled by passing a negative value
+     * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
+     * @param deadbandUnit the units for deadbandPeriod
      * @param kP P constant
      * @param kI I constant
      * @param kD D constant
      */
     public AbstractPID(final PIDSrc source, final float deadband,
+            final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD) {
         Objects.requireNonNull(source);
         this.source = source;
         this.deadband = deadband;
+        this.deadbandPeriod = deadbandPeriod;
+        this.deadbandUnit = deadbandUnit;
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;
-        this.atTarget = false;
     }
     
     /**
@@ -97,25 +98,44 @@ public abstract class AbstractPID implements PID {
     public final PIDSrc getSrc() {
         return this.source;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
     public final boolean atTarget() {
-        return atTarget;
+        if (deadband < 0 || deadbandPeriod < 0 || deadbandUnit == null) {
+            return false;
+        }
+        final boolean atTarget = Math.abs(prevError) < deadband;
+        final long timeNow = System.nanoTime();
+        if (!atTarget) {
+            lastTimeNotAtTarget = timeNow;
+        }
+        final boolean deadbandPeriodElapsed = lastTimeNotAtTarget < timeNow - deadbandUnit.toNanos(deadbandPeriod);
+
+        return atTarget && deadbandPeriodElapsed;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setkP(final float kP) {
         this.kP = kP;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setkI(final float kI) {
         this.kI = kI;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setkD(final float kD) {
         this.kD = kD;

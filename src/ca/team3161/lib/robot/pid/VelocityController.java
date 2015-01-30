@@ -29,6 +29,8 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
@@ -48,14 +50,13 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param speedController a backing SpeedController (ex physical Jaguar, Talon, Victor).
      * @param encoder an Encoder which measures the output of the associated physical SpeedController.
      * @param maxRotationalRate the maximum rotational rate as reported by the Encoder.
-     * @param deadband the threshold within which the PID will consider itself "at target".
      * @param kP the Proportional PID constant.
      * @param kI the Integral PID constant.
      * @param kD the Derivative PID constant.
      */
-    public VelocityController(final SpeedController speedController, final Encoder encoder,
-                              final float maxRotationalRate, final float deadband, final float kP, final float kI, final float kD) {
-        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, deadband, kP, kI, kD);
+    public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
+                              final float kP, final float kI, final float kD) {
+        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, kP, kI, kD);
     }
 
     /**
@@ -63,14 +64,13 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param speedController a backing SpeedController (ex physical Jaguar, Talon, Victor).
      * @param encoderPidSrc an EncoderPidSrc which measures the output of the associated physical SpeedController.
      * @param maxRotationalRate the maximum rotational rate as reported by the Encoder.
-     * @param deadband the threshold within which the PID will consider itself "at target".
      * @param kP the Proportional PID constant.
      * @param kI the Integral PID constant.
      * @param kD the Derivative PID constant.
      */
-    public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc,
-                              final float maxRotationalRate, final float deadband, final float kP, final float kI, final float kD) {
-        super(encoderPidSrc, deadband, kP, kI, kD);
+    public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc, final float maxRotationalRate,
+                              final float kP, final float kI, final float kD) {
+        super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         this.maxRotationalRate = maxRotationalRate;
         this.speedController = speedController;
     }

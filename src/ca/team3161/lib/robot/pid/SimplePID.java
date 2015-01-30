@@ -26,6 +26,7 @@
 package ca.team3161.lib.robot.pid;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A plain, general PID implementation.
@@ -37,12 +38,16 @@ public class SimplePID extends AbstractPID {
      * Create a new SimplePID instance.
      * @param source   the PIDSrc source sensor
      * @param deadband filter value - do not act when current error is within this bound
+     * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
+     * @param deadbandUnit the units for deadbandPeriod
      * @param kP       P constant
      * @param kI       I constant
      * @param kD       D constant
      */
-    public SimplePID(final PIDSrc source, final float deadband, final float kP, final float kI, final float kD) {
-        super(source, deadband, kP, kI, kD);
+    public SimplePID(final PIDSrc source, final float deadband,
+                     final int deadbandPeriod, final TimeUnit deadbandUnit,
+                     final float kP, final float kI, final float kD) {
+        super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
         Objects.requireNonNull(source);
     }
 
@@ -71,11 +76,8 @@ public class SimplePID extends AbstractPID {
             iOut = 1.0f;
         }
 
-        if (Math.abs(kErr) < deadband) {
-            atTarget = true;
+        if (atTarget()) {
             return 0.0f;
-        } else {
-            atTarget = false;
         }
 
         output = (pOut + iOut + dOut);
