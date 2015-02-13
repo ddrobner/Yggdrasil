@@ -27,17 +27,16 @@ package ca.team3161.lib.robot;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 /**
  * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
  * to ensure separation of task runs
  */
 public final class ResourceTracker {
     
-    private static final Map<Object, ReentrantLock> RESOURCES = new ConcurrentHashMap<>();
+    private static final Map<Object, ReentrantLock> RESOURCES = new WeakHashMap<>();
 
     private ResourceTracker(){}
 
