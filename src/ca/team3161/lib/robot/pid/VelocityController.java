@@ -56,7 +56,7 @@ public class VelocityController extends SimplePID implements SpeedController {
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
                               final float kP, final float kI, final float kD) {
-        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, kP, kI, kD);
+        this(speedController, new EncoderRatePidSrc(encoder), maxRotationalRate, kP, kI, kD);
     }
 
     /**
@@ -68,7 +68,7 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param kI the Integral PID constant.
      * @param kD the Derivative PID constant.
      */
-    public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc, final float maxRotationalRate,
+    public VelocityController(final SpeedController speedController, final EncoderRatePidSrc encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         this.maxRotationalRate = maxRotationalRate;
