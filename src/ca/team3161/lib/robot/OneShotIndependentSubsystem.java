@@ -26,29 +26,29 @@
 
 package ca.team3161.lib.robot;
 
-public interface Subsystem {
-    void require(Object resource);
+import java.util.concurrent.Future;
 
-    boolean getCancelled();
+public abstract class OneShotIndependentSubsystem extends AbstractIndependentSubsystem {
 
-    boolean getStarted();
-
-    void cancel();
+    private volatile Future<?> job;
 
     /**
-     * Start (or restart) this Subsystem's background task.
+     * {@inheritDoc}
      */
-    void start();
+    @Override
+    public void start() {
+        if (job != null) {
+            job.cancel(true);
+        }
+        job = executor.submit(new RunTask());
+    }
 
     /**
-     * Define the set of resourceLocks required for this Subsystem's task.
-     * @see ca.team3161.lib.robot.AbstractPooledSubsystem#require(Object)
+     * {@inheritDoc}
      */
-    void defineResources();
+    @Override
+    protected Future<?> getJob() {
+        return job;
+    }
 
-    /**
-     * The background task to run.
-     * @throws Exception in case the defined task throws any Exceptions
-     */
-    void task() throws Exception;
 }

@@ -26,7 +26,6 @@
 package ca.team3161.lib.robot;
 
 import ca.team3161.lib.robot.pid.PID;
-import ca.team3161.lib.robot.pid.SimplePID;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.Objects;
@@ -35,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
  */
-public final class PIDDrivetrain extends RepeatingSubsystem {
+public final class PIDDrivetrain extends RepeatingPooledSubsystem {
 
     public static final long SUBSYSTEM_TASK_PERIOD = 20L;
     private final SpeedController leftDrive, rightDrive;

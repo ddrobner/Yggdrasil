@@ -26,29 +26,32 @@
 
 package ca.team3161.lib.robot;
 
-public interface Subsystem {
-    void require(Object resource);
+import java.util.concurrent.Future;
 
-    boolean getCancelled();
+/**
+ * A Subsystem whose task is only normally run once. The task can however
+ * be manually forced to run again by calling {OneshotSubsystem#start} again.
+ */
+public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
 
-    boolean getStarted();
-
-    void cancel();
-
-    /**
-     * Start (or restart) this Subsystem's background task.
-     */
-    void start();
+    private volatile Future<?> job;
 
     /**
-     * Define the set of resourceLocks required for this Subsystem's task.
-     * @see ca.team3161.lib.robot.AbstractPooledSubsystem#require(Object)
+     * {@inheritDoc}
      */
-    void defineResources();
+    @Override
+    public void start() {
+        if (job != null) {
+            job.cancel(true);
+        }
+        job = SCHEDULED_EXECUTOR_SERVICE.submit(new RunTask());
+    }
 
     /**
-     * The background task to run.
-     * @throws Exception in case the defined task throws any Exceptions
+     * {@inheritDoc}
      */
-    void task() throws Exception;
+    @Override
+    protected Future<?> getJob() {
+        return job;
+    }
 }

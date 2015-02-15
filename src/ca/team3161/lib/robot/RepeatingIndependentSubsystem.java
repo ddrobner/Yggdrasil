@@ -26,30 +26,31 @@
 
 package ca.team3161.lib.robot;
 
+import java.util.Objects;
 import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-/**
- * A Subsystem whose task is only normally run once. The task can however
- * be manually forced to run again by calling {OneshotSubsystem#start} again.
- */
-public abstract class OneshotSubsystem extends Subsystem {
+public abstract class RepeatingIndependentSubsystem extends AbstractIndependentSubsystem {
 
-    private volatile Future<?> job;
+    private final long timeout;
+    private final TimeUnit timeUnit;
+    private volatile ScheduledFuture<?> job;
 
-    /**
-     * {@inheritDoc}
-     */
+    public RepeatingIndependentSubsystem(final long timeout, final TimeUnit timeUnit) {
+        Objects.requireNonNull(timeUnit);
+        this.timeout = timeout;
+        this.timeUnit = timeUnit;
+    }
+
     @Override
     public void start() {
         if (job != null) {
             job.cancel(true);
         }
-        job = SCHEDULED_EXECUTOR_SERVICE.submit(new RunTask());
+        job = executor.scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected Future<?> getJob() {
         return job;

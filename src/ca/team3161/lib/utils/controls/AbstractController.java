@@ -26,7 +26,7 @@
 
 package ca.team3161.lib.utils.controls;
 
-import ca.team3161.lib.robot.RepeatingSubsystem;
+import ca.team3161.lib.robot.RepeatingPooledSubsystem;
 import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * A Gamepad which allows button bindings and control modes.
  */
-public abstract class AbstractController extends RepeatingSubsystem implements Gamepad {
+public abstract class AbstractController extends RepeatingPooledSubsystem implements Gamepad {
 
     /* The actual FIRST-provided input device that we are implementing a
     * convenience wrapper around.

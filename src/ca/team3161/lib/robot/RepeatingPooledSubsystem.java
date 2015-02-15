@@ -34,13 +34,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * A Subsystem whose task is run repeatedly with a specified period, until cancelled.
  */
-public abstract class RepeatingSubsystem extends Subsystem {
+public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
 
     private final long timeout;
     private final TimeUnit timeUnit;
     private volatile ScheduledFuture<?> job;
 
-    public RepeatingSubsystem(final long timeout, final TimeUnit timeUnit) {
+    public RepeatingPooledSubsystem(final long timeout, final TimeUnit timeUnit) {
         Objects.requireNonNull(timeUnit);
         this.timeout = timeout;
         this.timeUnit = timeUnit;

@@ -29,7 +29,7 @@ package ca.team3161.lib.robot.motion.tracking;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import ca.team3161.lib.robot.RepeatingSubsystem;
+import ca.team3161.lib.robot.RepeatingPooledSubsystem;
 import ca.team3161.lib.robot.motion.Position;
 import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * Abstract parent for drivetrain-specific classes which integrate accelerometer, gyroscope, and encoder data
  * in order to estimate total x, y distance travelled and degrees rotated by a robot.
  */
-public abstract class AbstractPositionEstimator extends RepeatingSubsystem {
+public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem {
 
     /**
      * Acceleration due to gravity, in meters per second.
