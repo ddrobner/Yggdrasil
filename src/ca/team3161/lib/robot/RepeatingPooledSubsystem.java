@@ -27,8 +27,6 @@
 package ca.team3161.lib.robot;
 
 import java.util.Objects;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**

@@ -26,8 +26,6 @@
 
 package ca.team3161.lib.robot;
 
-import java.util.concurrent.Future;
-
 /**
  * A Subsystem whose task is only normally run once. The task can however
  * be manually forced to run again by calling {OneshotSubsystem#start} again.
