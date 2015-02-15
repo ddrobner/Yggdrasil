@@ -45,6 +45,8 @@ public abstract class AbstractIndependentSubsystem implements Subsystem {
      */
     protected final List<Lock> resourceLocks = new ArrayList<>();
 
+    protected Future<?> job;
+
     /**
      * Define a required resource for this Subsystem when its task is executed.
      * @param resource a sensor, speed controller, etc. that this subsystem
@@ -93,7 +95,10 @@ public abstract class AbstractIndependentSubsystem implements Subsystem {
      * Get this subsystem's task.
      * @return the current task for this subsystem, if any
      */
-    protected abstract Future<?> getJob();
+    @Override
+    public final Future<?> getJob() {
+        return job;
+    }
 
     /**
      * The task for this Subsystem to run.

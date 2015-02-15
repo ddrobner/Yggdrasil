@@ -26,6 +26,8 @@
 
 package ca.team3161.lib.robot;
 
+import java.util.concurrent.Future;
+
 public interface Subsystem {
     void require(Object resource);
 
@@ -51,4 +53,6 @@ public interface Subsystem {
      * @throws Exception in case the defined task throws any Exceptions
      */
     void task() throws Exception;
+
+    Future<?> getJob();
 }

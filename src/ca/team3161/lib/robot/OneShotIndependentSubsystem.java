@@ -26,11 +26,7 @@
 
 package ca.team3161.lib.robot;
 
-import java.util.concurrent.Future;
-
 public abstract class OneShotIndependentSubsystem extends AbstractIndependentSubsystem {
-
-    private volatile Future<?> job;
 
     /**
      * {@inheritDoc}
@@ -41,14 +37,6 @@ public abstract class OneShotIndependentSubsystem extends AbstractIndependentSub
             job.cancel(true);
         }
         job = executor.submit(new RunTask());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Future<?> getJob() {
-        return job;
     }
 
 }

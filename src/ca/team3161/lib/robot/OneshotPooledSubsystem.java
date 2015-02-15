@@ -34,8 +34,6 @@ import java.util.concurrent.Future;
  */
 public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
 
-    private volatile Future<?> job;
-
     /**
      * {@inheritDoc}
      */
@@ -47,11 +45,4 @@ public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
         job = SCHEDULED_EXECUTOR_SERVICE.submit(new RunTask());
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Future<?> getJob() {
-        return job;
-    }
 }

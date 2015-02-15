@@ -38,7 +38,6 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
 
     private final long timeout;
     private final TimeUnit timeUnit;
-    private volatile ScheduledFuture<?> job;
 
     public RepeatingPooledSubsystem(final long timeout, final TimeUnit timeUnit) {
         Objects.requireNonNull(timeUnit);
@@ -57,11 +56,4 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
         job = SCHEDULED_EXECUTOR_SERVICE.scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Future<?> getJob() {
-        return job;
-    }
 }

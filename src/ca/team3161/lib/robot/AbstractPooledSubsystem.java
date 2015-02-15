@@ -42,6 +42,8 @@ public abstract class AbstractPooledSubsystem implements Subsystem {
 
     protected static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
 
+    protected Future<?> job;
+
     /**
      * A list of resourceLocks which this Subsystem requires.
      * @see ca.team3161.lib.robot.ResourceTracker
@@ -96,7 +98,10 @@ public abstract class AbstractPooledSubsystem implements Subsystem {
      * Get this subsystem's task.
      * @return the current task for this subsystem, if any
      */
-    protected abstract Future<?> getJob();
+    @Override
+    public Future<?> getJob() {
+        return job;
+    }
 
     /**
      * The task for this Subsystem to run.

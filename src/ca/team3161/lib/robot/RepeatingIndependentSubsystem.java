@@ -27,15 +27,12 @@
 package ca.team3161.lib.robot;
 
 import java.util.Objects;
-import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public abstract class RepeatingIndependentSubsystem extends AbstractIndependentSubsystem {
 
     private final long timeout;
     private final TimeUnit timeUnit;
-    private volatile ScheduledFuture<?> job;
 
     public RepeatingIndependentSubsystem(final long timeout, final TimeUnit timeUnit) {
         Objects.requireNonNull(timeUnit);
@@ -49,10 +46,5 @@ public abstract class RepeatingIndependentSubsystem extends AbstractIndependentS
             job.cancel(true);
         }
         job = executor.scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
-    }
-
-    @Override
-    protected Future<?> getJob() {
-        return job;
     }
 }
