@@ -32,9 +32,22 @@ import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 
+/**
+ * Abstracts a system which uses resourceLocks and has some task (recurring or
+ * one-shot) to be performed. An example is PID control - monitor sensors
+ * and periodically set motor values based on this. Independent subsystems do not
+ * share a common work queue, and so independent subsystems are suitable for tasks
+ * which contain long-running operations (which includes any Thread.sleeps,
+ * Timers, while(true) loops, etc), as this will not affect other Subsystems' execution.
+ * However, there is more overhead involved with this. If you do not need a Subsystem
+ * which is able to execute long-running operations without interfering with
+ * other Subsystems, use a PooledSubsystem so that the workload can be shared among
+ * threads.
+ *
+ * @see ca.team3161.lib.robot.AbstractPooledSubsystem
+ */
 public abstract class AbstractIndependentSubsystem implements Subsystem {
 
     protected final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();

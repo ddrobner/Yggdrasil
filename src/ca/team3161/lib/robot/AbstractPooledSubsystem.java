@@ -36,7 +36,15 @@ import java.util.concurrent.locks.Lock;
 /**
  * Abstracts a system which uses resourceLocks and has some task (recurring or
  * one-shot) to be performed. An example is PID control - monitor sensors
- * and periodically set motor values based on this.
+ * and periodically set motor values based on this. Pooled subsystems share a
+ * common work queue, and so pooled subsystems should be careful to ensure that
+ * their tasks do not contain long-running operations (which includes any Thread.sleeps,
+ * Timers, while(true) loops, etc) or else other Subsystems will be unable to
+ * execute until the long-running operation has completed. If you need a Subsystem
+ * which is able to execute long-running operations without interfering with
+ * other Subsystems, use an IndependentSubsystem.
+ *
+ * @see ca.team3161.lib.robot.AbstractIndependentSubsystem
  */
 public abstract class AbstractPooledSubsystem implements Subsystem {
 

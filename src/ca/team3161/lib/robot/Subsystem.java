@@ -28,6 +28,10 @@ package ca.team3161.lib.robot;
 
 import java.util.concurrent.Future;
 
+/**
+ * An interface for defining structures which require use of some (physical) resources,
+ * and which performs a specific task with these resources, either once or periodically.
+ */
 public interface Subsystem {
     void require(Object resource);
 

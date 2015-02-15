@@ -29,6 +29,9 @@ package ca.team3161.lib.robot;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A Subsystem whose task is run repeatedly with a specified period, until cancelled.
+ */
 public abstract class RepeatingIndependentSubsystem extends AbstractIndependentSubsystem {
 
     private final long timeout;

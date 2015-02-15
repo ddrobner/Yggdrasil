@@ -26,6 +26,10 @@
 
 package ca.team3161.lib.robot;
 
+/**
+ * A Subsystem whose task is only normally run once. The task can however
+ * be manually forced to run again by calling {OneshotSubsystem#start} again.
+ */
 public abstract class OneShotIndependentSubsystem extends AbstractIndependentSubsystem {
 
     /**
