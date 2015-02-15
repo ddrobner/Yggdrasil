@@ -95,7 +95,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
      * {@inheritDoc}
      */
     @Override
-    protected void defineResources() {
+    public void defineResources() {
         // none!
     }
 
@@ -106,7 +106,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     protected abstract Set<Button> getButtons();
 
     @Override
-    protected void task() throws Exception {
+    public void task() throws Exception {
         final Map<Button, Boolean> previousButtonStates = new HashMap<>(buttonStates);
         for (final Button button : getButtons()) {
             buttonStates.put(button, getButton(button));

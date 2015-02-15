@@ -83,7 +83,7 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
     /**
      * Require the SpeedControllers and PID objects.
      */
-    protected void defineResources() {
+    public void defineResources() {
         require(leftDrive);
         require(rightDrive);
         require(leftEncoder);
@@ -142,7 +142,7 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
     /**
      * Iteratively PID loop.
      */
-    protected void task() {
+    public void task() {
         t.run();
     }
     

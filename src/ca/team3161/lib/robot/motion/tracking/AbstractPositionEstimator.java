@@ -112,7 +112,7 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
      * {@inheritDoc}
      */
     @Override
-    protected void defineResources() {
+    public void defineResources() {
         require(accelerometer);
         require(gyro);
         require(frontLeftEncoder);
@@ -125,7 +125,7 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
      * {@inheritDoc}
      */
     @Override
-    protected void task() throws Exception {
+    public void task() throws Exception {
         updateTime();
         updateSteerSpecificParameters();
         updateEstimate();
