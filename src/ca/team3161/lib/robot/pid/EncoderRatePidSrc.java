@@ -59,6 +59,6 @@ public final class EncoderRatePidSrc implements PIDSrc<Encoder> {
      */
     @Override
     public float getValue() {
-        return (float)enc.getRate();
+        return (float) enc.getRate();
     }
 }
