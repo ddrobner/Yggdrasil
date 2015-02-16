@@ -47,7 +47,7 @@ public final class PIDulum extends AbstractPID {
      * @param offsetAngle the balance point of the inverted pendulum
      * @param torqueConstant "feed forward" term constant to allow the pendulum to hold position against gravity
      */
-    public PIDulum(final AnglePidValueSrc source, final float deadband,
+    public PIDulum(final AnglePidValueSrc<?> source, final float deadband,
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD,
             final float offsetAngle, final float torqueConstant) {
