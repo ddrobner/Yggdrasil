@@ -34,12 +34,47 @@ import java.util.concurrent.Future;
  */
 public interface Subsystem {
 
+    /**
+     * Define a resource which this Subsystem requires exclusive access to while its
+     * task runs.
+     * @param resource the required resource.
+     */
     void require(Object resource);
 
+    /**
+     * Check if this subsystem's task has been cancelled.
+     * @return true iff cancelled.
+     */
     boolean getCancelled();
 
+    /**
+     * Check if this subsystem's task has been started.
+     * @return true iff started.
+     */
     boolean getStarted();
 
+    /**
+     * Check if this subsystem's task is scheduled to execute.
+     * @return true iff scheduled.
+     */
+    boolean isScheduled();
+
+    /**
+     * Check if this subsystem's task has been completed. This is never
+     * true for repeating subsystems, which are always "Not Started",
+     * "Scheduled", or "Cancelled".
+     * @return true iff completed.
+     */
+    boolean isDone();
+
+    /**
+     * Stop this Subsystem's background task. If this is a one-shot subsystem,
+     * the task will never be run if it has not already started. If it has already
+     * started, the task may be cancelled partway through execution. If it has already
+     * completed, this has no effect. For repeating subsystems, tasks in progress
+     * may be cancelled partway through execution, and in any case, future tasks
+     * will no longer be run.
+     */
     void cancel();
 
     /**
@@ -59,5 +94,9 @@ public interface Subsystem {
      */
     void task() throws Exception;
 
+    /**
+     * Get the job representing the execution of this Subsystem's task.
+     * @return the Future job.
+     */
     Future<?> getJob();
 }

@@ -57,9 +57,7 @@ public abstract class AbstractSubsystem implements Subsystem {
     protected Future<?> job;
 
     /**
-     * Define a required resource for this Subsystem when its task is executed.
-     * @param resource a sensor, speed controller, etc. that this subsystem
-     * needs exclusive access to during its task
+     * {@inheritDoc}
      */
     @Override
     public final void require(final Object resource) {
@@ -83,8 +81,7 @@ public abstract class AbstractSubsystem implements Subsystem {
     }
 
     /**
-     * Get this subsystem's task.
-     * @return the current task for this subsystem, if any
+     * {@inheritDoc}
      */
     @Override
     public final Future<?> getJob() {
@@ -92,8 +89,7 @@ public abstract class AbstractSubsystem implements Subsystem {
     }
 
     /**
-     * Check if this Subsystem's task has been canceled.
-     * @return if this Subsystem's background task has been canceled
+     * {@inheritDoc}
      */
     @Override
     public final boolean getCancelled() {
@@ -101,17 +97,20 @@ public abstract class AbstractSubsystem implements Subsystem {
     }
 
     /**
-     * Checks if the subsystem has been started.
-     * @return true iff the subsystem has been started.
+     * {@inheritDoc}
      */
     @Override
     public final boolean getStarted() {
-        return getJob() != null && (!getJob().isCancelled() && !getJob().isDone());
+        return getJob() != null;
+    }
+
+    @Override
+    public final boolean isScheduled() {
+        return getStarted() && !getCancelled() && !isDone();
     }
 
     /**
-     * Cancel the background task of this Subsystem (stop it from running, if it
-     * is a recurring task).
+     * {@inheritDoc}
      */
     @Override
     public final void cancel() {
