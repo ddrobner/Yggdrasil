@@ -47,7 +47,7 @@ public interface PID {
      * Get the source sensor of this PID.
      * @return the PIDSrc (PID source sensor) used by this PID loop
      */
-    PIDSrc getSrc();
+    PIDValueSrc getSrc();
 
     /**
      * Check if this PID has reached its target value.

@@ -25,40 +25,64 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Gyro;
 
 import java.util.Objects;
 
 /**
- * A PID source that returns values as encoder rate.
+ * A PID source that returns values as degrees of rotation.
  */
-public final class EncoderRatePidSrc implements PIDSrc<Encoder> {
+public final class GyroPidValueSrc implements AnglePidValueSrc<Gyro>, PIDRateSrc<Gyro> {
 
-    private final Encoder enc;
-
+    public static final float MAX_ANGLE = 360.0f;
+    private final Gyro gyro;
+    
     /**
-     * Create a new EncoderRatePidSrc instance.
-     * @param enc an Encoder object to use as a PIDSrc
+     * Create a new GyroPidSrc instance.
+     * @param gyro a Gyro object to use as a PIDSrc
      */
-    public EncoderRatePidSrc(final Encoder enc) {
-        Objects.requireNonNull(enc);
-        this.enc = enc;
+    public GyroPidValueSrc(final Gyro gyro) {
+        Objects.requireNonNull(gyro);
+        this.gyro = gyro;
     }
-
+    
     /**
-     * Retrieve the original sensor used to construct this PIDSrc.
-     * @return the Encoder
+     * Retrieve the original sensor used to create this PIDSrc.
+     * @return the Gyro
      */
     @Override
-    public Encoder getSensor() {
-        return enc;
+    public Gyro getSensor() {
+        return gyro;
     }
-
+    
     /**
      * {@inheritDoc}
      */
     @Override
     public float getValue() {
-        return (float) enc.getRate();
+        return (float) gyro.getAngle();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getMinAngle() {
+        return 0.0f;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getMaxAngle() {
+        return MAX_ANGLE;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public float getRate() {
+        return (float) gyro.getRate();
     }
 }

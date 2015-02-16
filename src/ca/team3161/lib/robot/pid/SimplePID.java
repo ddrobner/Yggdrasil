@@ -46,7 +46,7 @@ public class SimplePID extends AbstractPID {
      * @param kI       I constant
      * @param kD       D constant
      */
-    public SimplePID(final PIDSrc<? extends PIDSource> source, final float deadband,
+    public SimplePID(final PIDValueSrc<? extends PIDSource> source, final float deadband,
                      final int deadbandPeriod, final TimeUnit deadbandUnit,
                      final float kP, final float kI, final float kD) {
         super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);

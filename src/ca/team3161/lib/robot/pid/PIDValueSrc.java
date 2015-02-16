@@ -28,21 +28,17 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.PIDSource;
 
 /**
- * A PID source that specifically returns values to be interpreted as
- * degrees.
- * @param <T> the type of the PIDSource sensor for this AnglePidSrc (eg potentiometer)
+ * A simple interface for allowing different types of sensors to be used for
+ * PID loops. Returns the raw value of its sensor - eg Encoders return a tick
+ * count.
+ * @param <T> the type of the PIDSource sensor for this PIDSrc (eg encoder)
  */
-public interface AnglePidSrc<T extends PIDSource> extends PIDSrc<T> {
+public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T> {
 
     /**
-     * The minimal angle of this sensor.
-     * @return the minimal angle of this sensor
+     * The measured value of this PIDSrc.
+     * @return the measured value of this PIDSrc
      */
-    float getMinAngle();
+    float getValue();
 
-    /**
-     * The maximal angle of this sensor.
-     * @return the maximal angle of this sensor
-     */
-    float getMaxAngle();
 }

@@ -33,7 +33,7 @@ import java.util.Objects;
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
  * rotation.
  */
-public final class PotentiometerPidSrc implements AnglePidSrc<Potentiometer> {
+public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentiometer> {
     
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
@@ -46,9 +46,9 @@ public final class PotentiometerPidSrc implements AnglePidSrc<Potentiometer> {
      * @param minAngle the minimum angle the system can physically rotate to
      * @param maxAngle  the maximum angle the system can physically rotate to
      */
-    public PotentiometerPidSrc(final Potentiometer pot,
-            final float minVolt, final float maxVolt,
-            final float minAngle, final float maxAngle) {
+    public PotentiometerPidValueSrc(final Potentiometer pot,
+                                    final float minVolt, final float maxVolt,
+                                    final float minAngle, final float maxAngle) {
         Objects.requireNonNull(pot);
         this.pot = pot;
         this.minVolt = minVolt;

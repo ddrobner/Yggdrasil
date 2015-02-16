@@ -28,12 +28,18 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.PIDSource;
 
-public interface PIDSrc<T extends PIDSource> {
+/**
+ * A simple interface for allowing different types of sensors to be used for
+ * PID loops. Returns the rate value of its sensor - eg Encoders return the
+ * measured ticks per second.
+ * @param <T> the type of the PIDSource sensor for this PIDSrc (eg encoder)
+ */
+public interface PIDRateSrc<T extends PIDSource> extends PIDSrc<T> {
 
     /**
-     * Get the sensor behind this PIDSrc.
-     * @return the sensor.
+     * Get the rate measured by this PIDRateSrc.
+     * @return the rate.
      */
-    T getSensor();
+    float getRate();
 
 }
