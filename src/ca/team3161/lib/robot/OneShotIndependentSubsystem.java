@@ -43,4 +43,12 @@ public abstract class OneShotIndependentSubsystem extends AbstractIndependentSub
         job = getExecutorService().submit(new RunTask());
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDone() {
+        return job != null && job.isDone();
+    }
+
 }

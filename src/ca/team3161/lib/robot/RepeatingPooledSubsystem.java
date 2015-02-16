@@ -54,4 +54,12 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
         job = getExecutorService().scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDone() {
+        return false;
+    }
+
 }

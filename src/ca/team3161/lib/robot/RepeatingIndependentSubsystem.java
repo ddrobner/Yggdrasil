@@ -50,4 +50,12 @@ public abstract class RepeatingIndependentSubsystem extends AbstractIndependentS
         }
         job = getExecutorService().scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDone() {
+        return false;
+    }
 }
