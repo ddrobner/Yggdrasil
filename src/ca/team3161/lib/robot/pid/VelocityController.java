@@ -123,4 +123,8 @@ public class VelocityController extends SimplePID implements SpeedController {
     public void pidWrite(final double v) {
         speedController.pidWrite(v);
     }
+
+    public SpeedController getSpeedController() {
+        return speedController;
+    }
 }
