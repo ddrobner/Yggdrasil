@@ -29,8 +29,6 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
-import java.util.concurrent.TimeUnit;
-
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
