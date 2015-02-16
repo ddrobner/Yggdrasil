@@ -44,6 +44,8 @@ public class VelocityController extends SimplePID implements SpeedController {
     protected final SpeedController speedController;
     protected float maxRotationalRate = 0;
     protected float target = 0;
+    protected final float maxIntegralError;
+    protected final float deadband;
 
     /**
      * Construct a new VelocityController instance.
@@ -55,8 +57,8 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param kD the Derivative PID constant.
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
-                              final float kP, final float kI, final float kD) {
-        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, kP, kI, kD);
+                              final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
+        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, kP, kI, kD, maxIntegralError, deadband);
     }
 
     /**
@@ -69,12 +71,14 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param kD the Derivative PID constant.
      */
     public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc, final float maxRotationalRate,
-                              final float kP, final float kI, final float kD) {
+                              final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         Objects.requireNonNull(speedController);
         Objects.requireNonNull(encoderPidSrc);
         this.maxRotationalRate = maxRotationalRate;
         this.speedController = speedController;
+        this.maxIntegralError = maxIntegralError;
+        this.deadband = deadband;
     }
 
     /**
@@ -130,5 +134,50 @@ public class VelocityController extends SimplePID implements SpeedController {
 
     public SpeedController getSpeedController() {
         return speedController;
+    }
+
+    @Override
+    public float pid(final float target) {
+        float kErr;
+        float pOut;
+        float iOut;
+        float dOut;
+        float output;
+
+        kErr = (target - source.getValue());
+
+        deltaError = prevError - kErr;
+        prevError = kErr;
+        integralError += kErr;
+
+        if (integralError > maxIntegralError) {
+            integralError = maxIntegralError;
+        }
+
+        if (Math.abs(target) <= deadband) {
+            return 0;
+        }
+
+        pOut = kErr * kP;
+        iOut = integralError * kI;
+        dOut = deltaError * kD;
+
+        if (iOut > 1.0f) {
+            iOut = 1.0f;
+        }
+
+        if (atTarget()) {
+            return 0.0f;
+        }
+
+        output = (pOut + iOut + dOut);
+
+        if (output > 1.0f) {
+            return 1.0f;
+        }
+        if (output < -1.0f) {
+            return -1.0f;
+        }
+        return output;
     }
 }
