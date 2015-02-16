@@ -62,14 +62,32 @@ public interface PID {
     void setkP(float kP);
 
     /**
+     * Get the Proportional constant for this PID.
+     * @return the Proportional constant.
+     */
+    float getkP();
+
+    /**
      * Set the Integral constant for this PID.
      * @param kI the Integral constant.
      */
     void setkI(float kI);
 
     /**
+     * Get the Integral constant for this PID.
+     * @return the Integral constant.
+     */
+    float getkI();
+
+    /**
      * Set the Derivative constant for this PID.
      * @param kD the Derivative constant.
      */
     void setkD(float kD);
+
+    /**
+     * Get the Derivative constant for this PID.
+     * @return the Derivative constant.
+     */
+    float getkD();
 }

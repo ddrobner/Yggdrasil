@@ -131,6 +131,14 @@ public abstract class AbstractPID implements PID {
      * {@inheritDoc}
      */
     @Override
+    public float getkP() {
+        return kP;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setkI(final float kI) {
         this.kI = kI;
     }
@@ -139,7 +147,23 @@ public abstract class AbstractPID implements PID {
      * {@inheritDoc}
      */
     @Override
+    public float getkI() {
+        return kI;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setkD(final float kD) {
         this.kD = kD;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public float getkD() {
+        return kD;
     }
 }
