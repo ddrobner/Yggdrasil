@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.utils;
 
+import java.util.Objects;
+
 /**
  * Assertions. Contains static methods which take a boolean condition and throw
  * an exception if these conditions do not hold. Useful for debugging and during
@@ -50,6 +52,7 @@ public final class Assert {
      * @param condition throw an exception if the given condition does not hold
      */
     public static void assertTrue(String reason, boolean condition) {
+        Objects.requireNonNull(reason);
         if (!condition) {
             throw new AssertionException(reason);
         }
@@ -69,6 +72,7 @@ public final class Assert {
      * @param condition throw an exception if the given condition holds
      */
     public static void assertFalse(String reason, boolean condition) {
+        Objects.requireNonNull(reason);
         assertTrue(reason, !condition);
     }
 

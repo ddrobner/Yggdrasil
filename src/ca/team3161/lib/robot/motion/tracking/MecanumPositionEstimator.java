@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
+import java.util.Objects;
+
 /**
  * A Position Estimator for Mecanum drivetrains.
  * @see AbstractPositionEstimator
@@ -52,6 +54,13 @@ public class MecanumPositionEstimator extends AbstractPositionEstimator {
                                     final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
                                     final Encoder backLeftEncoder, final Encoder backRightEncoder) {
         super(chassisParameters, accelerometer, gyro, frontLeftEncoder, frontRightEncoder, backLeftEncoder, backRightEncoder);
+        Objects.requireNonNull(chassisParameters);
+        Objects.requireNonNull(accelerometer);
+        Objects.requireNonNull(gyro);
+        Objects.requireNonNull(frontLeftEncoder);
+        Objects.requireNonNull(frontRightEncoder);
+        Objects.requireNonNull(backLeftEncoder);
+        Objects.requireNonNull(backRightEncoder);
     }
 
     @Override

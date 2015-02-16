@@ -54,6 +54,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
 
     protected AbstractController(final int port, final long timeout, final TimeUnit timeUnit) {
         super(timeout, timeUnit);
+        Objects.requireNonNull(timeUnit);
         Assert.assertTrue(port >= 0);
         this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine

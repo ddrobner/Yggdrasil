@@ -27,6 +27,7 @@ package ca.team3161.lib.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -80,6 +81,7 @@ public abstract class TitanBot extends IterativeRobot {
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
     public final void waitFor(final long length, final TimeUnit unit) throws InterruptedException {
+        Objects.requireNonNull(unit);
         accumulatedTime += TimeUnit.MILLISECONDS.convert(length, unit);
         if (accumulatedTime > TimeUnit.SECONDS.toMillis(getAutonomousPeriodLengthSeconds())) {
             autoJob.cancel(true);

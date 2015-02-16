@@ -46,6 +46,7 @@ public final class LogitechDualAction extends AbstractController {
 
         @Override
         public int getIdentifier(final Axis axis) {
+            Objects.requireNonNull(axis);
             return this.ordinal() * LogitechControl.values().length + axis.getIdentifier();
         }
     }
@@ -202,6 +203,7 @@ public final class LogitechDualAction extends AbstractController {
     @Override
     public boolean hasBinding(final Button button, final PressType pressType) {
         Objects.requireNonNull(button);
+        Objects.requireNonNull(pressType);
         if (!(button instanceof LogitechButton)) {
             System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
                                        + button);

@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -84,6 +85,13 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
                                      final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
                                      final Encoder backLeftEncoder, final Encoder backRightEncoder) {
         super(10, TimeUnit.MILLISECONDS);
+        Objects.requireNonNull(chassisParameters);
+        Objects.requireNonNull(accelerometer);
+        Objects.requireNonNull(gyro);
+        Objects.requireNonNull(frontLeftEncoder);
+        Objects.requireNonNull(frontRightEncoder);
+        Objects.requireNonNull(backLeftEncoder);
+        Objects.requireNonNull(backRightEncoder);
         this.chassisParameters = chassisParameters;
         this.accelerometer = accelerometer;
         this.gyro = gyro;
