@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.robot.pid;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -37,7 +39,7 @@ public abstract class AbstractPID implements PID {
     /**
      * A PIDSrc sensor.
      */
-    protected final PIDSrc source;
+    protected final PIDSrc<? extends PIDSource> source;
 
     protected volatile float deadband;
     protected volatile float kP;
@@ -62,7 +64,7 @@ public abstract class AbstractPID implements PID {
      * @param kI I constant
      * @param kD D constant
      */
-    public AbstractPID(final PIDSrc source, final float deadband,
+    public AbstractPID(final PIDSrc<? extends PIDSource> source, final float deadband,
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD) {
         Objects.requireNonNull(source);
@@ -95,7 +97,7 @@ public abstract class AbstractPID implements PID {
      * {@inheritDoc}
      */
     @Override
-    public final PIDSrc getSrc() {
+    public final PIDSrc<? extends PIDSource> getSrc() {
         return this.source;
     }
 
