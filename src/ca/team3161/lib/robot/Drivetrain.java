@@ -100,7 +100,7 @@ public final class Drivetrain implements SpeedController {
      * Set the pwm value (-1.0 to 1.0).
      * @param pwm the PWM value to assign to each SpeedController in the collection
      */
-    public void set(double pwm) {
+    public void set(final double pwm) {
         speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm)));
     }
 
@@ -109,7 +109,7 @@ public final class Drivetrain implements SpeedController {
      * @param pwm the PWM value to assign to each SpeedController in the collection
      * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
-    public void set(double pwm, final byte syncGroup) {
+    public void set(final double pwm, final byte syncGroup) {
         speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm), syncGroup));
     }
 

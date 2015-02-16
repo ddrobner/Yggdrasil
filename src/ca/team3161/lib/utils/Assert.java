@@ -40,7 +40,7 @@ public final class Assert {
      * Assert that a condition is true.
      * @param condition throw an exception if the given condition does not hold
      */
-    public static void assertTrue(boolean condition) {
+    public static void assertTrue(final boolean condition) {
         if (!condition) {
             throw new AssertionException();
         }
@@ -51,7 +51,7 @@ public final class Assert {
      * @param reason why the condition should hold
      * @param condition throw an exception if the given condition does not hold
      */
-    public static void assertTrue(String reason, boolean condition) {
+    public static void assertTrue(final String reason, final boolean condition) {
         Objects.requireNonNull(reason);
         if (!condition) {
             throw new AssertionException(reason);
@@ -62,7 +62,7 @@ public final class Assert {
      * Assert that a condition is false.
      * @param condition throw an exception if the given condition holds
      */
-    public static void assertFalse(boolean condition) {
+    public static void assertFalse(final boolean condition) {
         assertTrue(!condition);
     }
 
@@ -71,7 +71,7 @@ public final class Assert {
      * @param reason why the condition should not hold
      * @param condition throw an exception if the given condition holds
      */
-    public static void assertFalse(String reason, boolean condition) {
+    public static void assertFalse(final String reason, final boolean condition) {
         Objects.requireNonNull(reason);
         assertTrue(reason, !condition);
     }
@@ -96,7 +96,7 @@ public final class Assert {
          * Create a new AssertionException.
          * @param cause the cause for this exception to have occurred
          */
-        public AssertionException(String cause) {
+        public AssertionException(final String cause) {
             super(cause);
         }
 
