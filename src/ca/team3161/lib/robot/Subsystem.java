@@ -45,13 +45,13 @@ public interface Subsystem {
      * Check if this subsystem's task has been cancelled.
      * @return true iff cancelled.
      */
-    boolean getCancelled();
+    boolean isCancelled();
 
     /**
      * Check if this subsystem's task has been started.
      * @return true iff started.
      */
-    boolean getStarted();
+    boolean isStarted();
 
     /**
      * Check if this subsystem's task is scheduled to execute.

@@ -92,7 +92,7 @@ public abstract class AbstractSubsystem implements Subsystem {
      * {@inheritDoc}
      */
     @Override
-    public final boolean getCancelled() {
+    public final boolean isCancelled() {
         return (getJob() != null && getJob().isCancelled());
     }
 
@@ -100,13 +100,13 @@ public abstract class AbstractSubsystem implements Subsystem {
      * {@inheritDoc}
      */
     @Override
-    public final boolean getStarted() {
+    public final boolean isStarted() {
         return getJob() != null;
     }
 
     @Override
     public final boolean isScheduled() {
-        return getStarted() && !getCancelled() && !isDone();
+        return isStarted() && !isCancelled() && !isDone();
     }
 
     /**
