@@ -16,6 +16,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+/**
+ * @deprecated as of 2015 Recycle Rush season, no interaction with the robot is allowed
+ * during autonomous, not even indirect control using the Kinect or solutions like
+ * Cheesy Vision.
+ */
+@Deprecated
 public enum CheesyVisionServer {
 
     INSTANCE;
