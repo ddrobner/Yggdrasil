@@ -33,6 +33,7 @@ import java.util.concurrent.Future;
  * and which performs a specific task with these resources, either once or periodically.
  */
 public interface Subsystem {
+
     void require(Object resource);
 
     boolean getCancelled();
