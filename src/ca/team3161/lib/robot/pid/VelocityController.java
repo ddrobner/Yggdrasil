@@ -144,7 +144,7 @@ public class VelocityController extends SimplePID implements SpeedController {
         float dOut;
         float output;
 
-        kErr = (target - source.getValue());
+        kErr = (target - ((EncoderPidSrc)source).getRate());
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -152,9 +152,12 @@ public class VelocityController extends SimplePID implements SpeedController {
 
         if (integralError > maxIntegralError) {
             integralError = maxIntegralError;
+        } else if (integralError < -maxIntegralError) {
+            integralError = -maxIntegralError;
         }
 
         if (Math.abs(target) <= deadband) {
+            integralError = 0;
             return 0;
         }
 
@@ -164,10 +167,6 @@ public class VelocityController extends SimplePID implements SpeedController {
 
         if (iOut > 1.0f) {
             iOut = 1.0f;
-        }
-
-        if (atTarget()) {
-            return 0.0f;
         }
 
         output = (pOut + iOut + dOut);
