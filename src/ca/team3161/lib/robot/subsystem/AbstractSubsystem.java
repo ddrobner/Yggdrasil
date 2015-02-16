@@ -28,9 +28,9 @@ package ca.team3161.lib.robot.subsystem;
 
 import ca.team3161.lib.robot.ResourceTracker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.locks.Lock;
@@ -48,7 +48,7 @@ public abstract class AbstractSubsystem implements Subsystem {
      * A list of resourceLocks which this Subsystem requires.
      * @see ca.team3161.lib.robot.ResourceTracker
      */
-    protected final List<Lock> resourceLocks = new ArrayList<>();
+    protected final Set<Lock> resourceLocks = new HashSet<>();
 
     /**
      * The Future representing this Subsystem's task. 'null' if the subsystem
