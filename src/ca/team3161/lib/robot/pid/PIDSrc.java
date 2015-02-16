@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.PIDSource;
  * the sensor they represent. This interface is intended to be extended
  * by interfaces which represent specific abilities of a type of sensor
  * and thus of a type of PID source.
- * @param <T>
+ * @param <T> the type of sensor, eg Encoder or Gyro, used for this PID source.
  */
 public interface PIDSrc<T extends PIDSource> {
 
