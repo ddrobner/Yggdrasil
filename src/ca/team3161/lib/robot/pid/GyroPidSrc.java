@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * A PID source that returns values as degrees of rotation.
  */
-public final class GyroPidValueSrc implements AnglePidValueSrc<Gyro>, PIDRateSrc<Gyro> {
+public final class GyroPidSrc implements AnglePidValueSrc<Gyro>, PIDRateSrc<Gyro> {
 
     public static final float MAX_ANGLE = 360.0f;
     private final Gyro gyro;
@@ -41,7 +41,7 @@ public final class GyroPidValueSrc implements AnglePidValueSrc<Gyro>, PIDRateSrc
      * Create a new GyroPidSrc instance.
      * @param gyro a Gyro object to use as a PIDSrc
      */
-    public GyroPidValueSrc(final Gyro gyro) {
+    public GyroPidSrc(final Gyro gyro) {
         Objects.requireNonNull(gyro);
         this.gyro = gyro;
     }

@@ -32,7 +32,7 @@ import java.util.Objects;
 /**
  * A PID source that returns values as encoder ticks.
  */
-public final class EncoderPidValueSrc implements PIDValueSrc<Encoder>, PIDRateSrc<Encoder> {
+public final class EncoderPidSrc implements PIDValueSrc<Encoder>, PIDRateSrc<Encoder> {
 
     private final Encoder enc;
     
@@ -40,7 +40,7 @@ public final class EncoderPidValueSrc implements PIDValueSrc<Encoder>, PIDRateSr
      * Create a new EncoderPidSrc instance.
      * @param enc an Encoder object to use as a PIDSrc
      */
-    public EncoderPidValueSrc(final Encoder enc) {
+    public EncoderPidSrc(final Encoder enc) {
         Objects.requireNonNull(enc);
         this.enc = enc;
     }

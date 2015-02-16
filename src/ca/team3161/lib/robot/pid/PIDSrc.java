@@ -28,6 +28,13 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.PIDSource;
 
+/**
+ * Interface for PID sources. On their own, these can only return back
+ * the sensor they represent. This interface is intended to be extended
+ * by interfaces which represent specific abilities of a type of sensor
+ * and thus of a type of PID source.
+ * @param <T>
+ */
 public interface PIDSrc<T extends PIDSource> {
 
     /**
