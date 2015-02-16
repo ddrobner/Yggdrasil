@@ -24,31 +24,32 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.subsystem;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
- * A Subsystem whose task is only normally run once. The task can however
- * be manually forced to run again by calling {OneshotSubsystem#start} again.
+ * Abstracts a system which uses resourceLocks and has some task (recurring or
+ * one-shot) to be performed. An example is PID control - monitor sensors
+ * and periodically set motor values based on this. Independent subsystems do not
+ * share a common work queue, and so independent subsystems are suitable for tasks
+ * which contain long-running operations (which includes any Thread.sleeps,
+ * Timers, while(true) loops, etc), as this will not affect other Subsystems' execution.
+ * However, there is more overhead involved with this. If you do not need a Subsystem
+ * which is able to execute long-running operations without interfering with
+ * other Subsystems, use a PooledSubsystem so that the workload can be shared among
+ * threads.
+ *
+ * @see AbstractPooledSubsystem
  */
-public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
+public abstract class AbstractIndependentSubsystem extends AbstractSubsystem {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start() {
-        if (job != null) {
-            job.cancel(true);
-        }
-        job = getExecutorService().submit(new RunTask());
-    }
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public boolean isDone() {
-        return job != null && job.isDone();
+    public ScheduledExecutorService getExecutorService() {
+        return executor;
     }
 
 }

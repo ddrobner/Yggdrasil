@@ -29,7 +29,7 @@ package ca.team3161.lib.robot.motion.tracking;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-import ca.team3161.lib.robot.RepeatingPooledSubsystem;
+import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import ca.team3161.lib.robot.motion.Position;
 import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;

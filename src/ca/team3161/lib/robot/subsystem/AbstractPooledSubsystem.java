@@ -23,7 +23,7 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.subsystem;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * which is able to execute long-running operations without interfering with
  * other Subsystems, use an IndependentSubsystem.
  *
- * @see ca.team3161.lib.robot.AbstractIndependentSubsystem
+ * @see AbstractIndependentSubsystem
  */
 public abstract class AbstractPooledSubsystem extends AbstractSubsystem {
 

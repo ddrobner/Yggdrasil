@@ -26,7 +26,7 @@
 
 package ca.team3161.lib.utils.controls;
 
-import ca.team3161.lib.robot.RepeatingPooledSubsystem;
+import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;

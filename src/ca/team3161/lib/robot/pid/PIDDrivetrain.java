@@ -23,9 +23,10 @@
 * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.pid;
 
 import ca.team3161.lib.robot.pid.PID;
+import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.Objects;

@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.subsystem;
 
 import java.util.concurrent.Future;
 
@@ -84,7 +84,7 @@ public interface Subsystem {
 
     /**
      * Define the set of resourceLocks required for this Subsystem's task.
-     * @see ca.team3161.lib.robot.AbstractPooledSubsystem#require(Object)
+     * @see AbstractPooledSubsystem#require(Object)
      */
     void defineResources();
 

@@ -24,24 +24,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
-
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+package ca.team3161.lib.robot.subsystem;
 
 /**
- * A Subsystem whose task is run repeatedly with a specified period, until cancelled.
+ * A Subsystem whose task is only normally run once. The task can however
+ * be manually forced to run again by calling {OneshotSubsystem#start} again.
  */
-public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
-
-    private final long timeout;
-    private final TimeUnit timeUnit;
-
-    public RepeatingPooledSubsystem(final long timeout, final TimeUnit timeUnit) {
-        Objects.requireNonNull(timeUnit);
-        this.timeout = timeout;
-        this.timeUnit = timeUnit;
-    }
+public abstract class OneShotIndependentSubsystem extends AbstractIndependentSubsystem {
 
     /**
      * {@inheritDoc}
@@ -51,7 +40,7 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
         if (job != null) {
             job.cancel(true);
         }
-        job = getExecutorService().scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
+        job = getExecutorService().submit(new RunTask());
     }
 
     /**
@@ -59,7 +48,7 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
      */
     @Override
     public boolean isDone() {
-        return false;
+        return job != null && job.isDone();
     }
 
 }

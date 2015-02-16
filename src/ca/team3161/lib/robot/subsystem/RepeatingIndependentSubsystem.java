@@ -24,32 +24,38 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.subsystem;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
- * Abstracts a system which uses resourceLocks and has some task (recurring or
- * one-shot) to be performed. An example is PID control - monitor sensors
- * and periodically set motor values based on this. Independent subsystems do not
- * share a common work queue, and so independent subsystems are suitable for tasks
- * which contain long-running operations (which includes any Thread.sleeps,
- * Timers, while(true) loops, etc), as this will not affect other Subsystems' execution.
- * However, there is more overhead involved with this. If you do not need a Subsystem
- * which is able to execute long-running operations without interfering with
- * other Subsystems, use a PooledSubsystem so that the workload can be shared among
- * threads.
- *
- * @see ca.team3161.lib.robot.AbstractPooledSubsystem
+ * A Subsystem whose task is run repeatedly with a specified period, until cancelled.
  */
-public abstract class AbstractIndependentSubsystem extends AbstractSubsystem {
+public abstract class RepeatingIndependentSubsystem extends AbstractIndependentSubsystem {
 
-    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    private final long timeout;
+    private final TimeUnit timeUnit;
 
-    @Override
-    public ScheduledExecutorService getExecutorService() {
-        return executor;
+    public RepeatingIndependentSubsystem(final long timeout, final TimeUnit timeUnit) {
+        Objects.requireNonNull(timeUnit);
+        this.timeout = timeout;
+        this.timeUnit = timeUnit;
     }
 
+    @Override
+    public void start() {
+        if (job != null) {
+            job.cancel(true);
+        }
+        job = getExecutorService().scheduleAtFixedRate(new RunTask(), 0L, timeout, timeUnit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isDone() {
+        return false;
+    }
 }

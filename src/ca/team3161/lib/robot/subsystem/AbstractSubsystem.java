@@ -24,7 +24,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.subsystem;
+
+import ca.team3161.lib.robot.ResourceTracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,8 +144,8 @@ public abstract class AbstractSubsystem implements Subsystem {
      * for Independent subsystems it is never shared, and for Pooled
      * subsystems it is always shared.
      * @return the executor service.
-     * @see ca.team3161.lib.robot.AbstractIndependentSubsystem
-     * @see ca.team3161.lib.robot.AbstractPooledSubsystem
+     * @see AbstractIndependentSubsystem
+     * @see AbstractPooledSubsystem
      */
     protected abstract ScheduledExecutorService getExecutorService();
 
