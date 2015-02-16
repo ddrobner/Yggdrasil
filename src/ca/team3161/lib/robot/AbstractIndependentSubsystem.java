@@ -26,13 +26,8 @@
 
 package ca.team3161.lib.robot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.locks.Lock;
 
 /**
  * Abstracts a system which uses resourceLocks and has some task (recurring or
@@ -48,86 +43,13 @@ import java.util.concurrent.locks.Lock;
  *
  * @see ca.team3161.lib.robot.AbstractPooledSubsystem
  */
-public abstract class AbstractIndependentSubsystem implements Subsystem {
+public abstract class AbstractIndependentSubsystem extends AbstractSubsystem {
 
-    protected final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
-
-    /**
-     * A list of resourceLocks which this Subsystem requires.
-     * @see ca.team3161.lib.robot.ResourceTracker
-     */
-    protected final List<Lock> resourceLocks = new ArrayList<>();
-
-    protected Future<?> job;
-
-    /**
-     * Define a required resource for this Subsystem when its task is executed.
-     * @param resource a sensor, speed controller, etc. that this subsystem
-     * needs exclusive access to during its task
-     */
-    @Override
-    public final void require(final Object resource) {
-        Objects.requireNonNull(resource);
-        resourceLocks.add(ResourceTracker.track(resource));
-    }
-
-    private void acquireResources() throws InterruptedException {
-        resourceLocks.forEach(Lock::tryLock);
-    }
-
-    private void releaseResources() {
-        resourceLocks.forEach(Lock::unlock);
-    }
-
-    /**
-     * Check if this Subsystem's task has been canceled.
-     * @return if this Subsystem's background task has been canceled
-     */
-    @Override
-    public final boolean getCancelled() {
-        return (getJob() != null && getJob().isCancelled());
-    }
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     @Override
-    public final boolean getStarted() {
-        return getJob() != null && (!getJob().isCancelled() && !getJob().isDone());
-    }
-
-    /**
-     * Cancel the background task of this Subsystem (stop it from running, if it
-     * is a recurring task).
-     */
-    @Override
-    public final void cancel() {
-        if (getJob() != null) {
-            getJob().cancel(true);
-        }
-    }
-
-    /**
-     * Get this subsystem's task.
-     * @return the current task for this subsystem, if any
-     */
-    @Override
-    public final Future<?> getJob() {
-        return job;
-    }
-
-    /**
-     * The task for this Subsystem to run.
-     */
-    protected class RunTask implements Runnable {
-        @Override
-        public void run() {
-            try {
-                acquireResources();
-                task();
-            } catch (final Exception e) {
-                e.printStackTrace();
-            } finally {
-                releaseResources();
-            }
-        }
+    public ScheduledExecutorService getExecutorService() {
+        return executor;
     }
 
 }

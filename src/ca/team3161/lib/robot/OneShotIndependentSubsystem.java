@@ -40,7 +40,7 @@ public abstract class OneShotIndependentSubsystem extends AbstractIndependentSub
         if (job != null) {
             job.cancel(true);
         }
-        job = executor.submit(new RunTask());
+        job = getExecutorService().submit(new RunTask());
     }
 
 }

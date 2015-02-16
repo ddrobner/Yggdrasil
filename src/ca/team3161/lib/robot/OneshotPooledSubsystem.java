@@ -40,7 +40,7 @@ public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
         if (job != null) {
             job.cancel(true);
         }
-        job = SCHEDULED_EXECUTOR_SERVICE.submit(new RunTask());
+        job = getExecutorService().submit(new RunTask());
     }
 
 }
