@@ -103,6 +103,10 @@ public class VelocityController extends SimplePID implements SpeedController {
         speedController.set(pid(target * maxRotationalRate), b);
     }
 
+    public double getRate() {
+        return ((EncoderPidSrc) source).getRate();
+    }
+
     /**
      * Set the target rotational rate of this VelocityController.
      * This method should be called very frequently, as the PID loop only iterates when this method
@@ -155,7 +159,7 @@ public class VelocityController extends SimplePID implements SpeedController {
         }
 
         if (Math.abs(target) <= deadband) {
-            return 0;
+            integralError = 0;
         }
 
         pOut = kErr * kP;
