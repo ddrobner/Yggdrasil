@@ -48,6 +48,12 @@ public abstract class AbstractSubsystem implements Subsystem {
      */
     protected final List<Lock> resourceLocks = new ArrayList<>();
 
+    /**
+     * The Future representing this Subsystem's task. 'null' if the subsystem
+     * has never yet been started. This can be used to check if the subsystem
+     * has ever been started, or to cancel scheduled jobs.
+     * @see Subsystem#start()
+     */
     protected Future<?> job;
 
     /**
@@ -61,10 +67,17 @@ public abstract class AbstractSubsystem implements Subsystem {
         resourceLocks.add(ResourceTracker.track(resource));
     }
 
+    /**
+     * Helper method to acquire all defined resources.
+     * @throws InterruptedException if interrupted while holding any resource lock
+     */
     protected final void acquireResources() throws InterruptedException {
         resourceLocks.forEach(Lock::tryLock);
     }
 
+    /**
+     * Helper method to release all defined resources.
+     */
     protected final void releaseResources() {
         resourceLocks.forEach(Lock::unlock);
     }
@@ -87,6 +100,10 @@ public abstract class AbstractSubsystem implements Subsystem {
         return (getJob() != null && getJob().isCancelled());
     }
 
+    /**
+     * Checks if the subsystem has been started.
+     * @return true iff the subsystem has been started.
+     */
     @Override
     public final boolean getStarted() {
         return getJob() != null && (!getJob().isCancelled() && !getJob().isDone());
