@@ -40,7 +40,7 @@ public class GyroRatePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyr
     }
 
     @Override
-    public Float get() {
+    public Float getPIDValue() {
         return (float) gyro.getRate();
     }
 

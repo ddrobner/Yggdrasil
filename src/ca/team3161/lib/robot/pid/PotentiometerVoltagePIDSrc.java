@@ -77,7 +77,7 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     }
 
     @Override
-    public Float get() {
+    public Float getPIDValue() {
         return getAngle();
     }
     

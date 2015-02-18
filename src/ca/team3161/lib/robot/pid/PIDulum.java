@@ -29,7 +29,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
- * A PID controller for inverted pendulum systems (PID pendulum... get it?)
+ * A PID controller for inverted pendulum systems (PID pendulum... getPIDValue it?)
  * @param <V> the specific source type which provides angle measurements for this PIDulum.
  */
 public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V, Float> {
@@ -70,7 +70,7 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
         float feedForward;
         float output;
 
-        kErr = target - source.get();
+        kErr = target - source.getPIDValue();
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -84,7 +84,7 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
             iOut = 1;
         }
         
-        feedForward = torqueConstant * (source.get() - offsetAngle);
+        feedForward = torqueConstant * (source.getPIDValue() - offsetAngle);
 
         if (atTarget()) {
             return feedForward;

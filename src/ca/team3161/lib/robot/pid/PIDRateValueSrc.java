@@ -35,6 +35,6 @@ import edu.wpi.first.wpilibj.PIDSource;
 public interface PIDRateValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
     default Float getRate() {
-        return get();
+        return getPIDValue();
     }
 }

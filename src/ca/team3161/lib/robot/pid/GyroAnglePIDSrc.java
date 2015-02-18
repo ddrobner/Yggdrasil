@@ -40,7 +40,7 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
     }
 
     @Override
-    public Float get() {
+    public Float getPIDValue() {
         return (float) gyro.getAngle();
     }
 

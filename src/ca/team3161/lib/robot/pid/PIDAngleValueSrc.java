@@ -47,6 +47,6 @@ public interface PIDAngleValueSrc<T extends PIDSource> extends PIDSrc<T, Float> 
     Float getMaxAngle();
 
     default Float getAngle() {
-        return get();
+        return getPIDValue();
     }
 }

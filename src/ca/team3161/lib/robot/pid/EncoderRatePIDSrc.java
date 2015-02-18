@@ -59,7 +59,7 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
      * {@inheritDoc}
      */
     @Override
-    public Float get() {
+    public Float getPIDValue() {
         return (float) enc.getRate();
     }
 }

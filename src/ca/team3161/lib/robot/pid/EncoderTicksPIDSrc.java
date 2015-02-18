@@ -58,7 +58,7 @@ public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer> {
      * {@inheritDoc}
      */
     @Override
-    public Integer get() {
+    public Integer getPIDValue() {
         return enc.get();
     }
 }

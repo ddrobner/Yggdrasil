@@ -64,7 +64,7 @@ public class SimplePID extends AbstractPID<PIDSource, Float> {
         float dOut;
         float output;
 
-        kErr = target - source.get();
+        kErr = target - source.getPIDValue();
 
         deltaError = prevError - kErr;
         prevError = kErr;

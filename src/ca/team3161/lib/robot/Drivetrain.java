@@ -82,7 +82,7 @@ public final class Drivetrain implements SpeedController {
      */
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
-        // so simply get the value of the first one.
+        // so simply getPIDValue the value of the first one.
         return inversion * speedControllers.get(0).get();
     }
 

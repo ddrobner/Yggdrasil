@@ -108,7 +108,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
     }
 
     public double getRate() {
-        return source.get();
+        return source.getPIDValue();
     }
 
     /**
@@ -152,7 +152,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         float dOut;
         float output;
 
-        kErr = target - source.get();
+        kErr = target - source.getPIDValue();
 
         deltaError = prevError - kErr;
         prevError = kErr;
