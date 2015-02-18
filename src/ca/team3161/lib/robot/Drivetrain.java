@@ -26,6 +26,7 @@
 package ca.team3161.lib.robot;
 
 import ca.team3161.lib.utils.Assert;
+import ca.team3161.lib.utils.ComposedComponent;
 import ca.team3161.lib.utils.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -39,7 +40,7 @@ import java.util.stream.Collectors;
 /**
  * Implements a container for SpeedControllers.
  */
-public final class Drivetrain implements SpeedController {
+public final class Drivetrain implements SpeedController, ComposedComponent<List<SpeedController>> {
 
     private final List<SpeedController> speedControllers = new ArrayList<>();
     private float inversion = 1.0f;
@@ -86,6 +87,11 @@ public final class Drivetrain implements SpeedController {
         // All of the SpeedControllers will always be set to the same value,
         // so simply getPIDValue the value of the first one.
         return inversion * speedControllers.get(0).get();
+    }
+
+    @Override
+    public List<SpeedController> getComposedComponent() {
+        return new ArrayList<>(speedControllers);
     }
 
     /**
