@@ -79,9 +79,11 @@
     </if>
 
     <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}.jar" basedir="${build}"/>
+    <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}-sources.jar" basedir="${src}"/>
     <jar jarfile="${dist}/lib/${ant.project.name}${dist-suffix}-javadoc.jar" basedir="${javadoc-dir}"/>
     <zip destfile="${dist}/lib/${ant.project.name}${dist-suffix}-all.zip" whenempty="fail" duplicate="fail">
         <fileset file="${dist}/lib/${ant.project.name}${dist-suffix}.jar"/>
+        <fileset file="${dist}/lib/${ant.project.name}${dist-suffix}-sources.jar"/>
         <fileset file="${dist}/lib/${ant.project.name}${dist-suffix}-javadoc.jar" />
         <fileset file="LICENSE"/>
         <fileset file="README.asciidoc"/>
