@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -137,7 +138,7 @@ public final class LogitechDualAction extends AbstractController {
         return controlsModeMap.entrySet()
                        .stream().filter(e -> e.getKey().getControl().equals(control)
                                                      && e.getKey().getAxis().equals(axis))
-                       .collect(Collectors.toList()).get(0).getValue().adjust(backingHID.getRawAxis(control.getIdentifier(axis)));
+                       .collect(Collectors.toList()).get(0).getValue().apply(backingHID.getRawAxis(control.getIdentifier(axis)));
     }
 
     /**
@@ -178,6 +179,21 @@ public final class LogitechDualAction extends AbstractController {
                                        + control);
         }
         controlsModeMap.put(new ModeIdentifier(control, axis), joystickMode);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMode(final Control control, final Axis axis, final Function<Double, Double> function) {
+        Objects.requireNonNull(control);
+        Objects.requireNonNull(axis);
+        Objects.requireNonNull(function);
+        if (!(control instanceof LogitechControl)) {
+            System.err.println("Gamepad on port " + this.port + " setMode() called with invalid control "
+                                       + control);
+        }
+        controlsModeMap.put(new ModeIdentifier(control, axis), function);
     }
 
     /**

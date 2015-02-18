@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * A Gamepad which allows button bindings and control modes.
@@ -48,7 +49,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     * convenience wrapper around.
     */
     protected final GenericHID backingHID;
-    protected final Map<ModeIdentifier, JoystickMode> controlsModeMap = new HashMap<>();
+    protected final Map<ModeIdentifier, Function<Double, Double>> controlsModeMap = new HashMap<>();
     protected final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
     protected final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
     protected final int port;

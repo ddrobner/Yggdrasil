@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -84,6 +85,8 @@ public interface Gamepad {
      * @param joystickMode the mode to set
      */
     void setMode(Control control, Axis axis, JoystickMode joystickMode);
+
+    void setMode(Control contorl, Axis axis, Function<Double, Double> function);
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
