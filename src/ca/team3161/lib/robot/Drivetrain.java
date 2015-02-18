@@ -89,6 +89,10 @@ public final class Drivetrain implements SpeedController, ComposedComponent<List
         return inversion * speedControllers.get(0).get();
     }
 
+    /**
+     * Return the list of SpeedControllers which this Drivetrain was constructed with.
+     * @return the SpeedControllers.
+     */
     @Override
     public List<SpeedController> getComposedComponent() {
         return new ArrayList<>(speedControllers);
