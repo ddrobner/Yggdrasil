@@ -39,7 +39,7 @@ import java.util.Objects;
  * will only return the adjusted value for the next PID iteration; this value represents an actual motor output value,
  * but is not automatically applied to the backing SpeedController instance.
  */
-public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController {
+public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController, PIDRateValueSrc<Encoder> {
 
     protected final SpeedController speedController;
     protected float maxRotationalRate = 0;
@@ -107,7 +107,8 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.set(pid(target * maxRotationalRate), b);
     }
 
-    public double getRate() {
+    @Override
+    public Float getRate() {
         return source.getPIDValue();
     }
 
@@ -185,5 +186,15 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
             return -1.0f;
         }
         return output;
+    }
+
+    @Override
+    public Encoder getSensor() {
+        return source.getSensor();
+    }
+
+    @Override
+    public Float getPIDValue() {
+        return getRate();
     }
 }
