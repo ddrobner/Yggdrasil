@@ -26,6 +26,8 @@
 package ca.team3161.lib.utils.controls;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -193,6 +195,20 @@ public final class LogitechDualAction extends AbstractController {
         buttonBindings.put(new Binding(button, pressType), binding);
     }
 
+    @Override
+    public void bind(final Set<Button> buttons, final PressType pressType, final Runnable binding) {
+        Objects.requireNonNull(buttons);
+        Objects.requireNonNull(pressType);
+        Objects.requireNonNull(binding);
+        buttons.stream().forEach(button -> {
+            if (!(button instanceof LogitechButton)) {
+                System.err.println("Gamepad on port " + this.port + " bind() called with invalid button "
+                                           + button);
+            }
+        });
+        buttonBindings.put(new Binding(buttons, pressType), binding);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -204,7 +220,21 @@ public final class LogitechDualAction extends AbstractController {
             System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
                                        + button);
         }
-        buttonBindings.entrySet().removeIf(e -> e.getKey().getButton().equals(button)
+        buttonBindings.entrySet().removeIf(e -> e.getKey().getButtons().equals(Collections.singleton(button))
+                                                        && e.getKey().getPressType().equals(pressType));
+    }
+
+    @Override
+    public void unbind(final Set<Button> buttons, final PressType pressType) {
+        Objects.requireNonNull(buttons);
+        Objects.requireNonNull(pressType);
+        buttons.stream().forEach(button -> {
+            if (!(button instanceof LogitechButton)) {
+                System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
+                                           + button);
+            }
+        });
+        buttonBindings.entrySet().removeIf(e -> e.getKey().getButtons().equals(buttons)
                                                         && e.getKey().getPressType().equals(pressType));
     }
 
@@ -219,7 +249,22 @@ public final class LogitechDualAction extends AbstractController {
             System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
                                        + button);
         }
-        return buttonBindings.keySet().stream().anyMatch(b -> b.getButton().equals(button) && b.getPressType().equals(pressType));
+        return buttonBindings.keySet().stream().anyMatch(b -> b.getButtons().equals(Collections.singleton(button))
+                                                                      && b.getPressType().equals(pressType));
+    }
+
+    @Override
+    public boolean hasBinding(final Set<Button> buttons, final PressType pressType) {
+        Objects.requireNonNull(buttons);
+        Objects.requireNonNull(pressType);
+        buttons.stream().forEach(button -> {
+            if (!(button instanceof LogitechButton)) {
+                System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
+                                           + button);
+            }
+        });
+        return buttonBindings.keySet().stream().anyMatch(b -> b.getButtons().equals(buttons)
+                                                                      && b.getPressType().equals(pressType));
     }
 
 } 
