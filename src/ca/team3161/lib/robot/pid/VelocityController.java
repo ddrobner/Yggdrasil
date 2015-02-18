@@ -26,6 +26,7 @@
 
 package ca.team3161.lib.robot.pid;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
@@ -39,7 +40,7 @@ import java.util.Objects;
  * will only return the adjusted value for the next PID iteration; this value represents an actual motor output value,
  * but is not automatically applied to the backing SpeedController instance.
  */
-public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController, PIDRateValueSrc<Encoder> {
+public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController, PIDRateValueSrc<Encoder>, ComposedComponent<SpeedController> {
 
     protected final SpeedController speedController;
     protected float maxRotationalRate = 0;
@@ -141,7 +142,8 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.pidWrite(v);
     }
 
-    public SpeedController getSpeedController() {
+    @Override
+    public SpeedController getComposedComponent() {
         return speedController;
     }
 
