@@ -26,6 +26,12 @@
 
 package ca.team3161.lib.utils.controls;
 
+/**
+ * A Joystick mode which applies a deadband filter according to a constructor parameter.
+ * If the input value to the mode is less than the specified deadband, return 0 instead.
+ * Otherwise, return back the input value. Useful when releasing a joystick results in
+ * the joystick reading a very small value rather than 0.
+ */
 public final class DeadbandJoystickMode implements JoystickMode {
     private final double deadband;
 

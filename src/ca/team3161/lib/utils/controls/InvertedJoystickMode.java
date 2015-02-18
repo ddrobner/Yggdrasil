@@ -26,6 +26,9 @@
 
 package ca.team3161.lib.utils.controls;
 
+/**
+ * A Joystick mode which simply inverts its input.
+ */
 public final class InvertedJoystickMode implements JoystickMode {
     @Override
     public double adjust(final double raw) {
