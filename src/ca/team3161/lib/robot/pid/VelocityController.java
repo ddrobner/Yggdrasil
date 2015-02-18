@@ -74,7 +74,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      * @param maxIntegralError limit constant for the integral error.
      * @param deadband if the absolute value of the deadband falls within this range, output 0.
      */
-    public VelocityController(final SpeedController speedController, final PIDSrc<Encoder, Float> encoderPidSrc, final float maxRotationalRate,
+    public VelocityController(final SpeedController speedController, final PIDRateValueSrc<Encoder> encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         Objects.requireNonNull(speedController);
