@@ -152,7 +152,7 @@ public class VelocityController extends SimplePID implements SpeedController {
         float dOut;
         float output;
 
-        kErr = (target - source.getValue());
+        kErr = (target - ((EncoderPidSrc) source).getRate());
 
         deltaError = prevError - kErr;
         prevError = kErr;
