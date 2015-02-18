@@ -34,6 +34,7 @@ import java.util.function.Function;
  * Implementing a JoystickMode is also how one might handle setting an input
  * deadband on their Joysticks.
  */
+@FunctionalInterface
 public interface JoystickMode extends Function<Double, Double> {
 
     /**
