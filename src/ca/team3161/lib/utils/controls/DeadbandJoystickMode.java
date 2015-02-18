@@ -24,22 +24,26 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.pid;
-
-import edu.wpi.first.wpilibj.PIDSource;
+package ca.team3161.lib.utils.controls;
 
 /**
- * A simple interface for allowing different types of sensors to be used for
- * PID loops. Returns the rate value of its sensor - eg Encoders return the
- * measured ticks per second.
- * @param <T> the type of the PIDSource sensor for this PIDSrc (eg encoder)
+ * A Joystick mode which applies a deadband filter according to a constructor parameter.
+ * If the input value to the mode is less than the specified deadband, return 0 instead.
+ * Otherwise, return back the input value. Useful when releasing a joystick results in
+ * the joystick reading a very small value rather than 0.
  */
-public interface PIDRateSrc<T extends PIDSource> extends PIDSrc<T> {
+public final class DeadbandJoystickMode implements JoystickMode {
+    private final double deadband;
 
-    /**
-     * Get the rate measured by this PIDRateSrc.
-     * @return the rate.
-     */
-    float getRate();
+    public DeadbandJoystickMode(final double deadband) {
+        this.deadband = deadband;
+    }
 
+    @Override
+    public double adjust(final double raw) {
+        if (Math.abs(raw) < deadband) {
+            return 0;
+        }
+        return raw;
+    }
 }

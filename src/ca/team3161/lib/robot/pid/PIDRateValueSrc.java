@@ -29,12 +29,12 @@ package ca.team3161.lib.robot.pid;
 import edu.wpi.first.wpilibj.PIDSource;
 
 /**
- * Defines a component which provides a generic measurable value for a PID system.
+ * Defines a component which can provide rate values for a PID system.
  * @param <T> the type of sensor.
  */
-public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
+public interface PIDRateValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
-    default Float getValue() {
+    default Float getRate() {
         return get();
     }
 }

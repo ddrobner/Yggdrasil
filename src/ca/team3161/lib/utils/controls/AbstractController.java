@@ -31,6 +31,7 @@ import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -114,22 +115,25 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
         }
         synchronized (buttonBindings) {
             for (final Map.Entry<Binding, Runnable> binding : buttonBindings.entrySet()) {
-                final Button button = binding.getKey().getButton();
+                final Set<Button> buttons = binding.getKey().getButtons();
                 final PressType pressType = binding.getKey().getPressType();
                 final Runnable action = binding.getValue();
+
+                final boolean currentlyHeld = buttons.stream().allMatch(buttonStates::get);
+                final boolean previouslyHeld = buttons.stream().allMatch(previousButtonStates::get);
                 switch (pressType) {
                     case PRESS:
-                        if (buttonStates.get(button) && !previousButtonStates.get(button)) {
+                        if (currentlyHeld && !previouslyHeld) {
                             getExecutorService().submit(action);
                         }
                         break;
                     case RELEASE:
-                        if (!buttonStates.get(button) && previousButtonStates.get(button)) {
+                        if (!currentlyHeld && previouslyHeld) {
                             getExecutorService().submit(action);
                         }
                         break;
                     case HOLD:
-                        if (buttonStates.get(button)) {
+                        if (currentlyHeld) {
                             getExecutorService().submit(action);
                         }
                         break;
@@ -146,27 +150,31 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
      * A (Button, PressType) tuple for identifying button bindings.
      */
     protected static class Binding {
-        private final Button button;
+        private final Set<Button> buttons;
         private final PressType pressType;
 
         /**
          * Construct a new Binding identifier.
-         * @param button the button
+         * @param buttons the buttons
          * @param pressType the press type
          */
-        public Binding(final Button button, final PressType pressType) {
-            Objects.requireNonNull(button);
+        public Binding(final Set<Button> buttons, final PressType pressType) {
+            Objects.requireNonNull(buttons);
             Objects.requireNonNull(pressType);
-            this.button = button;
+            this.buttons = buttons;
             this.pressType = pressType;
+        }
+
+        public Binding(final Button button, final PressType pressType) {
+            this(Collections.singleton(button), pressType);
         }
 
         /**
          * Get the button.
          * @return the button
          */
-        public Button getButton() {
-            return button;
+        public Set<Button> getButtons() {
+            return buttons;
         }
 
         /**
@@ -191,7 +199,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
 
             final Binding binding = (Binding) o;
 
-            if (!button.equals(binding.button)) {
+            if (!buttons.equals(binding.buttons)) {
                 return false;
             }
             if (pressType != binding.pressType) {
@@ -206,7 +214,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
          */
         @Override
         public int hashCode() {
-            int result = button.hashCode();
+            int result = buttons.hashCode();
             result = 31 * result + pressType.hashCode();
             return result;
         }

@@ -26,15 +26,40 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.Encoder;
+
+import java.util.Objects;
 
 /**
- * Defines a component which provides a generic measurable value for a PID system.
- * @param <T> the type of sensor.
+ * A PID source that returns values as encoder rates.
  */
-public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
+public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
 
-    default Float getValue() {
-        return get();
+    private final Encoder enc;
+
+    /**
+     * Create a new EncoderPidSrc instance.
+     * @param enc an Encoder object to use as a PIDSrc
+     */
+    public EncoderRatePIDSrc(final Encoder enc) {
+        Objects.requireNonNull(enc);
+        this.enc = enc;
+    }
+
+    /**
+     * Retrieve the original sensor used to construct this PIDSrc.
+     * @return the Encoder
+     */
+    @Override
+    public Encoder getSensor() {
+        return enc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Float get() {
+        return (float) enc.getRate();
     }
 }

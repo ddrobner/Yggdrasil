@@ -26,6 +26,8 @@
 package ca.team3161.lib.robot.pid;
 
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.Objects;
@@ -38,7 +40,8 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
 
     public static final long SUBSYSTEM_TASK_PERIOD = 20L;
     private final SpeedController leftDrive, rightDrive;
-    private final PID leftEncoder, rightEncoder, turningPid, bearingPid;
+    private final PID<? extends Encoder, Integer> leftEncoder, rightEncoder;
+    private final PID<? extends Gyro, Float> turningPid, bearingPid;
     private volatile float turningDegreesTarget = 0.0f;
     private volatile int leftTicksTarget = 0, rightTicksTarget = 0;
     private Task t;
@@ -64,7 +67,8 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
      * @param bearingPid an AnglePidSrc to orient to a vector while stationary
      */
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
-            final PID leftEncoder, final PID rightEncoder, final PID turningPid, final PID bearingPid) {
+            final PID<? extends Encoder, Integer> leftEncoder, final PID<? extends Encoder, Integer> rightEncoder,
+            final PID<? extends Gyro, Float> turningPid, final PID<? extends Gyro, Float> bearingPid) {
         super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
         Objects.requireNonNull(leftDrive);
         Objects.requireNonNull(rightDrive);

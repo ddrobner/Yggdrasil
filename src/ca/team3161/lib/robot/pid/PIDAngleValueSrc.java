@@ -32,17 +32,21 @@ import edu.wpi.first.wpilibj.PIDSource;
  * degrees.
  * @param <T> the type of the PIDSource sensor for this AnglePidSrc (eg potentiometer)
  */
-public interface AnglePidValueSrc<T extends PIDSource> extends PIDValueSrc<T> {
+public interface PIDAngleValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
     /**
      * The minimal angle of this sensor.
      * @return the minimal angle of this sensor
      */
-    float getMinAngle();
+    Float getMinAngle();
 
     /**
      * The maximal angle of this sensor.
      * @return the maximal angle of this sensor
      */
-    float getMaxAngle();
+    Float getMaxAngle();
+
+    default Float getAngle() {
+        return get();
+    }
 }

@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * A plain, general PID implementation.
  * {@inheritDoc}
  */
-public class SimplePID extends AbstractPID {
+public class SimplePID extends AbstractPID<PIDSource, Float> {
 
     /**
      * Create a new SimplePID instance.
@@ -46,7 +46,7 @@ public class SimplePID extends AbstractPID {
      * @param kI       I constant
      * @param kD       D constant
      */
-    public SimplePID(final PIDValueSrc<? extends PIDSource> source, final float deadband,
+    public SimplePID(final PIDSrc<PIDSource, Float> source, final float deadband,
                      final int deadbandPeriod, final TimeUnit deadbandUnit,
                      final float kP, final float kI, final float kD) {
         super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
@@ -57,14 +57,14 @@ public class SimplePID extends AbstractPID {
      * {@inheritDoc}
      */
     @Override
-    public float pid(final float target) {
+    public Float pid(final Float target) {
         float kErr;
         float pOut;
         float iOut;
         float dOut;
         float output;
 
-        kErr = (target - source.getValue());
+        kErr = target - source.get();
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -79,16 +79,16 @@ public class SimplePID extends AbstractPID {
         }
 
         if (atTarget()) {
-            return 0.0f;
+            return 0f;
         }
 
         output = (pOut + iOut + dOut);
 
         if (output > 1.0f) {
-            return 1.0f;
+            return 1f;
         }
         if (output < -1.0f) {
-            return -1.0f;
+            return -1f;
         }
         return output;
     }

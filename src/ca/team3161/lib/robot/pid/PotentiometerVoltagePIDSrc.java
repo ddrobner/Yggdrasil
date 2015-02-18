@@ -33,7 +33,7 @@ import java.util.Objects;
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
  * rotation.
  */
-public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentiometer> {
+public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potentiometer> {
     
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
@@ -46,9 +46,9 @@ public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentio
      * @param minAngle the minimum angle the system can physically rotate to
      * @param maxAngle  the maximum angle the system can physically rotate to
      */
-    public PotentiometerPidValueSrc(final Potentiometer pot,
-                                    final float minVolt, final float maxVolt,
-                                    final float minAngle, final float maxAngle) {
+    public PotentiometerVoltagePIDSrc(final Potentiometer pot,
+                                      final float minVolt, final float maxVolt,
+                                      final float minAngle, final float maxAngle) {
         Objects.requireNonNull(pot);
         this.pot = pot;
         this.minVolt = minVolt;
@@ -70,11 +70,15 @@ public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentio
      * Inherited from PIDSrc.
      * @return the measured value of this PIDSrc
      */
-    @Override
-    public float getValue() {
+    public Float getAngle() {
         final float slope = (maxAngle - minAngle) / (maxVolt - minVolt);
         final float offset = minAngle - slope * minVolt;
         return (float) (slope * pot.get() + offset);
+    }
+
+    @Override
+    public Float get() {
+        return getAngle();
     }
     
     /**
@@ -82,7 +86,7 @@ public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentio
      * @return the minimal angle of this sensor
      */
     @Override
-    public float getMinAngle() {
+    public Float getMinAngle() {
         return minAngle;
     }
     
@@ -91,7 +95,7 @@ public final class PotentiometerPidValueSrc implements AnglePidValueSrc<Potentio
      * @return the maximal angle of this sensor
      */
     @Override
-    public float getMaxAngle() {
+    public Float getMaxAngle() {
         return maxAngle;
     }
     

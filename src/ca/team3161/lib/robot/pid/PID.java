@@ -25,11 +25,15 @@
 
 package ca.team3161.lib.robot.pid;
 
+import edu.wpi.first.wpilibj.PIDSource;
+
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
  * output values with which a system can reach and maintain a target value.
+ * @param <T> the type of sensor used as input to this PID system.
+ * @param <V> the type of value read from the sensor used as input to this PID system.
  */
-public interface PID {
+public interface PID<T extends PIDSource, V extends Number> {
 
     /**
      * Reset the state of this PID loop.
@@ -41,13 +45,13 @@ public interface PID {
      * @param target the desired target value. Units depend on the context of this PID
      * @return the output value to set to eg a SpeedController to reach the specified target
      */
-    float pid(float target);
+    V pid(V target);
 
     /**
      * Get the source sensor of this PID.
      * @return the PIDSrc (PID source sensor) used by this PID loop
      */
-    PIDValueSrc getSrc();
+    PIDSrc<T, V> getSrc();
 
     /**
      * Check if this PID has reached its target value.

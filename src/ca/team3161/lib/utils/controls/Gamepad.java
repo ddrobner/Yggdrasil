@@ -27,6 +27,8 @@ package ca.team3161.lib.utils.controls;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -107,6 +109,8 @@ public interface Gamepad {
      */
     void bind(Button button, PressType pressType, Runnable binding);
 
+    void bind(Set<Button> buttons, PressType pressType, Runnable binding);
+
     /**
      * Remove all bindings for the given button. Buttons should be provided by Gamepad
      * implementations supplying their own valid possible values. Buttons defined by one
@@ -125,6 +129,8 @@ public interface Gamepad {
      * @param pressType the type of button press for which to unbind an action
      */
     void unbind(Button button, PressType pressType);
+
+    void unbind(Set<Button> buttons, PressType pressType);
 
     /**
      * Check if a given button has a bound action. Buttons should be provided by Gamepad
@@ -147,6 +153,8 @@ public interface Gamepad {
      * @return if the button has any bindings for the given press type
      */
     boolean hasBinding(Button button, PressType pressType);
+
+    boolean hasBinding(Set<Button> buttons, PressType pressType);
 
     /**
      * Enable button bindings. If bindings are not enabled, then no bound actions will be executed.

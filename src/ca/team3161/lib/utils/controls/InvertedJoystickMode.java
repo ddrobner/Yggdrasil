@@ -24,17 +24,14 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.pid;
-
-import edu.wpi.first.wpilibj.PIDSource;
+package ca.team3161.lib.utils.controls;
 
 /**
- * Defines a component which provides a generic measurable value for a PID system.
- * @param <T> the type of sensor.
+ * A Joystick mode which simply inverts its input.
  */
-public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
-
-    default Float getValue() {
-        return get();
+public final class InvertedJoystickMode implements JoystickMode {
+    @Override
+    public double adjust(final double raw) {
+        return -raw;
     }
 }
