@@ -33,16 +33,18 @@ import edu.wpi.first.wpilibj.SpeedController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Implements a container for SpeedControllers.
  */
-public final class Drivetrain implements SpeedController, ComposedComponent<List<SpeedController>> {
+public final class Drivetrain implements SpeedController, ComposedComponent<Set<SpeedController>> {
 
-    private final List<SpeedController> speedControllers = new ArrayList<>();
+    private final Set<SpeedController> speedControllers = new HashSet<>();
     private float inversion = 1.0f;
 
     /**
@@ -85,8 +87,8 @@ public final class Drivetrain implements SpeedController, ComposedComponent<List
     @Override
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
-        // so simply getPIDValue the value of the first one.
-        return inversion * speedControllers.get(0).get();
+        // so simply get the value of the first one.
+        return inversion * speedControllers.toArray(new SpeedController[speedControllers.size()])[0].get();
     }
 
     /**
@@ -94,8 +96,8 @@ public final class Drivetrain implements SpeedController, ComposedComponent<List
      * @return the SpeedControllers.
      */
     @Override
-    public List<SpeedController> getComposedComponent() {
-        return new ArrayList<>(speedControllers);
+    public Set<SpeedController> getComposedComponent() {
+        return new HashSet<>(speedControllers);
     }
 
     /**
