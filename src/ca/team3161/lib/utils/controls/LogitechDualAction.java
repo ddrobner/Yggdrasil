@@ -98,7 +98,18 @@ public final class LogitechDualAction extends AbstractController {
      * @param port the USB port for this controller
      */
     public LogitechDualAction(final int port) {
-        super(port, 20, TimeUnit.MILLISECONDS);
+        this(port, 20, TimeUnit.MILLISECONDS);
+    }
+
+    /**
+     * Create a new LogitechDualAction gamepad/controller, with a specific polling frequency (for button bindings).
+     * For example, to poll at 50Hz, you might use a period of 20 and a timeUnit of TimeUnit.MILLISECONDS.
+     * @param port the USB port for this controller.
+     * @param period the timeout period between button mapping polls.
+     * @param timeUnit the unit of the timeout period.
+     */
+    public LogitechDualAction(final int port, final int period, final TimeUnit timeUnit) {
+        super(port, period, timeUnit);
         for (final Control control : LogitechControl.values()) {
             for (final Axis axis : LogitechAxis.values()) {
                 controlsModeMap.put(new ModeIdentifier(control, axis), new LinearJoystickMode());
