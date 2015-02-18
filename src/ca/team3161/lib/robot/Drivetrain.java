@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
  * Implements a container for SpeedControllers.
  */
 public final class Drivetrain implements SpeedController {
+
     private final List<SpeedController> speedControllers = new ArrayList<>();
     private float inversion = 1.0f;
 
@@ -80,6 +81,7 @@ public final class Drivetrain implements SpeedController {
      * The current speed of this Drivetrain.
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
      */
+    @Override
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
         // so simply getPIDValue the value of the first one.
@@ -100,6 +102,7 @@ public final class Drivetrain implements SpeedController {
      * Set the pwm value (-1.0 to 1.0).
      * @param pwm the PWM value to assign to each SpeedController in the collection
      */
+    @Override
     public void set(final double pwm) {
         speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm)));
     }
@@ -109,6 +112,7 @@ public final class Drivetrain implements SpeedController {
      * @param pwm the PWM value to assign to each SpeedController in the collection
      * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
+    @Override
     public void set(final double pwm, final byte syncGroup) {
         speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm), syncGroup));
     }
@@ -116,6 +120,7 @@ public final class Drivetrain implements SpeedController {
     /**
      * Disable each SpeedController in the collection.
      */
+    @Override
     public void disable() {
         speedControllers.forEach(SpeedController::disable);
     }
@@ -124,6 +129,7 @@ public final class Drivetrain implements SpeedController {
      * Call pidWrite on each SpeedController in this collection.
      * @param output Set the output to the value calculated by PIDController
      */
+    @Override
     public void pidWrite(final double output) {
         speedControllers.forEach(c -> c.pidWrite(output));
     }
