@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.PIDSource;
  * Defines a component which provides a generic measurable value for a PID system.
  * @param <T> the type of sensor.
  */
-public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
+public interface PIDRawValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
     default Float getValue() {
         return get();
