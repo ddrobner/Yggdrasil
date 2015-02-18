@@ -30,8 +30,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... get it?)
+ * @param <V> the specific source type which provides angle measurements for this PIDulum.
  */
-public final class PIDulum extends AbstractPID {
+public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V, Float> {
     
     private final float offsetAngle;
     private final float torqueConstant;
@@ -47,7 +48,7 @@ public final class PIDulum extends AbstractPID {
      * @param offsetAngle the balance point of the inverted pendulum
      * @param torqueConstant "feed forward" term constant to allow the pendulum to hold position against gravity
      */
-    public PIDulum(final AnglePidValueSrc<?> source, final float deadband,
+    public PIDulum(final PIDSrc<V, Float> source, final float deadband,
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD,
             final float offsetAngle, final float torqueConstant) {
@@ -61,7 +62,7 @@ public final class PIDulum extends AbstractPID {
      * {@inheritDoc}
      */
     @Override
-    public float pid(final float target) {
+    public Float pid(final Float target) {
         float kErr;
         float pOut;
         float iOut;
@@ -69,7 +70,7 @@ public final class PIDulum extends AbstractPID {
         float feedForward;
         float output;
 
-        kErr = target - source.getValue();
+        kErr = target - source.get();
 
         deltaError = prevError - kErr;
         prevError = kErr;
@@ -83,7 +84,7 @@ public final class PIDulum extends AbstractPID {
             iOut = 1;
         }
         
-        feedForward = torqueConstant * (source.getValue() - offsetAngle);
+        feedForward = torqueConstant * (source.get() - offsetAngle);
 
         if (atTarget()) {
             return feedForward;

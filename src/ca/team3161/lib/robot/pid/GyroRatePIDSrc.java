@@ -26,15 +26,36 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.Gyro;
 
 /**
- * Defines a component which provides a generic measurable value for a PID system.
- * @param <T> the type of sensor.
+ * A PID source that returns values as gyroscope rates.
  */
-public interface PIDValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
+public class GyroRatePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro> {
 
-    default Float getValue() {
-        return get();
+    private final Gyro gyro;
+
+    public GyroRatePIDSrc(final Gyro gyro) {
+        this.gyro = gyro;
+    }
+
+    @Override
+    public Float get() {
+        return (float) gyro.getRate();
+    }
+
+    @Override
+    public Float getMinAngle() {
+        return 0f;
+    }
+
+    @Override
+    public Float getMaxAngle() {
+        return 360f;
+    }
+
+    @Override
+    public Gyro getSensor() {
+        return gyro;
     }
 }

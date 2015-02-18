@@ -33,13 +33,15 @@ import java.util.concurrent.TimeUnit;
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
  * output values with which a system can reach and maintain a target value.
+ * @param <T> the type of sensor used as input to this PID system.
+ * @param <V> the type of value read from the sensor used as input to this PID system.
  */
-public abstract class AbstractPID implements PID {
+public abstract class AbstractPID<T extends PIDSource, V extends Number> implements PID<T, V> {
     
     /**
      * A PIDSrc sensor.
      */
-    protected final PIDValueSrc<? extends PIDSource> source;
+    protected final PIDSrc<T, V> source;
 
     protected volatile float deadband;
     protected volatile float kP;
@@ -64,7 +66,7 @@ public abstract class AbstractPID implements PID {
      * @param kI I constant
      * @param kD D constant
      */
-    public AbstractPID(final PIDValueSrc<? extends PIDSource> source, final float deadband,
+    public AbstractPID(final PIDSrc<T, V> source, final float deadband,
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD) {
         Objects.requireNonNull(source);
@@ -91,13 +93,13 @@ public abstract class AbstractPID implements PID {
      * {@inheritDoc}
      */
     @Override
-    public abstract float pid(final float target);
+    public abstract V pid(final V target);
     
     /**
      * {@inheritDoc}
      */
     @Override
-    public final PIDValueSrc<? extends PIDSource> getSrc() {
+    public final PIDSrc<T, V> getSrc() {
         return this.source;
     }
 

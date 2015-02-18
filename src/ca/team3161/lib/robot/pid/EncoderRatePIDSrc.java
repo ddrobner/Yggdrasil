@@ -26,20 +26,40 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.Encoder;
+
+import java.util.Objects;
 
 /**
- * A simple interface for allowing different types of sensors to be used for
- * PID loops. Returns the rate value of its sensor - eg Encoders return the
- * measured ticks per second.
- * @param <T> the type of the PIDSource sensor for this PIDSrc (eg encoder)
+ * A PID source that returns values as encoder rates.
  */
-public interface PIDRateSrc<T extends PIDSource> extends PIDSrc<T> {
+public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
+
+    private final Encoder enc;
 
     /**
-     * Get the rate measured by this PIDRateSrc.
-     * @return the rate.
+     * Create a new EncoderPidSrc instance.
+     * @param enc an Encoder object to use as a PIDSrc
      */
-    float getRate();
+    public EncoderRatePIDSrc(final Encoder enc) {
+        Objects.requireNonNull(enc);
+        this.enc = enc;
+    }
 
+    /**
+     * Retrieve the original sensor used to construct this PIDSrc.
+     * @return the Encoder
+     */
+    @Override
+    public Encoder getSensor() {
+        return enc;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Float get() {
+        return (float) enc.getRate();
+    }
 }

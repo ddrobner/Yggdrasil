@@ -35,11 +35,11 @@ import java.util.Objects;
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
  * Intended usage is to call {@link ca.team3161.lib.robot.pid.VelocityController#set(double)} whenever the target
- * value changes OR a PID loop iteration is desired. {@link ca.team3161.lib.robot.pid.VelocityController#pid(float)}
+ * value changes OR a PID loop iteration is desired. {@link ca.team3161.lib.robot.pid.VelocityController#pid(Float)}
  * will only return the adjusted value for the next PID iteration; this value represents an actual motor output value,
  * but is not automatically applied to the backing SpeedController instance.
  */
-public class VelocityController extends SimplePID implements SpeedController {
+public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController {
 
     protected final SpeedController speedController;
     protected float maxRotationalRate = 0;
@@ -60,7 +60,7 @@ public class VelocityController extends SimplePID implements SpeedController {
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
-        this(speedController, new EncoderPidSrc(encoder), maxRotationalRate, kP, kI, kD, maxIntegralError, deadband);
+        this(speedController, new EncoderRatePIDSrc(encoder), maxRotationalRate, kP, kI, kD, maxIntegralError, deadband);
     }
 
     /**
@@ -74,7 +74,7 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param maxIntegralError limit constant for the integral error.
      * @param deadband if the absolute value of the deadband falls within this range, output 0.
      */
-    public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc, final float maxRotationalRate,
+    public VelocityController(final SpeedController speedController, final PIDSrc<Encoder, Float> encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         Objects.requireNonNull(speedController);
@@ -108,7 +108,7 @@ public class VelocityController extends SimplePID implements SpeedController {
     }
 
     public double getRate() {
-        return ((EncoderPidSrc) source).getRate();
+        return source.get();
     }
 
     /**
@@ -145,14 +145,14 @@ public class VelocityController extends SimplePID implements SpeedController {
     }
 
     @Override
-    public float pid(final float target) {
+    public Float pid(final Float target) {
         float kErr;
         float pOut;
         float iOut;
         float dOut;
         float output;
 
-        kErr = (target - ((EncoderPidSrc) source).getRate());
+        kErr = target - source.get();
 
         deltaError = prevError - kErr;
         prevError = kErr;
