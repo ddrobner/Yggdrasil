@@ -120,17 +120,17 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
                 switch (pressType) {
                     case PRESS:
                         if (buttonStates.get(button) && !previousButtonStates.get(button)) {
-                            action.run();
+                            getExecutorService().submit(action);
                         }
                         break;
                     case RELEASE:
                         if (!buttonStates.get(button) && previousButtonStates.get(button)) {
-                            action.run();
+                            getExecutorService().submit(action);
                         }
                         break;
                     case HOLD:
                         if (buttonStates.get(button)) {
-                            action.run();
+                            getExecutorService().submit(action);
                         }
                         break;
                     default:
