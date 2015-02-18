@@ -55,6 +55,8 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param kP the Proportional PID constant.
      * @param kI the Integral PID constant.
      * @param kD the Derivative PID constant.
+     * @param maxIntegralError limit constant for the integral error.
+     * @param deadband if the absolute value of the deadband falls within this range, output 0.
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
@@ -69,6 +71,8 @@ public class VelocityController extends SimplePID implements SpeedController {
      * @param kP the Proportional PID constant.
      * @param kI the Integral PID constant.
      * @param kD the Derivative PID constant.
+     * @param maxIntegralError limit constant for the integral error.
+     * @param deadband if the absolute value of the deadband falls within this range, output 0.
      */
     public VelocityController(final SpeedController speedController, final EncoderPidSrc encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
@@ -148,7 +152,7 @@ public class VelocityController extends SimplePID implements SpeedController {
         float dOut;
         float output;
 
-        kErr = (target - ((EncoderPidSrc)source).getRate());
+        kErr = (target - ((EncoderPidSrc) source).getRate());
 
         deltaError = prevError - kErr;
         prevError = kErr;
