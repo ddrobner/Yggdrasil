@@ -130,6 +130,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      */
     @Override
     public void disable() {
+        clear();
         speedController.disable();
     }
 
