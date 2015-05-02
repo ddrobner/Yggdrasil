@@ -130,20 +130,35 @@ public final class LogitechAttack3 extends AbstractController {
         }
     }
 
+    protected static void validate(final Mapping mapping, final String message) {
+        Objects.requireNonNull(mapping);
+        if (!(mapping.getControl() instanceof  LogitechAttack3Control) || !(mapping.getAxis() instanceof LogitechAttack3Axis)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    protected static void validate(final Button button, final String message) {
+        Objects.requireNonNull(button);
+        if (!(button instanceof LogitechAttack3Button)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    protected static void validate(final Binding binding, final String message) {
+        Objects.requireNonNull(binding);
+        binding.getButtons().stream().forEach(button -> {
+            if (!(button instanceof LogitechAttack3Button)) {
+                throw new IllegalArgumentException(message);
+            }
+        });
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public double getValue(final Mapping mapping) {
-        Objects.requireNonNull(mapping);
-        if (!(mapping.getControl() instanceof LogitechAttack3Control)) {
-            System.err.println("Joystick on port " + this.port + " getValue() called with invalid control "
-                                       + mapping.getControl());
-        }
-        if (!(mapping.getAxis() instanceof LogitechAttack3Axis)) {
-            System.err.println("Joystick on port " + this.port + " getValue() called with invalid axis "
-                                       + mapping.getAxis());
-        }
+        validate(mapping, "Joystick on port " + this.port + " getValue() called with invalid mapping " + mapping);
         return controlsModeMap.get(mapping).apply(backingHID.getRawAxis(mapping.getControl().getIdentifier(mapping.getAxis())));
     }
 
@@ -152,11 +167,7 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public boolean getButton(final Button button) {
-        Objects.requireNonNull(button);
-        if (!(button instanceof LogitechAttack3Button)) {
-            System.err.println("Joystick on port " + this.port + " getButton() called with invalid button "
-                                       + button);
-        }
+        validate(button, "Joystick on port " + this.port + " getButton() called with invalid button " + button);
         return backingHID.getRawButton(button.getIdentifier());
     }
 
@@ -177,16 +188,8 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public void setMode(final Mapping mapping, final Function<Double, Double> function) {
-        Objects.requireNonNull(mapping);
         Objects.requireNonNull(function);
-        if (!(mapping.getControl() instanceof LogitechAttack3Control)) {
-            System.err.println("Joystick on port " + this.port + " setMode() called with invalid control "
-                                       + mapping.getControl());
-        }
-        if (!(mapping.getAxis() instanceof LogitechAttack3Axis)) {
-            System.err.println("Joystick on port " + this.port + " setMode() called with invalid axis "
-                                       + mapping.getAxis());
-        }
+        validate(mapping, "Joystick on port " + this.port + " setMode() called with invalid mapping " + mapping);
         controlsModeMap.put(mapping, function);
     }
 
@@ -195,16 +198,8 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public void map(final Mapping mapping, final Consumer<Double> consumer) {
-        Objects.requireNonNull(mapping);
         Objects.requireNonNull(consumer);
-        if (!(mapping.getControl() instanceof LogitechAttack3Control)) {
-            System.err.println("Gamepad on port " + this.port + " map() called with invalid control "
-                                       + mapping.getControl());
-        }
-        if (!(mapping.getAxis() instanceof LogitechAttack3Axis)) {
-            System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
-                                       + mapping.getAxis());
-        }
+        validate(mapping, "Gamepad on port " + this.port + " getValue() called with invalid mapping " + mapping);
         controlsMapping.put(mapping, consumer);
     }
 
@@ -213,13 +208,8 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public void bind(final Binding binding, final Runnable action) {
-        Objects.requireNonNull(binding);
-        binding.getButtons().stream().forEach(button ->  {
-            if (!(button instanceof LogitechAttack3Button)) {
-                System.err.println("Joystick on port " + this.port + " bind() called with invalid button "
-                                           + button);
-            }
-        });
+        Objects.requireNonNull(action);
+        validate(binding, "Joystick on port " + this.port + " bind() called with invalid binding " + binding);
         buttonBindings.put(binding, action);
     }
 
@@ -228,13 +218,7 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public void unbind(final Binding binding) {
-        Objects.requireNonNull(binding);
-        binding.getButtons().stream().forEach(button -> {
-            if (!(button instanceof LogitechAttack3Button)) {
-                System.err.println("Joystick on port " + this.port + " unbind() called with invalid button "
-                                           + button);
-            }
-        });
+        validate(binding, "Joystick on port " + this.port + " unbind() called with invalid binding " + binding);
         buttonBindings.remove(binding);
     }
 
@@ -243,13 +227,7 @@ public final class LogitechAttack3 extends AbstractController {
      */
     @Override
     public boolean hasBinding(final Binding binding) {
-        Objects.requireNonNull(binding);
-        binding.getButtons().stream().forEach(button -> {
-            if (!(button instanceof LogitechAttack3Button)) {
-                System.err.println("Joystick on port " + this.port + " hasBinding() called with invalid button "
-                                           + button);
-            }
-        });
+        validate(binding, "Joystick on port " + this.port + " hasBinding() called with invalid binding " + binding);
         return buttonBindings.containsKey(binding);
     }
 

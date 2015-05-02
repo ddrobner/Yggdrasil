@@ -362,6 +362,14 @@ public interface Gamepad {
             result = 31 * result + pressType.hashCode();
             return result;
         }
+
+        @Override
+        public String toString() {
+            return "Binding{" +
+                           "buttons=" + buttons +
+                           ", pressType=" + pressType +
+                           '}';
+        }
     }
 
     /**
@@ -431,6 +439,14 @@ public interface Gamepad {
             int result = control.hashCode();
             result = 31 * result + axis.hashCode();
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Mapping{" +
+                           "control=" + control +
+                           ", axis=" + axis +
+                           '}';
         }
     }
 }
