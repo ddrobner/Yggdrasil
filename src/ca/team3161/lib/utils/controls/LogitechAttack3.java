@@ -45,12 +45,18 @@ public final class LogitechAttack3 extends AbstractController {
      * {@inheritDoc}.
      */
     public enum LogitechAttack3Control implements Control {
-        JOYSTICK;
+        JOYSTICK(0);
+
+        private final int id;
+
+        LogitechAttack3Control(final int id) {
+            this.id = id;
+        }
 
         @Override
         public int getIdentifier(final Axis axis) {
             Objects.requireNonNull(axis);
-            return this.ordinal() * LogitechAttack3Control.values().length + axis.getIdentifier();
+            return id * LogitechAttack3Control.values().length + axis.getIdentifier();
         }
     }
 
@@ -72,7 +78,7 @@ public final class LogitechAttack3 extends AbstractController {
 
         private final int id;
 
-        private LogitechAttack3Button(final int id) {
+        LogitechAttack3Button(final int id) {
             this.id = id;
         }
 
@@ -86,13 +92,19 @@ public final class LogitechAttack3 extends AbstractController {
      * {@inheritDoc}.
      */
     public enum LogitechAttack3Axis implements Axis {
-        X,
-        Y,
-        Z;
+        X(0),
+        Y(1),
+        Z(2);
+
+        private final int id;
+
+        LogitechAttack3Axis(final int id) {
+            this.id = id;
+        }
 
         @Override
         public int getIdentifier() {
-            return super.ordinal();
+            return id;
         }
     }
 

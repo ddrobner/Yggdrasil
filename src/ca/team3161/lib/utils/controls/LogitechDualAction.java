@@ -25,6 +25,8 @@
 
 package ca.team3161.lib.utils.controls;
 
+import edu.wpi.first.wpilibj.GenericHID;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,13 +46,19 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}.
      */
     public enum LogitechControl implements Control {
-        LEFT_STICK,
-        RIGHT_STICK;
+        LEFT_STICK(0),
+        RIGHT_STICK(1);
+
+        private final int id;
+
+        LogitechControl(final int id) {
+            this.id = id;
+        }
 
         @Override
         public int getIdentifier(final Axis axis) {
             Objects.requireNonNull(axis);
-            return this.ordinal() * LogitechControl.values().length + axis.getIdentifier();
+            return id * LogitechControl.values().length + axis.getIdentifier();
         }
     }
 
@@ -73,7 +81,7 @@ public final class LogitechDualAction extends AbstractController {
 
         private final int id;
 
-        private LogitechButton(final int id) {
+        LogitechButton(final int id) {
             this.id = id;
         }
 
@@ -87,12 +95,18 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}.
      */
     public enum LogitechAxis implements Axis {
-        X,
-        Y;
+        X(0),
+        Y(1);
+
+        private final int id;
+
+        LogitechAxis(final int id) {
+            this.id = id;
+        }
 
         @Override
         public int getIdentifier() {
-            return super.ordinal();
+            return id;
         }
     }
 
