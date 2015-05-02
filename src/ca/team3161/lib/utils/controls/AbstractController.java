@@ -32,7 +32,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -60,10 +59,12 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
         super(timeout, timeUnit);
         Objects.requireNonNull(timeUnit);
         Assert.assertTrue(port >= 0);
-        if (boundPorts.get(port)) {
-            throw new IllegalStateException("Port " + port + " is already bound; cannot bind two input devices to the same port");
+        synchronized (boundPorts) {
+            if (boundPorts.get(port)) {
+                throw new IllegalStateException("Port " + port + " is already bound; cannot bind two input devices to the same port");
+            }
+            boundPorts.set(port);
         }
-        boundPorts.set(port);
         this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
     }
