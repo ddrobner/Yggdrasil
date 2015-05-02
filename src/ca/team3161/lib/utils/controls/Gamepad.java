@@ -27,7 +27,8 @@ package ca.team3161.lib.utils.controls;
 
 import edu.wpi.first.wpilibj.GenericHID;
 
-import java.util.Collection;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -86,7 +87,16 @@ public interface Gamepad {
      */
     void setMode(Control control, Axis axis, JoystickMode joystickMode);
 
-    void setMode(Control contorl, Axis axis, Function<Double, Double> function);
+    /**
+     * Set a function to adjust input on one of the controls of this Gamepad. Controls
+     * should be provided by Gamepad implementations supplying their own valid
+     * possible values. Controls defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations. Likewise for axes.
+     * @param control the control on which to set a mode
+     * @param axis the axis of the control on which to set a mode
+     * @param function the function to apply
+     */
+    void setMode(Control control, Axis axis, Function<Double, Double> function);
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
@@ -104,7 +114,7 @@ public interface Gamepad {
      * Bind a button press on this gamepad to an action to be performed when the button
      * is pressed, released, or periodically while the button is held. Buttons should be
      * provided by Gamepad implementations supplying their own valid possible values.
-     * Buttons defined by one Gamepad implementation should* not be used as parameters
+     * Buttons defined by one Gamepad implementation should not be used as parameters
      * to other Gamepad implementations.
      * @param button the button on which to bind an action
      * @param pressType the type of button press which should trigger the action
@@ -112,7 +122,28 @@ public interface Gamepad {
      */
     void bind(Button button, PressType pressType, Runnable binding);
 
+    /**
+     * Bind a button combination press on this gamepad to an action to be performed when the button
+     * is pressed, released, or periodically while the button is held. Buttons should be
+     * provided by Gamepad implementations supplying their own valid possible values.
+     * Buttons defined by one Gamepad implementation should not be used as parameters
+     * to other Gamepad implementations.
+     * @param buttons the button combination on which to bind an action
+     * @param pressType the type of button press which should trigger the action
+     * @param binding the action to be bound
+     */
     void bind(Set<Button> buttons, PressType pressType, Runnable binding);
+
+    /**
+     * Bind a button press on this gamepad to an action to be performed when the button
+     * is pressed, released, or periodically while the button is held. Buttons should be
+     * provided by Gamepad implementations supplying their own valid possible values.
+     * Buttons defined by one Gamepad implementation should not be used as parameters
+     * to other Gamepad implementations.
+     * @param binding the binding on which to bind an action
+     * @param binding the action to be bound
+     */
+    void bind(Binding binding, Runnable action);
 
     /**
      * Remove all bindings for the given button. Buttons should be provided by Gamepad
@@ -133,7 +164,20 @@ public interface Gamepad {
      */
     void unbind(Button button, PressType pressType);
 
+    /**
+     * Remove a binding for the given button combination. Buttons should be provided by Gamepad
+     * implementations supplying their own valid possible values. Buttons defined by one
+     * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     * @param buttons the button combination for which to unbind an action
+     * @param pressType the type of button press for which to unbind an action
+     */
     void unbind(Set<Button> buttons, PressType pressType);
+
+    /**
+     * Remove a binding for the given binding.
+     * @param binding the binding for which to unbind an action
+     */
+    void unbind(Binding binding);
 
     /**
      * Check if a given button has a bound action. Buttons should be provided by Gamepad
@@ -201,4 +245,82 @@ public interface Gamepad {
         HOLD,
     }
 
+    /**
+     * A (Button, PressType) tuple for identifying button bindings.
+     */
+    class Binding {
+        private final Set<Button> buttons;
+        private final PressType pressType;
+
+        /**
+         * Construct a new Binding identifier.
+         * @param buttons the buttons
+         * @param pressType the press type
+         */
+        public Binding(final Set<Button> buttons, final PressType pressType) {
+            Objects.requireNonNull(buttons);
+            Objects.requireNonNull(pressType);
+            this.buttons = buttons;
+            this.pressType = pressType;
+        }
+
+        /**
+         * Construct a new Binding identifier.
+         * @param button the button
+         * @param pressType the press type
+         */
+        public Binding(final Button button, final PressType pressType) {
+            this(Collections.singleton(button), pressType);
+        }
+
+        /**
+         * Get the button.
+         * @return the button
+         */
+        public Set<Button> getButtons() {
+            return buttons;
+        }
+
+        /**
+         * Get the press type.
+         * @return the press type.
+         */
+        public PressType getPressType() {
+            return pressType;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            final Binding binding = (Binding) o;
+
+            if (!buttons.equals(binding.buttons)) {
+                return false;
+            }
+            if (pressType != binding.pressType) {
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            int result = buttons.hashCode();
+            result = 31 * result + pressType.hashCode();
+            return result;
+        }
+    }
 }

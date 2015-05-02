@@ -27,7 +27,6 @@
 package ca.team3161.lib.utils.controls;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;

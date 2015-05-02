@@ -25,10 +25,7 @@
 
 package ca.team3161.lib.utils.controls;
 
-import edu.wpi.first.wpilibj.GenericHID;
-
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -214,58 +211,65 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public void bind(final Button button, final PressType pressType, final Runnable binding) {
-        Objects.requireNonNull(button);
-        Objects.requireNonNull(pressType);
-        Objects.requireNonNull(binding);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " bind() called with invalid button "
-                                       + button);
-        }
-        buttonBindings.put(new Binding(button, pressType), binding);
-    }
-
-    @Override
-    public void bind(final Set<Button> buttons, final PressType pressType, final Runnable binding) {
-        Objects.requireNonNull(buttons);
-        Objects.requireNonNull(pressType);
-        Objects.requireNonNull(binding);
-        buttons.stream().forEach(button -> {
-            if (!(button instanceof LogitechButton)) {
-                System.err.println("Gamepad on port " + this.port + " bind() called with invalid button "
-                                           + button);
-            }
-        });
-        buttonBindings.put(new Binding(buttons, pressType), binding);
+    public void bind(final Button button, final PressType pressType, final Runnable action) {
+        bind(new Binding(button, pressType), action);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void unbind(final Button button, final PressType pressType) {
-        Objects.requireNonNull(button);
-        Objects.requireNonNull(pressType);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
-                                       + button);
-        }
-        buttonBindings.entrySet().removeIf(e -> e.getKey().getButtons().equals(Collections.singleton(button))
-                                                        && e.getKey().getPressType().equals(pressType));
+    public void bind(final Set<Button> buttons, final PressType pressType, final Runnable action) {
+        bind(new Binding(buttons, pressType), action);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void bind(final Binding binding, final Runnable action) {
+        Objects.requireNonNull(binding);
+        Objects.requireNonNull(action);
+        binding.getButtons().stream().forEach(button -> {
+            if (!(button instanceof LogitechButton)) {
+                System.err.println("Gamepad on port " + this.port + " bind() called with invalid button "
+                                           + button);
+            }
+        });
+        buttonBindings.put(binding, action);
+    }
+
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unbind(final Button button, final PressType pressType) {
+        unbind(new Binding(button, pressType));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void unbind(final Set<Button> buttons, final PressType pressType) {
-        Objects.requireNonNull(buttons);
-        Objects.requireNonNull(pressType);
-        buttons.stream().forEach(button -> {
+        unbind(new Binding(buttons, pressType));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unbind(final Binding binding) {
+        Objects.requireNonNull(binding);
+        binding.getButtons().stream().forEach(button -> {
             if (!(button instanceof LogitechButton)) {
                 System.err.println("Gamepad on port " + this.port + " unbind() called with invalid button "
                                            + button);
             }
         });
-        buttonBindings.entrySet().removeIf(e -> e.getKey().getButtons().equals(buttons)
-                                                        && e.getKey().getPressType().equals(pressType));
+        buttonBindings.remove(binding);
     }
 
     /**
