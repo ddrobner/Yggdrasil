@@ -172,6 +172,11 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
             this.pressType = pressType;
         }
 
+        /**
+         * Construct a new Binding identifier.
+         * @param button the button
+         * @param pressType the press type
+         */
         public Binding(final Button button, final PressType pressType) {
             this(Collections.singleton(button), pressType);
         }
