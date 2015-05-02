@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -59,11 +60,14 @@ public interface Gamepad {
      * and Axes should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls and Axes defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations.
-     * @param control the control (eg thumbstick) to check
-     * @param axis the axis of the control to read
+     * @param mapping the mapping to check
      * @return the value of the axis on the control
      */
-    double getValue(Control control, Axis axis);
+    double getValue(Mapping mapping);
+
+    default double getValue(Control control, Axis axis) {
+        return getValue(new Mapping(control, axis));
+    }
 
     /**
      * Get the value of a button on the controller. Buttons
@@ -85,7 +89,9 @@ public interface Gamepad {
      * @param axis the axis of the control on which to set a mode
      * @param joystickMode the mode to set
      */
-    void setMode(Control control, Axis axis, JoystickMode joystickMode);
+    default void setMode(Control control, Axis axis, JoystickMode joystickMode) {
+        setMode(new Mapping(control, axis), joystickMode);
+    }
 
     /**
      * Set a function to adjust input on one of the controls of this Gamepad. Controls
@@ -96,7 +102,27 @@ public interface Gamepad {
      * @param axis the axis of the control on which to set a mode
      * @param function the function to apply
      */
-    void setMode(Control control, Axis axis, Function<Double, Double> function);
+    default void setMode(Control control, Axis axis, Function<Double, Double> function) {
+        setMode(new Mapping(control, axis), function);
+    }
+
+    void setMode(Mapping mapping, Function<Double, Double> function);
+
+    /**
+     * Map a control/axis pair to a function.
+     *
+     * The given function will be periodically called and given the then-current value of
+     * the control/axis pair specified. This is similar to binding button presses to methods,
+     * on a continuous-valued input (eg thumbstick) instead, to a method which requires a double
+     * value, for example tank drive.
+     * @param mapping the control mapping to use
+     * @param consumer the function to be called
+     */
+    void map(Mapping mapping, Consumer<Double> consumer);
+
+    default void map(Control control, Axis axis, Consumer<Double> consumer) {
+        map(new Mapping(control, axis), consumer);
+    }
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
@@ -120,7 +146,9 @@ public interface Gamepad {
      * @param pressType the type of button press which should trigger the action
      * @param binding the action to be bound
      */
-    void bind(Button button, PressType pressType, Runnable binding);
+    default void bind(Button button, PressType pressType, Runnable binding) {
+        bind(Collections.singleton(button), pressType, binding);
+    }
 
     /**
      * Bind a button combination press on this gamepad to an action to be performed when the button
@@ -132,7 +160,9 @@ public interface Gamepad {
      * @param pressType the type of button press which should trigger the action
      * @param binding the action to be bound
      */
-    void bind(Set<Button> buttons, PressType pressType, Runnable binding);
+    default void bind(Set<Button> buttons, PressType pressType, Runnable binding) {
+        bind(new Binding(buttons, pressType), binding);
+    }
 
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
@@ -162,7 +192,9 @@ public interface Gamepad {
      * @param button the button for which to unbind an action
      * @param pressType the type of button press for which to unbind an action
      */
-    void unbind(Button button, PressType pressType);
+    default void unbind(Button button, PressType pressType) {
+        unbind(Collections.singleton(button), pressType);
+    }
 
     /**
      * Remove a binding for the given button combination. Buttons should be provided by Gamepad
@@ -171,7 +203,9 @@ public interface Gamepad {
      * @param buttons the button combination for which to unbind an action
      * @param pressType the type of button press for which to unbind an action
      */
-    void unbind(Set<Button> buttons, PressType pressType);
+    default void unbind(Set<Button> buttons, PressType pressType) {
+        unbind(new Binding(buttons, pressType));
+    }
 
     /**
      * Remove a binding for the given binding.
@@ -199,9 +233,15 @@ public interface Gamepad {
      * @param pressType the type of button press to check for bindings
      * @return if the button has any bindings for the given press type
      */
-    boolean hasBinding(Button button, PressType pressType);
+    default boolean hasBinding(Button button, PressType pressType) {
+        return hasBinding(Collections.singleton(button), pressType);
+    }
 
-    boolean hasBinding(Set<Button> buttons, PressType pressType);
+    default boolean hasBinding(Set<Button> buttons, PressType pressType) {
+        return hasBinding(new Binding(buttons, pressType));
+    }
+
+    boolean hasBinding(Binding binding);
 
     /**
      * Enable button bindings. If bindings are not enabled, then no bound actions will be executed.
@@ -320,6 +360,76 @@ public interface Gamepad {
         public int hashCode() {
             int result = buttons.hashCode();
             result = 31 * result + pressType.hashCode();
+            return result;
+        }
+    }
+
+    /**
+     * A (Control, Axis) tuple for identifying mode mappings.
+     */
+    class Mapping {
+        private final Control control;
+        private final Axis axis;
+
+        /**
+         * Construct a new ModeIdentifier.
+         * @param control the control
+         * @param axis the axis
+         */
+        public Mapping(final Control control, final Axis axis) {
+            Objects.requireNonNull(control);
+            Objects.requireNonNull(axis);
+            this.control = control;
+            this.axis = axis;
+        }
+
+        /**
+         * Get the control.
+         * @return the control
+         */
+        public Control getControl() {
+            return control;
+        }
+
+        /**
+         * Get the axis.
+         * @return the axis
+         */
+        public Axis getAxis() {
+            return axis;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+
+            final Mapping that = (Mapping) o;
+
+            if (!axis.equals(that.axis)) {
+                return false;
+            }
+            if (!control.equals(that.control)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+            int result = control.hashCode();
+            result = 31 * result + axis.hashCode();
             return result;
         }
     }

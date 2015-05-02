@@ -38,6 +38,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -49,7 +50,8 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     * convenience wrapper around.
     */
     protected final GenericHID backingHID;
-    protected final Map<ModeIdentifier, Function<Double, Double>> controlsModeMap = new HashMap<>();
+    protected final Map<Mapping, Function<Double, Double>> controlsModeMap = new HashMap<>();
+    protected final Map<Mapping, Consumer<Double>> controlsMapping = new HashMap<>();
     protected final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
     protected final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
     protected final int port;
@@ -118,11 +120,13 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     @Override
     public void task() throws Exception {
         final Map<Button, Boolean> previousButtonStates = new HashMap<>(buttonStates);
-        for (final Button button : getButtons()) {
-            buttonStates.put(button, getButton(button));
+        getButtons().parallelStream().forEach(button -> buttonStates.put(button, getButton(button)));
+        synchronized (controlsMapping) {
+            controlsMapping.entrySet().parallelStream().forEach(mapping ->
+                mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
         }
         synchronized (buttonBindings) {
-            for (final Map.Entry<Binding, Runnable> binding : buttonBindings.entrySet()) {
+            buttonBindings.entrySet().parallelStream().forEach(binding -> {
                 final Set<Button> buttons = binding.getKey().getButtons();
                 final PressType pressType = binding.getKey().getPressType();
                 final Runnable action = binding.getValue();
@@ -150,77 +154,8 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
                                                    + " has binding for unknown button press type " + pressType);
                         break;
                 }
-            }
+            });
         }
     }
 
-    /**
-     * A (Control, Axis) tuple for identifying mode mappings.
-     */
-    protected static class ModeIdentifier {
-        private final Control control;
-        private final Axis axis;
-
-        /**
-         * Construct a new ModeIdentifier.
-         * @param control the control
-         * @param axis the axis
-         */
-        public ModeIdentifier(final Control control, final Axis axis) {
-            Objects.requireNonNull(control);
-            Objects.requireNonNull(axis);
-            this.control = control;
-            this.axis = axis;
-        }
-
-        /**
-         * Get the control.
-         * @return the control
-         */
-        public Control getControl() {
-            return control;
-        }
-
-        /**
-         * Get the axis.
-         * @return the axis
-         */
-        public Axis getAxis() {
-            return axis;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            final ModeIdentifier that = (ModeIdentifier) o;
-
-            if (!axis.equals(that.axis)) {
-                return false;
-            }
-            if (!control.equals(that.control)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public int hashCode() {
-            int result = control.hashCode();
-            result = 31 * result + axis.hashCode();
-            return result;
-        }
-    }
 }

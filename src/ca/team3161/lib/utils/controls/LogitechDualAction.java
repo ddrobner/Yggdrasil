@@ -26,13 +26,12 @@
 package ca.team3161.lib.utils.controls;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
@@ -126,7 +125,7 @@ public final class LogitechDualAction extends AbstractController {
         super(port, period, timeUnit);
         for (final Control control : LogitechControl.values()) {
             for (final Axis axis : LogitechAxis.values()) {
-                controlsModeMap.put(new ModeIdentifier(control, axis), new LinearJoystickMode());
+                controlsModeMap.put(new Mapping(control, axis), new LinearJoystickMode());
             }
         }
     }
@@ -135,21 +134,17 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public double getValue(final Control control, final Axis axis) {
-        Objects.requireNonNull(control);
-        Objects.requireNonNull(axis);
-        if (!(control instanceof LogitechControl)) {
+    public double getValue(final Mapping mapping) {
+        Objects.requireNonNull(mapping);
+        if (!(mapping.getControl() instanceof LogitechControl)) {
             System.err.println("Gamepad on port " + this.port + " getValue() called with invalid control "
-            + control);
+            + mapping.getControl());
         }
-        if (!(axis instanceof LogitechAxis)) {
+        if (!(mapping.getAxis() instanceof LogitechAxis)) {
             System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
-                                       + control);
+                                       + mapping.getAxis());
         }
-        return controlsModeMap.entrySet()
-                       .stream().filter(e -> e.getKey().getControl().equals(control)
-                                                     && e.getKey().getAxis().equals(axis))
-                       .collect(Collectors.toList()).get(0).getValue().apply(backingHID.getRawAxis(control.getIdentifier(axis)));
+        return controlsModeMap.get(mapping).apply(backingHID.getRawAxis(mapping.getControl().getIdentifier(mapping.getAxis())));
     }
 
     /**
@@ -181,46 +176,36 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public void setMode(final Control control, final Axis axis, final JoystickMode joystickMode) {
-        Objects.requireNonNull(control);
-        Objects.requireNonNull(axis);
-        Objects.requireNonNull(joystickMode);
-        if (!(control instanceof LogitechControl)) {
-            System.err.println("Gamepad on port " + this.port + " setMode() called with invalid control "
-                                       + control);
-        }
-        controlsModeMap.put(new ModeIdentifier(control, axis), joystickMode);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setMode(final Control control, final Axis axis, final Function<Double, Double> function) {
-        Objects.requireNonNull(control);
-        Objects.requireNonNull(axis);
+    public void setMode(final Mapping mapping, final Function<Double, Double> function) {
+        Objects.requireNonNull(mapping);
         Objects.requireNonNull(function);
-        if (!(control instanceof LogitechControl)) {
+        if (!(mapping.getControl() instanceof LogitechControl)) {
             System.err.println("Gamepad on port " + this.port + " setMode() called with invalid control "
-                                       + control);
+                                       + mapping.getControl());
         }
-        controlsModeMap.put(new ModeIdentifier(control, axis), function);
+        if (!(mapping.getAxis() instanceof LogitechAxis)) {
+            System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
+                                       + mapping.getAxis());
+        }
+        controlsModeMap.put(mapping, function);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void bind(final Button button, final PressType pressType, final Runnable action) {
-        bind(new Binding(button, pressType), action);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void bind(final Set<Button> buttons, final PressType pressType, final Runnable action) {
-        bind(new Binding(buttons, pressType), action);
+    public void map(final Mapping mapping, final Consumer<Double> consumer) {
+        Objects.requireNonNull(mapping);
+        Objects.requireNonNull(consumer);
+        if (!(mapping.getControl() instanceof LogitechControl)) {
+            System.err.println("Gamepad on port " + this.port + " map() called with invalid control "
+                                       + mapping.getControl());
+        }
+        if (!(mapping.getAxis() instanceof LogitechAxis)) {
+            System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
+                                       + mapping.getAxis());
+        }
+        controlsMapping.put(mapping, consumer);
     }
 
     /**
@@ -237,24 +222,6 @@ public final class LogitechDualAction extends AbstractController {
             }
         });
         buttonBindings.put(binding, action);
-    }
-
-
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unbind(final Button button, final PressType pressType) {
-        unbind(new Binding(button, pressType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void unbind(final Set<Button> buttons, final PressType pressType) {
-        unbind(new Binding(buttons, pressType));
     }
 
     /**
@@ -276,29 +243,15 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public boolean hasBinding(final Button button, final PressType pressType) {
-        Objects.requireNonNull(button);
-        Objects.requireNonNull(pressType);
-        if (!(button instanceof LogitechButton)) {
-            System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
-                                       + button);
-        }
-        return buttonBindings.keySet().stream().anyMatch(b -> b.getButtons().equals(Collections.singleton(button))
-                                                                      && b.getPressType().equals(pressType));
-    }
-
-    @Override
-    public boolean hasBinding(final Set<Button> buttons, final PressType pressType) {
-        Objects.requireNonNull(buttons);
-        Objects.requireNonNull(pressType);
-        buttons.stream().forEach(button -> {
+    public boolean hasBinding(final Binding binding) {
+        Objects.requireNonNull(binding);
+        binding.getButtons().stream().forEach(button ->  {
             if (!(button instanceof LogitechButton)) {
                 System.err.println("Gamepad on port " + this.port + " hasBinding() called with invalid button "
                                            + button);
             }
         });
-        return buttonBindings.keySet().stream().anyMatch(b -> b.getButtons().equals(buttons)
-                                                                      && b.getPressType().equals(pressType));
+        return buttonBindings.containsKey(binding);
     }
 
 } 
