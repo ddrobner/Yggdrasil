@@ -202,7 +202,7 @@ public final class LogitechDualAction extends AbstractController {
                                        + mapping.getControl());
         }
         if (!(mapping.getAxis() instanceof LogitechAxis)) {
-            System.err.println("Gamepad on port " + this.port + " getValue() called with invalid axis "
+            System.err.println("Gamepad on port " + this.port + " map() called with invalid axis "
                                        + mapping.getAxis());
         }
         controlsMapping.put(mapping, consumer);
