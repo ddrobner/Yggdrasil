@@ -150,9 +150,8 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
                         }
                         break;
                     default:
-                        System.err.println("Gamepad on port " + Integer.toString(getPort())
+                        throw new IllegalArgumentException("Gamepad on port " + Integer.toString(getPort())
                                                    + " has binding for unknown button press type " + pressType);
-                        break;
                 }
             });
         }
