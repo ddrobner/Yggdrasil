@@ -28,6 +28,8 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.Gyro;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A PID source that returns values as gyroscope rates.
  */
@@ -36,7 +38,7 @@ public class GyroRatePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyr
     private final Gyro gyro;
 
     public GyroRatePIDSrc(final Gyro gyro) {
-        this.gyro = gyro;
+        this.gyro = requireNonNull(gyro);
     }
 
     @Override
