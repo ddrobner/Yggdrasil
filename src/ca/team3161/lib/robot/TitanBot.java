@@ -27,7 +27,6 @@
 package ca.team3161.lib.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-
 import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -77,8 +76,9 @@ public abstract class TitanBot extends IterativeRobot {
      * This also ensures that the autonomous routine does not continue
      * to run after the FMS notifies us that the autonomous period
      * has ended.
+     *
      * @param length how long to wait for (approximate)
-     * @param unit the time units the given delay is in
+     * @param unit   the time units the given delay is in
      * @throws InterruptedException if the autonomous thread is woken up early, for any reason
      */
     public final void waitFor(final long length, final TimeUnit unit) throws InterruptedException {
@@ -132,12 +132,14 @@ public abstract class TitanBot extends IterativeRobot {
 
     /**
      * The one-shot autonomous "script" to be run in a new Thread.
+     *
      * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
      */
     public abstract void autonomousRoutine() throws Exception;
 
     /**
      * Define the length of the Autonomous period, in seconds.
+     *
      * @return the length of the Autonomous period, in seconds.
      */
     public abstract int getAutonomousPeriodLengthSeconds();

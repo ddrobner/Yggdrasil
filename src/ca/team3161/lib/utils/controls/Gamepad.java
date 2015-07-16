@@ -26,15 +26,14 @@
 
 package ca.team3161.lib.utils.controls;
 
-import edu.wpi.first.wpilibj.GenericHID;
+import static java.util.Objects.requireNonNull;
 
+import edu.wpi.first.wpilibj.GenericHID;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * An interface defining a Gamepad controller. All Gamepads are expected to
@@ -47,12 +46,14 @@ public interface Gamepad {
 
     /**
      * Get the backing input device of this Gamepad.
+     *
      * @return the backing input device, eg Joystick
      */
     GenericHID getBackingHID();
 
     /**
      * Get the USB port (as numbered in the Driver Station) that this Gamepad is plugged into.
+     *
      * @return the USB port number
      */
     int getPort();
@@ -62,6 +63,7 @@ public interface Gamepad {
      * and Axes should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls and Axes defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations.
+     *
      * @param mapping the mapping to check
      * @return the value of the axis on the control
      */
@@ -76,8 +78,9 @@ public interface Gamepad {
      * should be provided by Gamepad implementations supplying their own valid
      * possible values. Buttons defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations.
+     *
      * @param button which button to check. The mapping from values here to
-     * actual buttons will depend on the specific Gamepad implementation
+     *               actual buttons will depend on the specific Gamepad implementation
      * @return whether the specified button is currently pressed or not
      */
     boolean getButton(Button button);
@@ -87,8 +90,9 @@ public interface Gamepad {
      * should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations. Likewise for axes.
-     * @param control the control on which to set a mode
-     * @param axis the axis of the control on which to set a mode
+     *
+     * @param control      the control on which to set a mode
+     * @param axis         the axis of the control on which to set a mode
      * @param joystickMode the mode to set
      */
     default void setMode(Control control, Axis axis, JoystickMode joystickMode) {
@@ -100,8 +104,9 @@ public interface Gamepad {
      * should be provided by Gamepad implementations supplying their own valid
      * possible values. Controls defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations. Likewise for axes.
-     * @param control the control on which to set a mode
-     * @param axis the axis of the control on which to set a mode
+     *
+     * @param control  the control on which to set a mode
+     * @param axis     the axis of the control on which to set a mode
      * @param function the function to apply
      */
     default void setMode(Control control, Axis axis, Function<Double, Double> function) {
@@ -112,12 +117,13 @@ public interface Gamepad {
 
     /**
      * Map a control/axis pair to a function.
-     *
+     * <p>
      * The given function will be periodically called and given the then-current value of
      * the control/axis pair specified. This is similar to binding button presses to methods,
      * on a continuous-valued input (eg thumbstick) instead, to a method which requires a double
      * value, for example tank drive.
-     * @param mapping the control mapping to use
+     *
+     * @param mapping  the control mapping to use
      * @param consumer the function to be called
      */
     void map(Mapping mapping, Consumer<Double> consumer);
@@ -131,7 +137,8 @@ public interface Gamepad {
      * is pressed. Buttons should be provided by Gamepad implementations supplying their
      * own valid possible values. Buttons defined by one Gamepad implementation should
      * not be used as parameters to other Gamepad implementations.
-     * @param button the button on which to bind an action
+     *
+     * @param button  the button on which to bind an action
      * @param binding the action to be bound
      */
     default void bind(Button button, Runnable binding) {
@@ -144,9 +151,10 @@ public interface Gamepad {
      * provided by Gamepad implementations supplying their own valid possible values.
      * Buttons defined by one Gamepad implementation should not be used as parameters
      * to other Gamepad implementations.
-     * @param button the button on which to bind an action
+     *
+     * @param button    the button on which to bind an action
      * @param pressType the type of button press which should trigger the action
-     * @param binding the action to be bound
+     * @param binding   the action to be bound
      */
     default void bind(Button button, PressType pressType, Runnable binding) {
         bind(Collections.singleton(button), pressType, binding);
@@ -158,9 +166,10 @@ public interface Gamepad {
      * provided by Gamepad implementations supplying their own valid possible values.
      * Buttons defined by one Gamepad implementation should not be used as parameters
      * to other Gamepad implementations.
-     * @param buttons the button combination on which to bind an action
+     *
+     * @param buttons   the button combination on which to bind an action
      * @param pressType the type of button press which should trigger the action
-     * @param binding the action to be bound
+     * @param binding   the action to be bound
      */
     default void bind(Set<Button> buttons, PressType pressType, Runnable binding) {
         bind(new Binding(buttons, pressType), binding);
@@ -172,6 +181,7 @@ public interface Gamepad {
      * provided by Gamepad implementations supplying their own valid possible values.
      * Buttons defined by one Gamepad implementation should not be used as parameters
      * to other Gamepad implementations.
+     *
      * @param binding the binding on which to bind an action
      * @param binding the action to be bound
      */
@@ -181,6 +191,7 @@ public interface Gamepad {
      * Remove all bindings for the given button. Buttons should be provided by Gamepad
      * implementations supplying their own valid possible values. Buttons defined by one
      * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     *
      * @param button the button for which to unbind all actions
      */
     default void unbind(Button button) {
@@ -191,7 +202,8 @@ public interface Gamepad {
      * Remove a binding for the given button. Buttons should be provided by Gamepad
      * implementations supplying their own valid possible values. Buttons defined by one
      * Gamepad implementation should not be used as parameters to other Gamepad implementations.
-     * @param button the button for which to unbind an action
+     *
+     * @param button    the button for which to unbind an action
      * @param pressType the type of button press for which to unbind an action
      */
     default void unbind(Button button, PressType pressType) {
@@ -202,7 +214,8 @@ public interface Gamepad {
      * Remove a binding for the given button combination. Buttons should be provided by Gamepad
      * implementations supplying their own valid possible values. Buttons defined by one
      * Gamepad implementation should not be used as parameters to other Gamepad implementations.
-     * @param buttons the button combination for which to unbind an action
+     *
+     * @param buttons   the button combination for which to unbind an action
      * @param pressType the type of button press for which to unbind an action
      */
     default void unbind(Set<Button> buttons, PressType pressType) {
@@ -211,6 +224,7 @@ public interface Gamepad {
 
     /**
      * Remove a binding for the given binding.
+     *
      * @param binding the binding for which to unbind an action
      */
     void unbind(Binding binding);
@@ -219,6 +233,7 @@ public interface Gamepad {
      * Check if a given button has a bound action. Buttons should be provided by Gamepad
      * implementations supplying their own valid possible values. Buttons defined by one
      * Gamepad implementation should not be used as parameters to other Gamepad implementations.
+     *
      * @param button the button to check for any bindings
      * @return if the button has any bindings
      */
@@ -231,7 +246,8 @@ public interface Gamepad {
      * should be provided by Gamepad implementations supplying their own valid possible values.
      * Buttons defined by one Gamepad implementation should not be used as parameters to other
      * Gamepad implementations.
-     * @param button the button to check for bindings
+     *
+     * @param button    the button to check for bindings
      * @param pressType the type of button press to check for bindings
      * @return if the button has any bindings for the given press type
      */
@@ -296,7 +312,8 @@ public interface Gamepad {
 
         /**
          * Construct a new Binding identifier.
-         * @param buttons the buttons
+         *
+         * @param buttons   the buttons
          * @param pressType the press type
          */
         public Binding(final Set<Button> buttons, final PressType pressType) {
@@ -306,7 +323,8 @@ public interface Gamepad {
 
         /**
          * Construct a new Binding identifier.
-         * @param button the button
+         *
+         * @param button    the button
          * @param pressType the press type
          */
         public Binding(final Button button, final PressType pressType) {
@@ -315,6 +333,7 @@ public interface Gamepad {
 
         /**
          * Get the button.
+         *
          * @return the button
          */
         public Set<Button> getButtons() {
@@ -323,6 +342,7 @@ public interface Gamepad {
 
         /**
          * Get the press type.
+         *
          * @return the press type.
          */
         public PressType getPressType() {
@@ -381,8 +401,9 @@ public interface Gamepad {
 
         /**
          * Construct a new ModeIdentifier.
+         *
          * @param control the control
-         * @param axis the axis
+         * @param axis    the axis
          */
         public Mapping(final Control control, final Axis axis) {
             this.control = requireNonNull(control);
@@ -391,6 +412,7 @@ public interface Gamepad {
 
         /**
          * Get the control.
+         *
          * @return the control
          */
         public Control getControl() {
@@ -399,6 +421,7 @@ public interface Gamepad {
 
         /**
          * Get the axis.
+         *
          * @return the axis
          */
         public Axis getAxis() {

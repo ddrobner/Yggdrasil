@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
  * output values with which a system can reach and maintain a target value.
+ *
  * @param <T> the type of sensor used as input to this PID system.
  * @param <V> the type of value read from the sensor used as input to this PID system.
  */
@@ -43,6 +44,7 @@ public interface PID<T extends PIDSource, V extends Number> {
 
     /**
      * Iterate the PID loop.
+     *
      * @param target the desired target value. Units depend on the context of this PID
      * @return the output value to set to eg a SpeedController to reach the specified target
      */
@@ -50,48 +52,56 @@ public interface PID<T extends PIDSource, V extends Number> {
 
     /**
      * Get the source sensor of this PID.
+     *
      * @return the PIDSrc (PID source sensor) used by this PID loop
      */
     PIDSrc<T, V> getSrc();
 
     /**
      * Check if this PID has reached its target value.
+     *
      * @return whether this PID loop has reached the specified target value
      */
     boolean atTarget();
 
     /**
      * Set the Proportional constant for this PID.
+     *
      * @param kP the Proportional constant.
      */
     void setkP(float kP);
 
     /**
      * Get the Proportional constant for this PID.
+     *
      * @return the Proportional constant.
      */
     float getkP();
 
     /**
      * Set the Integral constant for this PID.
+     *
      * @param kI the Integral constant.
      */
     void setkI(float kI);
 
     /**
      * Get the Integral constant for this PID.
+     *
      * @return the Integral constant.
      */
     float getkI();
 
     /**
      * Set the Derivative constant for this PID.
+     *
      * @param kD the Derivative constant.
      */
     void setkD(float kD);
 
     /**
      * Get the Derivative constant for this PID.
+     *
      * @return the Derivative constant.
      */
     float getkD();

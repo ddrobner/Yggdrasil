@@ -26,10 +26,11 @@
 
 package ca.team3161.lib.utils.controls;
 
+import static ca.team3161.lib.utils.Utils.requireNonNegative;
+
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +39,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
-import static ca.team3161.lib.utils.Utils.requireNonNegative;
 
 /**
  * A Gamepad which allows button bindings and control modes.
@@ -111,6 +110,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
 
     /**
      * Get the set of Buttons on this controller.
+     *
      * @return a set of Buttons
      */
     protected abstract Set<Button> getButtons();
@@ -121,7 +121,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
         getButtons().parallelStream().forEach(button -> buttonStates.put(button, getButton(button)));
         synchronized (controlsMapping) {
             controlsMapping.entrySet().parallelStream().forEach(mapping ->
-                mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
+                                                                        mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
         }
         synchronized (buttonBindings) {
             buttonBindings.entrySet().parallelStream().forEach(binding -> {
@@ -149,7 +149,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
                         break;
                     default:
                         throw new IllegalArgumentException("Gamepad on port " + Integer.toString(getPort())
-                                                   + " has binding for unknown button press type " + pressType);
+                                                                   + " has binding for unknown button press type " + pressType);
                 }
             });
         }

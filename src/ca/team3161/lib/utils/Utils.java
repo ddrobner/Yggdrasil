@@ -32,12 +32,14 @@ package ca.team3161.lib.utils;
  */
 public class Utils {
 
-    private Utils(){}
-    
+    private Utils() {
+    }
+
     /**
      * Normalize a PWM value so it remains in the range [-1.0, 1.0]
      * If a value above 1.0 is given, 1.0 is returned. If a value below -1.0
      * is given, -1.0 is returned. For other values, they are simply returned
+     *
      * @param val the value to normalize
      * @return the normalized value
      */
@@ -55,6 +57,7 @@ public class Utils {
      * Normalize a PWM value so it remains in the range [-1.0, 1.0]
      * If a value above 1.0 is given, 1.0 is returned. If a value below -1.0
      * is given, -1.0 is returned. For other values, they are simply returned
+     *
      * @param val the value to normalize
      * @return the normalized value
      */
@@ -70,6 +73,7 @@ public class Utils {
 
     /**
      * Assert that an int is greater than 0
+     *
      * @param in the argument which must be non-negative
      * @return the argument back
      * @throws Assert.AssertionException if the argument is less than 0
@@ -83,6 +87,7 @@ public class Utils {
 
     /**
      * Assert that a long is greater than 0
+     *
      * @param in the argument which must be non-negative
      * @return the argument back
      * @throws Assert.AssertionException if the argument is less than 0
@@ -96,6 +101,7 @@ public class Utils {
 
     /**
      * Assert that a double is greater than 0
+     *
      * @param in the argument which must be non-negative
      * @return the argument back
      * @throws Assert.AssertionException if the argument is less than 0
@@ -109,6 +115,7 @@ public class Utils {
 
     /**
      * Assert that a float is greater than 0
+     *
      * @param in the argument which must be non-negative
      * @return the argument back
      * @throws Assert.AssertionException if the argument is less than 0

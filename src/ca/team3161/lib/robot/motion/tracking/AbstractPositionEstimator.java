@@ -36,7 +36,6 @@ import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
-
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -72,13 +71,14 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
     /**
      * Construct a new PositionEstimator. Requires physical parameters of the robot and a collection of sensors from which
      * to pull various data.
+     *
      * @param chassisParameters physical parameters of the robot
-     * @param accelerometer an accelerometer to measure acceleration
-     * @param gyro a gyroscope to measure rotation
-     * @param frontLeftEncoder an encoder to measure movement of the front left wheel
+     * @param accelerometer     an accelerometer to measure acceleration
+     * @param gyro              a gyroscope to measure rotation
+     * @param frontLeftEncoder  an encoder to measure movement of the front left wheel
      * @param frontRightEncoder an encoder to measure movement of the front right wheel
-     * @param backLeftEncoder an encoder to measure movement of the back left wheel
-     * @param backRightEncoder an encoder to measure movement of the back right wheel
+     * @param backLeftEncoder   an encoder to measure movement of the back left wheel
+     * @param backRightEncoder  an encoder to measure movement of the back right wheel
      */
     public AbstractPositionEstimator(final ChassisParameters chassisParameters,
                                      final Accelerometer accelerometer, final Gyro gyro,
@@ -103,6 +103,7 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
     /**
      * Set the initial rotation of the robot. If the robot's initial heading is not to be interpreted as an angle of 0,
      * use this method to set the correct offset (for example, if your robot begins matches rotated).
+     *
      * @param theta0 the initial angle
      */
     public void setInitialTheta(final double theta0) {
@@ -194,6 +195,7 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
 
     /**
      * Get the current estimate of the robot's on-field position.
+     *
      * @return the position estimate
      */
     public Position getEstimate() {

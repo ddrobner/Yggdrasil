@@ -26,12 +26,10 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.PIDSource;
-
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
 import static ca.team3161.lib.utils.Utils.normalizePwm;
+
+import edu.wpi.first.wpilibj.PIDSource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A plain, general PID implementation.
@@ -41,13 +39,14 @@ public class SimplePID extends AbstractPID<PIDSource, Float> {
 
     /**
      * Create a new SimplePID instance.
-     * @param source   the PIDSrc source sensor
-     * @param deadband filter value - do not act when current error is within this bound
+     *
+     * @param source         the PIDSrc source sensor
+     * @param deadband       filter value - do not act when current error is within this bound
      * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
-     * @param deadbandUnit the units for deadbandPeriod
-     * @param kP       P constant
-     * @param kI       I constant
-     * @param kD       D constant
+     * @param deadbandUnit   the units for deadbandPeriod
+     * @param kP             P constant
+     * @param kI             I constant
+     * @param kD             D constant
      */
     public SimplePID(final PIDSrc<PIDSource, Float> source, final float deadband,
                      final int deadbandPeriod, final TimeUnit deadbandUnit,

@@ -108,6 +108,7 @@ public final class LogitechAttack3 extends AbstractController {
 
     /**
      * Create a new Joystick.
+     *
      * @param port the USB port for this Joystick.
      */
     public LogitechAttack3(final int port) {
@@ -117,8 +118,9 @@ public final class LogitechAttack3 extends AbstractController {
     /**
      * Create a new Joystick, with a specific polling frequency (for button bindings).
      * For example, to poll at 50Hz, you might use a period of 20 and a timeUnit of TimeUnit.MILLISECONDS.
-     * @param port the USB port for this Joystick.
-     * @param period the timeout period between button mapping polls.
+     *
+     * @param port     the USB port for this Joystick.
+     * @param period   the timeout period between button mapping polls.
      * @param timeUnit the unit of the timeout period.
      */
     public LogitechAttack3(final int port, final int period, final TimeUnit timeUnit) {
@@ -132,7 +134,7 @@ public final class LogitechAttack3 extends AbstractController {
 
     protected static void validate(final Mapping mapping, final String message) {
         Objects.requireNonNull(mapping);
-        if (!(mapping.getControl() instanceof  LogitechAttack3Control) || !(mapping.getAxis() instanceof LogitechAttack3Axis)) {
+        if (!(mapping.getControl() instanceof LogitechAttack3Control) || !(mapping.getAxis() instanceof LogitechAttack3Axis)) {
             throw new IllegalArgumentException(message);
         }
     }

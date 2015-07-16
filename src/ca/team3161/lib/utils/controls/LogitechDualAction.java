@@ -109,6 +109,7 @@ public final class LogitechDualAction extends AbstractController {
 
     /**
      * Create a new LogitechDualAction gamepad/controller.
+     *
      * @param port the USB port for this controller
      */
     public LogitechDualAction(final int port) {
@@ -118,8 +119,9 @@ public final class LogitechDualAction extends AbstractController {
     /**
      * Create a new LogitechDualAction gamepad/controller, with a specific polling frequency (for button bindings).
      * For example, to poll at 50Hz, you might use a period of 20 and a timeUnit of TimeUnit.MILLISECONDS.
-     * @param port the USB port for this controller.
-     * @param period the timeout period between button mapping polls.
+     *
+     * @param port     the USB port for this controller.
+     * @param period   the timeout period between button mapping polls.
      * @param timeUnit the unit of the timeout period.
      */
     public LogitechDualAction(final int port, final int period, final TimeUnit timeUnit) {
@@ -133,7 +135,7 @@ public final class LogitechDualAction extends AbstractController {
 
     protected static void validate(final Mapping mapping, final String message) {
         Objects.requireNonNull(mapping);
-        if (!(mapping.getControl() instanceof  LogitechControl) || !(mapping.getAxis() instanceof LogitechAxis)) {
+        if (!(mapping.getControl() instanceof LogitechControl) || !(mapping.getAxis() instanceof LogitechAxis)) {
             throw new IllegalArgumentException(message);
         }
     }

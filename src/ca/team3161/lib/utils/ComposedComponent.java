@@ -30,12 +30,14 @@ package ca.team3161.lib.utils;
  * Interface describing a logical component which is composed of (or wrapped around) another component, either
  * logical or physical. Physical components cannot be wrapped around other components - these include WPI base
  * classes such as SpeedControllers (including Talons, Jaguars, etc), Potentiometers, Gyros, etc.
+ *
  * @param <T>
  */
 public interface ComposedComponent<T> {
 
     /**
      * Get the composed component within this one.
+     *
      * @return the composed component.
      */
     T getComposedComponent();

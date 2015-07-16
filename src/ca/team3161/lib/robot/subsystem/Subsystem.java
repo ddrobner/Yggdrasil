@@ -37,24 +37,28 @@ public interface Subsystem {
     /**
      * Define a resource which this Subsystem requires exclusive access to while its
      * task runs.
+     *
      * @param resource the required resource.
      */
     void require(Object resource);
 
     /**
      * Check if this subsystem's task has been cancelled.
+     *
      * @return true iff cancelled.
      */
     boolean isCancelled();
 
     /**
      * Check if this subsystem's task has been started.
+     *
      * @return true iff started.
      */
     boolean isStarted();
 
     /**
      * Check if this subsystem's task is scheduled to execute.
+     *
      * @return true iff scheduled.
      */
     boolean isScheduled();
@@ -63,6 +67,7 @@ public interface Subsystem {
      * Check if this subsystem's task has been completed. This is never
      * true for repeating subsystems, which are always "Not Started",
      * "Scheduled", or "Cancelled".
+     *
      * @return true iff completed.
      */
     boolean isDone();
@@ -84,18 +89,21 @@ public interface Subsystem {
 
     /**
      * Define the set of resourceLocks required for this Subsystem's task.
+     *
      * @see AbstractPooledSubsystem#require(Object)
      */
     void defineResources();
 
     /**
      * The background task to run.
+     *
      * @throws Exception in case the defined task throws any Exceptions
      */
     void task() throws Exception;
 
     /**
      * Get the job representing the execution of this Subsystem's task.
+     *
      * @return the Future job.
      */
     Future<?> getJob();

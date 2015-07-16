@@ -26,10 +26,10 @@
 
 package ca.team3161.lib.robot.subsystem;
 
-import java.util.concurrent.TimeUnit;
-
 import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A Subsystem whose task is run repeatedly with a specified period, until cancelled.

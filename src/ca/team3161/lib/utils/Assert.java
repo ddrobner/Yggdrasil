@@ -35,10 +35,12 @@ import java.util.Objects;
  */
 public final class Assert {
 
-    private Assert(){}
+    private Assert() {
+    }
 
     /**
      * Assert that a condition is true.
+     *
      * @param condition throw an exception if the given condition does not hold
      */
     public static void assertTrue(final boolean condition) {
@@ -49,7 +51,8 @@ public final class Assert {
 
     /**
      * Assert that a condition is true.
-     * @param reason why the condition should hold
+     *
+     * @param reason    why the condition should hold
      * @param condition throw an exception if the given condition does not hold
      */
     public static void assertTrue(final String reason, final boolean condition) {
@@ -61,6 +64,7 @@ public final class Assert {
 
     /**
      * Assert that a condition is false.
+     *
      * @param condition throw an exception if the given condition holds
      */
     public static void assertFalse(final boolean condition) {
@@ -69,7 +73,8 @@ public final class Assert {
 
     /**
      * Assert rhat a condition is false.
-     * @param reason why the condition should not hold
+     *
+     * @param reason    why the condition should not hold
      * @param condition throw an exception if the given condition holds
      */
     public static void assertFalse(final String reason, final boolean condition) {
@@ -95,6 +100,7 @@ public final class Assert {
 
         /**
          * Create a new AssertionException.
+         *
          * @param cause the cause for this exception to have occurred
          */
         public AssertionException(final String cause) {

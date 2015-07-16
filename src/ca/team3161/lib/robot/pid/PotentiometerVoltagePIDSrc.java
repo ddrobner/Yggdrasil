@@ -26,26 +26,27 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
-
 import static java.util.Objects.requireNonNull;
+
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
  * rotation.
  */
 public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potentiometer> {
-    
+
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
-    
+
     /**
      * Create a new PotentiometerPidSrc instance.
-     * @param pot a Potentiometer object to measure voltages from
-     * @param minVolt the minimum measured voltage from the potentiometer at the "small" movement endpoint of the system
-     * @param maxVolt the maximum measured voltage from the potentiometer at the "large" movement endpoint of the system
+     *
+     * @param pot      a Potentiometer object to measure voltages from
+     * @param minVolt  the minimum measured voltage from the potentiometer at the "small" movement endpoint of the system
+     * @param maxVolt  the maximum measured voltage from the potentiometer at the "large" movement endpoint of the system
      * @param minAngle the minimum angle the system can physically rotate to
-     * @param maxAngle  the maximum angle the system can physically rotate to
+     * @param maxAngle the maximum angle the system can physically rotate to
      */
     public PotentiometerVoltagePIDSrc(final Potentiometer pot,
                                       final float minVolt, final float maxVolt,
@@ -56,18 +57,20 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
         this.minAngle = minAngle;
         this.maxAngle = maxAngle;
     }
-    
+
     /**
      * Retrieve the original sensor used to construct this PIDSrc.
+     *
      * @return the Potentiometer
      */
     @Override
     public Potentiometer getSensor() {
         return pot;
     }
-    
+
     /**
      * Inherited from PIDSrc.
+     *
      * @return the measured value of this PIDSrc
      */
     public Float getAngle() {
@@ -80,23 +83,25 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     public Float getPIDValue() {
         return getAngle();
     }
-    
+
     /**
      * Inherited from AnglePidSrc.
+     *
      * @return the minimal angle of this sensor
      */
     @Override
     public Float getMinAngle() {
         return minAngle;
     }
-    
+
     /**
      * Inherited from AnglePidSrc.
+     *
      * @return the maximal angle of this sensor
      */
     @Override
     public Float getMaxAngle() {
         return maxAngle;
     }
-    
+
 }

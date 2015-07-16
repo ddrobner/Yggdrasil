@@ -38,11 +38,12 @@ public class ChassisParameters {
 
     /**
      * Construct a new ChassisParameters object.
-     * @param wheelRadius the radius of the wheels on this Robot's drivetrain
-     * @param wheelBaseLength the length between the furthest forward and further backward axles on this Robot's drivetrain
-     * @param wheelBaseWidth the width between the left and ride side wheels on this Robot's drivetrain
+     *
+     * @param wheelRadius           the radius of the wheels on this Robot's drivetrain
+     * @param wheelBaseLength       the length between the furthest forward and further backward axles on this Robot's drivetrain
+     * @param wheelBaseWidth        the width between the left and ride side wheels on this Robot's drivetrain
      * @param encoderWheelGearRatio the gear ratio between the output shaft the encoders are mounted on and the wheels
-     * @param encoderCPR the number of "ticks" the encoders on the drivetrain will count for each full revolution
+     * @param encoderCPR            the number of "ticks" the encoders on the drivetrain will count for each full revolution
      */
     public ChassisParameters(final double wheelRadius, final double wheelBaseLength, final double wheelBaseWidth,
                              final double encoderWheelGearRatio, final double encoderCPR) {
@@ -55,6 +56,7 @@ public class ChassisParameters {
 
     /**
      * Get the wheel radius.
+     *
      * @return the wheel radius
      */
     public double getWheelRadius() {
@@ -63,6 +65,7 @@ public class ChassisParameters {
 
     /**
      * Get the wheelbase length.
+     *
      * @return the wheelbase length
      */
     public double getWheelBaseLength() {
@@ -71,6 +74,7 @@ public class ChassisParameters {
 
     /**
      * Get the wheelbase width.
+     *
      * @return the wheelbase width
      */
     public double getWheelBaseWidth() {
@@ -79,6 +83,7 @@ public class ChassisParameters {
 
     /**
      * Get the gear ratio between what the encoders measure and what the wheels experience.
+     *
      * @return the gear ratio
      */
     public double getEncoderWheelGearRatio() {
@@ -87,6 +92,7 @@ public class ChassisParameters {
 
     /**
      * Get the number of ticks per revolution for the drivetrain encoders.
+     *
      * @return the number of ticks per revolution
      */
     public double getEncoderCPR() {

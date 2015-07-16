@@ -27,7 +27,6 @@
 package ca.team3161.lib.robot.subsystem;
 
 import ca.team3161.lib.robot.ResourceTracker;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -37,7 +36,7 @@ import java.util.concurrent.locks.Lock;
 
 /**
  * An abstract implementation of the Subsystem interface.
- *
+ * <p>
  * Manages acquiring and releasing required resources and handles starting/stopping
  * tasks. Subclasses are expected to define the semantics of how tasks are run
  * (shared or independent workers, one-shot or repeating, etc).
@@ -46,6 +45,7 @@ public abstract class AbstractSubsystem implements Subsystem {
 
     /**
      * A list of resourceLocks which this Subsystem requires.
+     *
      * @see ca.team3161.lib.robot.ResourceTracker
      */
     protected final Set<Lock> resourceLocks = new HashSet<>();
@@ -54,6 +54,7 @@ public abstract class AbstractSubsystem implements Subsystem {
      * The Future representing this Subsystem's task. 'null' if the subsystem
      * has never yet been started. This can be used to check if the subsystem
      * has ever been started, or to cancel scheduled jobs.
+     *
      * @see Subsystem#start()
      */
     protected Future<?> job;
@@ -69,6 +70,7 @@ public abstract class AbstractSubsystem implements Subsystem {
 
     /**
      * Helper method to acquire all defined resources.
+     *
      * @throws InterruptedException if interrupted while holding any resource lock
      */
     protected final void acquireResources() throws InterruptedException {
@@ -143,6 +145,7 @@ public abstract class AbstractSubsystem implements Subsystem {
      * This service may or may not be shared with other subsystems;
      * for Independent subsystems it is never shared, and for Pooled
      * subsystems it is always shared.
+     *
      * @return the executor service.
      * @see AbstractIndependentSubsystem
      * @see AbstractPooledSubsystem

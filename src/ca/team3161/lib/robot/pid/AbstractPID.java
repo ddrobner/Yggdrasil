@@ -26,21 +26,21 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.PIDSource;
-
-import java.util.concurrent.TimeUnit;
-
 import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
+
+import edu.wpi.first.wpilibj.PIDSource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
  * output values with which a system can reach and maintain a target value.
+ *
  * @param <T> the type of sensor used as input to this PID system.
  * @param <V> the type of value read from the sensor used as input to this PID system.
  */
 public abstract class AbstractPID<T extends PIDSource, V extends Number> implements PID<T, V> {
-    
+
     /**
      * A PIDSrc sensor.
      */
@@ -58,20 +58,21 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
     protected volatile int deadbandPeriod;
     protected volatile TimeUnit deadbandUnit;
     protected volatile long lastTimeNotAtTarget;
-    
+
     /**
      * Create a new AbstractPID instance.
-     * @param source the PIDSrc source sensor
-     * @param deadband filter value - do not act when current error is within this bound. This can be disabled by passing a negative value
+     *
+     * @param source         the PIDSrc source sensor
+     * @param deadband       filter value - do not act when current error is within this bound. This can be disabled by passing a negative value
      * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
-     * @param deadbandUnit the units for deadbandPeriod
-     * @param kP P constant
-     * @param kI I constant
-     * @param kD D constant
+     * @param deadbandUnit   the units for deadbandPeriod
+     * @param kP             P constant
+     * @param kI             I constant
+     * @param kD             D constant
      */
     public AbstractPID(final PIDSrc<T, V> source, final float deadband,
-            final int deadbandPeriod, final TimeUnit deadbandUnit,
-            final float kP, final float kI, final float kD) {
+                       final int deadbandPeriod, final TimeUnit deadbandUnit,
+                       final float kP, final float kI, final float kD) {
         this.source = requireNonNull(source);
         this.deadband = requireNonNegative(deadband);
         this.deadbandPeriod = requireNonNegative(deadbandPeriod);
@@ -80,7 +81,7 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
         this.kI = kI;
         this.kD = kD;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -96,7 +97,7 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
      */
     @Override
     public abstract V pid(final V target);
-    
+
     /**
      * {@inheritDoc}
      */

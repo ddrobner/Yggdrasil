@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj.PIDSource;
 
 /**
  * Defines a component which can provide rate values for a PID system.
+ *
  * @param <T> the type of sensor.
  */
 public interface PIDRateValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {

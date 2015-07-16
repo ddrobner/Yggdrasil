@@ -38,8 +38,9 @@ public class Position {
 
     /**
      * Construct a new Position.
-     * @param x net x distance co-ordinate
-     * @param y net y distance co-ordinate
+     *
+     * @param x     net x distance co-ordinate
+     * @param y     net y distance co-ordinate
      * @param theta net change in rotation
      */
     public Position(final double x, final double y, final double theta) {
@@ -50,6 +51,7 @@ public class Position {
 
     /**
      * Get the net x distance co-ordinate.
+     *
      * @return the net x distance co-ordinate
      */
     public double getX() {
@@ -58,6 +60,7 @@ public class Position {
 
     /**
      * Get the net y distance co-ordinate.
+     *
      * @return the net y distance co-ordinate
      */
     public double getY() {
@@ -66,6 +69,7 @@ public class Position {
 
     /**
      * Get the net change in rotation.
+     *
      * @return the net change in rotation
      */
     public double getTheta() {

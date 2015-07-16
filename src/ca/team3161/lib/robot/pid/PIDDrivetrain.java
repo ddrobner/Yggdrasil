@@ -26,14 +26,13 @@
 
 package ca.team3161.lib.robot.pid;
 
+import static java.util.Objects.requireNonNull;
+
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
-
 import java.util.concurrent.TimeUnit;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
@@ -48,29 +47,30 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
     private volatile int leftTicksTarget = 0, rightTicksTarget = 0;
     private Task t;
     private final Object notifier;
-    
+
     /**
      * The task defining the action of driving straight forward (or backward).
      */
     private final Task driveTask = new DriveTask();
-    
+
     /**
      * The task defining the action of turning in place.
      */
     private final Task turnTask = new TurnTask();
-    
+
     /**
      * Create a new PIDDrivetrain instance.
-     * @param leftDrive the left side drivetrain SpeedController
-     * @param rightDrive the right side drivetrain SpeedController
-     * @param leftEncoder the left side drivetrain Encoder
+     *
+     * @param leftDrive    the left side drivetrain SpeedController
+     * @param rightDrive   the right side drivetrain SpeedController
+     * @param leftEncoder  the left side drivetrain Encoder
      * @param rightEncoder the right side drivetrain Encoder
-     * @param turningPid an AnglePidSrc (eg Gyro) to maintain a straight heading
-     * @param bearingPid an AnglePidSrc to orient to a vector while stationary
+     * @param turningPid   an AnglePidSrc (eg Gyro) to maintain a straight heading
+     * @param bearingPid   an AnglePidSrc to orient to a vector while stationary
      */
     public PIDDrivetrain(final SpeedController leftDrive, final SpeedController rightDrive,
-            final PID<? extends Encoder, Integer> leftEncoder, final PID<? extends Encoder, Integer> rightEncoder,
-            final PID<? extends Gyro, Float> turningPid, final PID<? extends Gyro, Float> bearingPid) {
+                         final PID<? extends Encoder, Integer> leftEncoder, final PID<? extends Encoder, Integer> rightEncoder,
+                         final PID<? extends Gyro, Float> turningPid, final PID<? extends Gyro, Float> bearingPid) {
         super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
         this.leftDrive = requireNonNull(leftDrive);
         this.rightDrive = requireNonNull(rightDrive);
@@ -92,20 +92,22 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
         require(turningPid);
         require(bearingPid);
     }
-    
+
     /**
      * Turn in place.
      * Positive degrees may be either clockwise or anticlockwise, depending on
      * the setup of your particular AnglePidSrc
+     *
      * @param degrees how many degrees to turn
      */
     public void turnByDegrees(final float degrees) {
         setTask(turnTask);
         turningDegreesTarget = degrees;
     }
-    
+
     /**
      * Drive forward a number of encoder ticks.
+     *
      * @param ticks how many ticks to drive
      */
     public void setTicksTarget(final int ticks) {
@@ -113,9 +115,10 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
         leftTicksTarget = -ticks;
         rightTicksTarget = -ticks;
     }
-    
+
     /**
      * Change the Task of this PIDDrivetrain.
+     *
      * @param t the task type to switch to
      */
     private void setTask(final Task t) {
@@ -125,7 +128,7 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
         turningPid.clear();
         bearingPid.clear();
     }
-    
+
     /**
      * Reset the state of the drivetrain so that it can be cleanly reused.
      */
@@ -145,9 +148,10 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
     public void task() {
         t.run();
     }
-    
+
     /**
      * Suspends the calling thread until the target is reached, at which point it will be awoken again.
+     *
      * @throws InterruptedException if the calling thread is interrupted while waiting
      */
     public void waitForTarget() throws InterruptedException {
@@ -155,14 +159,14 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
             notifier.wait();
         }
     }
-    
+
     /**
      * An action this PIDDrivetrain may carry out.
      */
     public abstract class Task implements Runnable {
     }
 
-    private class DriveTask extends Task  {
+    private class DriveTask extends Task {
         @Override
         public void run() {
             final double skew = bearingPid.pid(0.0f);
@@ -202,5 +206,5 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
             }
         }
     }
-    
+
 }

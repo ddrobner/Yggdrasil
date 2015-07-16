@@ -26,9 +26,9 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.Encoder;
-
 import static java.util.Objects.requireNonNull;
+
+import edu.wpi.first.wpilibj.Encoder;
 
 /**
  * A PID source that returns values as encoder rates.
@@ -39,6 +39,7 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
 
     /**
      * Create a new EncoderPidSrc instance.
+     *
      * @param enc an Encoder object to use as a PIDSrc
      */
     public EncoderRatePIDSrc(final Encoder enc) {
@@ -47,6 +48,7 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
 
     /**
      * Retrieve the original sensor used to construct this PIDSrc.
+     *
      * @return the Encoder
      */
     @Override

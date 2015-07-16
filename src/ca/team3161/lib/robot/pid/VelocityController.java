@@ -26,13 +26,13 @@
 
 package ca.team3161.lib.robot.pid;
 
-import ca.team3161.lib.utils.ComposedComponent;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
-
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
+
+import ca.team3161.lib.utils.ComposedComponent;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SpeedController;
 
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
@@ -52,14 +52,15 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
     /**
      * Construct a new VelocityController instance.
-     * @param speedController a backing SpeedController (ex physical Jaguar, Talon, Victor).
-     * @param encoder an Encoder which measures the output of the associated physical SpeedController.
+     *
+     * @param speedController   a backing SpeedController (ex physical Jaguar, Talon, Victor).
+     * @param encoder           an Encoder which measures the output of the associated physical SpeedController.
      * @param maxRotationalRate the maximum rotational rate as reported by the Encoder.
-     * @param kP the Proportional PID constant.
-     * @param kI the Integral PID constant.
-     * @param kD the Derivative PID constant.
-     * @param maxIntegralError limit constant for the integral error.
-     * @param deadband if the absolute value of the deadband falls within this range, output 0.
+     * @param kP                the Proportional PID constant.
+     * @param kI                the Integral PID constant.
+     * @param kD                the Derivative PID constant.
+     * @param maxIntegralError  limit constant for the integral error.
+     * @param deadband          if the absolute value of the deadband falls within this range, output 0.
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
@@ -68,14 +69,15 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
     /**
      * Construct a new VelocityController instance.
-     * @param speedController a backing SpeedController (ex physical Jaguar, Talon, Victor).
-     * @param encoderPidSrc an EncoderPidSrc which measures the output of the associated physical SpeedController.
+     *
+     * @param speedController   a backing SpeedController (ex physical Jaguar, Talon, Victor).
+     * @param encoderPidSrc     an EncoderPidSrc which measures the output of the associated physical SpeedController.
      * @param maxRotationalRate the maximum rotational rate as reported by the Encoder.
-     * @param kP the Proportional PID constant.
-     * @param kI the Integral PID constant.
-     * @param kD the Derivative PID constant.
-     * @param maxIntegralError limit constant for the integral error.
-     * @param deadband if the absolute value of the deadband falls within this range, output 0.
+     * @param kP                the Proportional PID constant.
+     * @param kI                the Integral PID constant.
+     * @param kD                the Derivative PID constant.
+     * @param maxIntegralError  limit constant for the integral error.
+     * @param deadband          if the absolute value of the deadband falls within this range, output 0.
      */
     public VelocityController(final SpeedController speedController, final PIDRateValueSrc<Encoder> encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
@@ -88,6 +90,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
     /**
      * Get the target rotational rate proportion which this VelocityController is set to.
+     *
      * @return the proportional rotational rate target.
      */
     @Override
@@ -99,6 +102,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      * Set the target rotational rate of this VelocityController.
      * This method should be called very frequently, as the PID loop only iterates when this method
      * or {@link ca.team3161.lib.robot.pid.VelocityController#set(double)} is called.
+     *
      * @param v target value.
      * @param b syncgroup.
      */
@@ -117,6 +121,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      * Set the target rotational rate of this VelocityController.
      * This method should be called very frequently, as the PID loop only iterates when this method
      * or {@link ca.team3161.lib.robot.pid.VelocityController#set(double, byte)} is called.
+     *
      * @param v target value.
      */
     @Override
@@ -136,6 +141,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
     /**
      * Used with WPILib PIDControllers.
+     *
      * @param v pid value.
      */
     @Override

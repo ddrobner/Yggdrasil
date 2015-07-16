@@ -26,9 +26,9 @@
 
 package ca.team3161.lib.robot.pid;
 
-import edu.wpi.first.wpilibj.Gyro;
-
 import static java.util.Objects.requireNonNull;
+
+import edu.wpi.first.wpilibj.Gyro;
 
 /**
  * A PID source that returns values as gyroscope angles.

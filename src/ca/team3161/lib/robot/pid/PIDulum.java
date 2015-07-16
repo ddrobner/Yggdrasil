@@ -26,40 +26,40 @@
 
 package ca.team3161.lib.robot.pid;
 
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
 import static ca.team3161.lib.utils.Utils.normalizePwm;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... getPIDValue it?)
+ *
  * @param <V> the specific source type which provides angle measurements for this PIDulum.
  */
 public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V, Float> {
-    
+
     private final float offsetAngle;
     private final float torqueConstant;
-    
+
     /**
-     * @param source the PIDSrc source sensor
-     * @param deadband filter value - do not act when current error is within this bound
+     * @param source         the PIDSrc source sensor
+     * @param deadband       filter value - do not act when current error is within this bound
      * @param deadbandPeriod the amount of time to remain within acceptable error of the target value before claiming to actually be at the target
-     * @param deadbandUnit the units for deadbandPeriod
-     * @param kP P constant
-     * @param kI I constant
-     * @param kD D constant
-     * @param offsetAngle the balance point of the inverted pendulum
+     * @param deadbandUnit   the units for deadbandPeriod
+     * @param kP             P constant
+     * @param kI             I constant
+     * @param kD             D constant
+     * @param offsetAngle    the balance point of the inverted pendulum
      * @param torqueConstant "feed forward" term constant to allow the pendulum to hold position against gravity
      */
     public PIDulum(final PIDSrc<V, Float> source, final float deadband,
-            final int deadbandPeriod, final TimeUnit deadbandUnit,
-            final float kP, final float kI, final float kD,
-            final float offsetAngle, final float torqueConstant) {
+                   final int deadbandPeriod, final TimeUnit deadbandUnit,
+                   final float kP, final float kI, final float kD,
+                   final float offsetAngle, final float torqueConstant) {
         super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
         this.offsetAngle = offsetAngle;
         this.torqueConstant = torqueConstant;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -85,7 +85,7 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
         if (iOut > 1) {
             iOut = 1;
         }
-        
+
         feedForward = torqueConstant * (source.getPIDValue() - offsetAngle);
 
         if (atTarget()) {
@@ -96,5 +96,5 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
 
         return normalizePwm(output);
     }
-    
+
 }

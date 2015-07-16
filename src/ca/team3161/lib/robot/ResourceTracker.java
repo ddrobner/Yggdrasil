@@ -31,18 +31,21 @@ import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
  * to ensure separation of task runs
  */
 public final class ResourceTracker {
-    
+
     private static final Map<Object, ReentrantLock> RESOURCES = new WeakHashMap<>();
 
-    private ResourceTracker(){}
+    private ResourceTracker() {
+    }
 
     /**
      * Acquire the unique lock associated with a resource.
+     *
      * @param resource the resource required
      * @return a unique associated lock
      */
@@ -53,5 +56,5 @@ public final class ResourceTracker {
             return RESOURCES.get(resource);
         }
     }
-    
+
 }

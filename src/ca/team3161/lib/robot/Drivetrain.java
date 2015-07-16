@@ -30,8 +30,6 @@ import ca.team3161.lib.utils.Assert;
 import ca.team3161.lib.utils.ComposedComponent;
 import ca.team3161.lib.utils.Utils;
 import edu.wpi.first.wpilibj.SpeedController;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,15 +48,17 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * Create a new Drivetrain instance.
+     *
      * @param controllers a varargs list or array of SpeedController objects. May be
-     * all the same type, or may be mixed.
+     *                    all the same type, or may be mixed.
      */
-    public Drivetrain(final SpeedController ... controllers) {
+    public Drivetrain(final SpeedController... controllers) {
         this(Arrays.asList(controllers));
     }
 
     /**
      * Create a new Drivetrain instance.
+     *
      * @param controllers a collection of SpeedControllers for this Drivetrain to manage
      */
     public Drivetrain(final Collection<SpeedController> controllers) {
@@ -69,6 +69,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * Invert all PWM values for this Drivetrain.
+     *
      * @param inverted whether the PWM values should be inverted or not
      * @return this Drivetrain instance
      */
@@ -83,6 +84,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * The current speed of this Drivetrain.
+     *
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
      */
     @Override
@@ -94,6 +96,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * Return the list of SpeedControllers which this Drivetrain was constructed with.
+     *
      * @return the SpeedControllers.
      */
     @Override
@@ -105,6 +108,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
      * The speeds of all SpeedControllers within this Drivetrain.
      * They should all be nearly identical, other than error due to floating point
      * precision.
+     *
      * @return a list enumerating all the current PWM values of the SpeedController collection (-1.0 to 1.0)
      */
     public List<Double> getAll() {
@@ -113,6 +117,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * Set the pwm value (-1.0 to 1.0).
+     *
      * @param pwm the PWM value to assign to each SpeedController in the collection
      */
     @Override
@@ -122,7 +127,8 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * You probably shouldn't use this. Only included as required by SpeedController interface.
-     * @param pwm the PWM value to assign to each SpeedController in the collection
+     *
+     * @param pwm       the PWM value to assign to each SpeedController in the collection
      * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
      */
     @Override
@@ -140,6 +146,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
 
     /**
      * Call pidWrite on each SpeedController in this collection.
+     *
      * @param output Set the output to the value calculated by PIDController
      */
     @Override

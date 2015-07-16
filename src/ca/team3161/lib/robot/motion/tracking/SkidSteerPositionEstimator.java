@@ -31,8 +31,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
-import java.util.Objects;
-
 /**
  * A Position Estimator for plain Skid Steer drivetrains, eg standard tank and arcade drive.
  */
@@ -40,13 +38,14 @@ public class SkidSteerPositionEstimator extends AbstractPositionEstimator {
 
     /**
      * Construct a new SkidSteerPositionEstimator.
+     *
      * @param chassisParameters a physical description of the robot
-     * @param accelerometer an accelerometer
-     * @param gyro a gyroscope
-     * @param frontLeftEncoder the encoder attached to the output of the front left wheel
+     * @param accelerometer     an accelerometer
+     * @param gyro              a gyroscope
+     * @param frontLeftEncoder  the encoder attached to the output of the front left wheel
      * @param frontRightEncoder the encoder attached to the output of the front right wheel
-     * @param backLeftEncoder the encoder attached to the output of the back left wheel
-     * @param backRightEncoder the encoder attached to the output of the back right wheel
+     * @param backLeftEncoder   the encoder attached to the output of the back left wheel
+     * @param backRightEncoder  the encoder attached to the output of the back right wheel
      */
     public SkidSteerPositionEstimator(final ChassisParameters chassisParameters,
                                       final Accelerometer accelerometer, final Gyro gyro,
