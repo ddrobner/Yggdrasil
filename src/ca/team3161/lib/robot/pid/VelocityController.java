@@ -31,6 +31,8 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import static ca.team3161.lib.utils.Utils.normalizePwm;
+import static ca.team3161.lib.utils.Utils.requireNonNegative;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
@@ -79,9 +81,9 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
         this.maxRotationalRate = maxRotationalRate;
-        this.speedController = speedController;
+        this.speedController = requireNonNull(speedController);
         this.maxIntegralError = maxIntegralError;
-        this.deadband = deadband;
+        this.deadband = requireNonNegative(deadband);
     }
 
     /**
