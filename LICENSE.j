@@ -23,28 +23,3 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-package ca.team3161.lib.utils.controls;
-
-/**
- * A JoystickMode which squares the Joystick's raw input, but preserves
- * sign.
- * 0.5 on an axis becomes 0.25, for example, but -0.5 becomes -0.25.
- */
-public final class SquaredJoystickMode implements JoystickMode {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double adjust(final double raw) {
-        final double negate;
-        if (raw < 0.0d) {
-            negate = -1.0d;
-        } else {
-            negate = 1.0d;
-        }
-        return negate * Math.abs(raw * raw);
-    }
-
-}

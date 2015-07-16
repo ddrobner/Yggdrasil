@@ -6,8 +6,13 @@ what the following rules do, please see the checkstyle configuration
 page at http://checkstyle.sourceforge.net/config.html -->
 <module name="Checker">
 
+  <module name="Header">
+    <property name="headerFile" value="LICENSE.j"/>
+    <property name="ignoreLines" value="2"/>
+    <property name="fileExtensions" value="java"/>
+  </module>
 
-  <module name="RegexpSingleline">
+<module name="RegexpSingleline">
     <!-- Requires an FRC 3161 copyright notice in each file.
       Code intended to be open-sourced may have a multi-line copyright
       notice, so that this required text appears on the second line:
