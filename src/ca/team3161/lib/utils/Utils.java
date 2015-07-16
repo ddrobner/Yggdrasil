@@ -49,4 +49,21 @@ public class Utils {
         }
         return val;
     }
+
+    /**
+     * Normalize a PWM value so it remains in the range [-1.0, 1.0]
+     * If a value above 1.0 is given, 1.0 is returned. If a value below -1.0
+     * is given, -1.0 is returned. For other values, they are simply returned
+     * @param val the value to normalize
+     * @return the normalized value
+     */
+    public static float normalizePwm(final float val) {
+        if (val < -1.0f) {
+            return -1.0f;
+        }
+        if (val > 1.0f) {
+            return 1.0f;
+        }
+        return val;
+    }
 }

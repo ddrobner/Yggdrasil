@@ -30,6 +30,8 @@ import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import static ca.team3161.lib.utils.Utils.normalizePwm;
+
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
@@ -178,13 +180,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
         output = (pOut + iOut + dOut);
 
-        if (output > 1.0f) {
-            return 1.0f;
-        }
-        if (output < -1.0f) {
-            return -1.0f;
-        }
-        return output;
+        return normalizePwm(output);
     }
 
     @Override

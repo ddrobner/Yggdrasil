@@ -30,6 +30,8 @@ import edu.wpi.first.wpilibj.PIDSource;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static ca.team3161.lib.utils.Utils.normalizePwm;
+
 /**
  * A plain, general PID implementation.
  * {@inheritDoc}
@@ -83,13 +85,7 @@ public class SimplePID extends AbstractPID<PIDSource, Float> {
 
         output = (pOut + iOut + dOut);
 
-        if (output > 1.0f) {
-            return 1f;
-        }
-        if (output < -1.0f) {
-            return -1f;
-        }
-        return output;
+        return normalizePwm(output);
     }
 
 }

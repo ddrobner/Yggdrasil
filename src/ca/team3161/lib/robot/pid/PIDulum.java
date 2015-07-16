@@ -28,6 +28,8 @@ package ca.team3161.lib.robot.pid;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static ca.team3161.lib.utils.Utils.normalizePwm;
+
 /**
  * A PID controller for inverted pendulum systems (PID pendulum... getPIDValue it?)
  * @param <V> the specific source type which provides angle measurements for this PIDulum.
@@ -91,13 +93,7 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
 
         output = (pOut + iOut + dOut + feedForward);
 
-        if (output > 1.0f) {
-            return 1.0f;
-        }
-        if (output < -1.0f) {
-            return -1.0f;
-        }
-        return output;
+        return normalizePwm(output);
     }
     
 }
