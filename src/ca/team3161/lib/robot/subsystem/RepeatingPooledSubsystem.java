@@ -26,8 +26,10 @@
 
 package ca.team3161.lib.robot.subsystem;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static ca.team3161.lib.utils.Assert.requireNonNegative;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A Subsystem whose task is run repeatedly with a specified period, until cancelled.
@@ -38,9 +40,9 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
     private final TimeUnit timeUnit;
 
     public RepeatingPooledSubsystem(final long timeout, final TimeUnit timeUnit) {
-        Objects.requireNonNull(timeUnit);
-        this.timeout = timeout;
-        this.timeUnit = timeUnit;
+        requireNonNull(timeUnit);
+        this.timeout = requireNonNegative(timeout);
+        this.timeUnit = requireNonNull(timeUnit);
     }
 
     /**

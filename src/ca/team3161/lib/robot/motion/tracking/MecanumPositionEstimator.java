@@ -54,13 +54,6 @@ public class MecanumPositionEstimator extends AbstractPositionEstimator {
                                     final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
                                     final Encoder backLeftEncoder, final Encoder backRightEncoder) {
         super(chassisParameters, accelerometer, gyro, frontLeftEncoder, frontRightEncoder, backLeftEncoder, backRightEncoder);
-        Objects.requireNonNull(chassisParameters);
-        Objects.requireNonNull(accelerometer);
-        Objects.requireNonNull(gyro);
-        Objects.requireNonNull(frontLeftEncoder);
-        Objects.requireNonNull(frontRightEncoder);
-        Objects.requireNonNull(backLeftEncoder);
-        Objects.requireNonNull(backRightEncoder);
     }
 
     @Override

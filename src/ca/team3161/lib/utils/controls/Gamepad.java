@@ -28,11 +28,12 @@ package ca.team3161.lib.utils.controls;
 import edu.wpi.first.wpilibj.GenericHID;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An interface defining a Gamepad controller. All Gamepads are expected to
@@ -298,10 +299,8 @@ public interface Gamepad {
          * @param pressType the press type
          */
         public Binding(final Set<Button> buttons, final PressType pressType) {
-            Objects.requireNonNull(buttons);
-            Objects.requireNonNull(pressType);
-            this.buttons = buttons;
-            this.pressType = pressType;
+            this.buttons = requireNonNull(buttons);
+            this.pressType = requireNonNull(pressType);
         }
 
         /**
@@ -385,10 +384,8 @@ public interface Gamepad {
          * @param axis the axis
          */
         public Mapping(final Control control, final Axis axis) {
-            Objects.requireNonNull(control);
-            Objects.requireNonNull(axis);
-            this.control = control;
-            this.axis = axis;
+            this.control = requireNonNull(control);
+            this.axis = requireNonNull(axis);
         }
 
         /**

@@ -28,6 +28,7 @@ package ca.team3161.lib.robot.motion.tracking;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.robot.motion.Position;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
@@ -36,7 +37,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -85,20 +85,13 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
                                      final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
                                      final Encoder backLeftEncoder, final Encoder backRightEncoder) {
         super(10, TimeUnit.MILLISECONDS);
-        Objects.requireNonNull(chassisParameters);
-        Objects.requireNonNull(accelerometer);
-        Objects.requireNonNull(gyro);
-        Objects.requireNonNull(frontLeftEncoder);
-        Objects.requireNonNull(frontRightEncoder);
-        Objects.requireNonNull(backLeftEncoder);
-        Objects.requireNonNull(backRightEncoder);
-        this.chassisParameters = chassisParameters;
-        this.accelerometer = accelerometer;
-        this.gyro = gyro;
-        this.frontLeftEncoder = frontLeftEncoder;
-        this.frontRightEncoder = frontRightEncoder;
-        this.backLeftEncoder = backLeftEncoder;
-        this.backRightEncoder = backRightEncoder;
+        this.chassisParameters = requireNonNull(chassisParameters);
+        this.accelerometer = requireNonNull(accelerometer);
+        this.gyro = requireNonNull(gyro);
+        this.frontLeftEncoder = requireNonNull(frontLeftEncoder);
+        this.frontRightEncoder = requireNonNull(frontRightEncoder);
+        this.backLeftEncoder = requireNonNull(backLeftEncoder);
+        this.backRightEncoder = requireNonNull(backRightEncoder);
 
         final double distancePerPulse = 2 * Math.PI * chassisParameters.getWheelRadius() / chassisParameters.getEncoderCPR();
         frontLeftEncoder.setDistancePerPulse(distancePerPulse);

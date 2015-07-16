@@ -59,6 +59,58 @@ public final class Assert {
     }
 
     /**
+     * Assert that an int is greater than 0
+     * @param in the argument which must be non-negative
+     * @return the argument back
+     * @throws ca.team3161.lib.utils.Assert.AssertionException if the argument is less than 0
+     */
+    public static int requireNonNegative(int in) {
+        if (in < 0) {
+            throw new AssertionException();
+        }
+        return in;
+    }
+
+    /**
+     * Assert that a long is greater than 0
+     * @param in the argument which must be non-negative
+     * @return the argument back
+     * @throws ca.team3161.lib.utils.Assert.AssertionException if the argument is less than 0
+     */
+    public static long requireNonNegative(long in) {
+        if (in < 0) {
+            throw new AssertionException();
+        }
+        return in;
+    }
+
+    /**
+     * Assert that a double is greater than 0
+     * @param in the argument which must be non-negative
+     * @return the argument back
+     * @throws ca.team3161.lib.utils.Assert.AssertionException if the argument is less than 0
+     */
+    public static double requireNonNegative(double in) {
+        if (in < 0) {
+            throw new AssertionException();
+        }
+        return in;
+    }
+
+    /**
+     * Assert that a float is greater than 0
+     * @param in the argument which must be non-negative
+     * @return the argument back
+     * @throws ca.team3161.lib.utils.Assert.AssertionException if the argument is less than 0
+     */
+    public static float requireNonNegative(float in) {
+        if (in < 0) {
+            throw new AssertionException();
+        }
+        return in;
+    }
+
+    /**
      * Assert that a condition is false.
      * @param condition throw an exception if the given condition holds
      */

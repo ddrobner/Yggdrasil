@@ -30,8 +30,6 @@ import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
-import java.util.Objects;
-
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
@@ -78,8 +76,6 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
     public VelocityController(final SpeedController speedController, final PIDRateValueSrc<Encoder> encoderPidSrc, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
         super(encoderPidSrc, -1, -1, null, kP, kI, kD);
-        Objects.requireNonNull(speedController);
-        Objects.requireNonNull(encoderPidSrc);
         this.maxRotationalRate = maxRotationalRate;
         this.speedController = speedController;
         this.maxIntegralError = maxIntegralError;

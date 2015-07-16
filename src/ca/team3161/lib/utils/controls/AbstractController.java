@@ -27,19 +27,19 @@
 package ca.team3161.lib.utils.controls;
 
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
-import ca.team3161.lib.utils.Assert;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import static ca.team3161.lib.utils.Assert.requireNonNegative;
 
 /**
  * A Gamepad which allows button bindings and control modes.
@@ -59,15 +59,13 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
 
     protected AbstractController(final int port, final long timeout, final TimeUnit timeUnit) {
         super(timeout, timeUnit);
-        Objects.requireNonNull(timeUnit);
-        Assert.assertTrue(port >= 0);
+        this.port = requireNonNegative(port);
         synchronized (boundPorts) {
             if (boundPorts.get(port)) {
                 throw new IllegalStateException("Port " + port + " is already bound; cannot bind two input devices to the same port");
             }
             boundPorts.set(port);
         }
-        this.port = port;
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
     }
 

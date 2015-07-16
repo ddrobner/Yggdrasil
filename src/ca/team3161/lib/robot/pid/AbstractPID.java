@@ -27,8 +27,10 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.PIDSource;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static ca.team3161.lib.utils.Assert.requireNonNegative;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A PID loop, which uses a PIDSrc and a set of constants to iteratively determine
@@ -69,11 +71,10 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
     public AbstractPID(final PIDSrc<T, V> source, final float deadband,
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD) {
-        Objects.requireNonNull(source);
-        this.source = source;
-        this.deadband = deadband;
-        this.deadbandPeriod = deadbandPeriod;
-        this.deadbandUnit = deadbandUnit;
+        this.source = requireNonNull(source);
+        this.deadband = requireNonNegative(deadband);
+        this.deadbandPeriod = requireNonNegative(deadbandPeriod);
+        this.deadbandUnit = requireNonNull(deadbandUnit);
         this.kP = kP;
         this.kI = kI;
         this.kD = kD;

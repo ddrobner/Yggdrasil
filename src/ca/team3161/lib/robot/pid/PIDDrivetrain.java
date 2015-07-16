@@ -30,8 +30,9 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
@@ -70,17 +71,12 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
             final PID<? extends Encoder, Integer> leftEncoder, final PID<? extends Encoder, Integer> rightEncoder,
             final PID<? extends Gyro, Float> turningPid, final PID<? extends Gyro, Float> bearingPid) {
         super(SUBSYSTEM_TASK_PERIOD, TimeUnit.MILLISECONDS);
-        Objects.requireNonNull(leftDrive);
-        Objects.requireNonNull(rightDrive);
-        Objects.requireNonNull(leftEncoder);
-        Objects.requireNonNull(rightEncoder);
-        Objects.requireNonNull(turningPid);
-        this.leftDrive = leftDrive;
-        this.rightDrive = rightDrive;
-        this.leftEncoder = leftEncoder;
-        this.rightEncoder = rightEncoder;
-        this.turningPid = turningPid;
-        this.bearingPid = bearingPid;
+        this.leftDrive = requireNonNull(leftDrive);
+        this.rightDrive = requireNonNull(rightDrive);
+        this.leftEncoder = requireNonNull(leftEncoder);
+        this.rightEncoder = requireNonNull(rightEncoder);
+        this.turningPid = requireNonNull(turningPid);
+        this.bearingPid = requireNonNull(bearingPid);
         this.notifier = new Object();
     }
 
@@ -122,12 +118,11 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
      * @param t the task type to switch to
      */
     private void setTask(final Task t) {
-        Objects.requireNonNull(t);
+        this.t = requireNonNull(t);
         leftEncoder.clear();
         rightEncoder.clear();
         turningPid.clear();
         bearingPid.clear();
-        this.t = t;
     }
     
     /**

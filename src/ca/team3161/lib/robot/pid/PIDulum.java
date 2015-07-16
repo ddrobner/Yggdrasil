@@ -53,7 +53,6 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
             final float kP, final float kI, final float kD,
             final float offsetAngle, final float torqueConstant) {
         super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
-        Objects.requireNonNull(source);
         this.offsetAngle = offsetAngle;
         this.torqueConstant = torqueConstant;
     }

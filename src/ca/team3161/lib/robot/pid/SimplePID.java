@@ -50,7 +50,6 @@ public class SimplePID extends AbstractPID<PIDSource, Float> {
                      final int deadbandPeriod, final TimeUnit deadbandUnit,
                      final float kP, final float kI, final float kD) {
         super(source, deadband, deadbandPeriod, deadbandUnit, kP, kI, kD);
-        Objects.requireNonNull(source);
     }
 
     /**

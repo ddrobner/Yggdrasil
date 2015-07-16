@@ -27,7 +27,7 @@ package ca.team3161.lib.robot.pid;
 
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
-import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
@@ -49,8 +49,7 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     public PotentiometerVoltagePIDSrc(final Potentiometer pot,
                                       final float minVolt, final float maxVolt,
                                       final float minAngle, final float maxAngle) {
-        Objects.requireNonNull(pot);
-        this.pot = pot;
+        this.pot = requireNonNull(pot);
         this.minVolt = minVolt;
         this.maxVolt = maxVolt;
         this.minAngle = minAngle;
