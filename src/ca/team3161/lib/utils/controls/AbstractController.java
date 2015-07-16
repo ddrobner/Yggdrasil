@@ -54,16 +54,16 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     protected final Map<Binding, Runnable> buttonBindings = new ConcurrentHashMap<>();
     protected final Map<Button, Boolean> buttonStates = new ConcurrentHashMap<>();
     protected final int port;
-    protected static final BitSet boundPorts = new BitSet();
+    protected static final BitSet BOUND_PORTS = new BitSet();
 
     protected AbstractController(final int port, final long timeout, final TimeUnit timeUnit) {
         super(timeout, timeUnit);
         this.port = requireNonNegative(port);
-        synchronized (boundPorts) {
-            if (boundPorts.get(port)) {
+        synchronized (BOUND_PORTS) {
+            if (BOUND_PORTS.get(port)) {
                 throw new IllegalStateException("Port " + port + " is already bound; cannot bind two input devices to the same port");
             }
-            boundPorts.set(port);
+            BOUND_PORTS.set(port);
         }
         backingHID = new Joystick(port); // Joystick happens to work well here, but any GenericHID should be fine
     }
