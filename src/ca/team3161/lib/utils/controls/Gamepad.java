@@ -183,7 +183,7 @@ public interface Gamepad {
      * to other Gamepad implementations.
      *
      * @param binding the binding on which to bind an action
-     * @param binding the action to be bound
+     * @param action the action to be bound
      */
     void bind(Binding binding, Runnable action);
 
