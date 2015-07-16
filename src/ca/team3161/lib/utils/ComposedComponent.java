@@ -31,7 +31,7 @@ package ca.team3161.lib.utils;
  * logical or physical. Physical components cannot be wrapped around other components - these include WPI base
  * classes such as SpeedControllers (including Talons, Jaguars, etc), Potentiometers, Gyros, etc.
  *
- * @param <T>
+ * @param <T> the type of component which this component is wrapped around
  */
 public interface ComposedComponent<T> {
 
