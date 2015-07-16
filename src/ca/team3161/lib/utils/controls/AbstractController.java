@@ -27,7 +27,6 @@
 package ca.team3161.lib.utils.controls;
 
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
-import ca.team3161.lib.utils.Utils;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -60,7 +59,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
 
     protected AbstractController(final int port, final long timeout, final TimeUnit timeUnit) {
         super(timeout, timeUnit);
-        this.port = Utils.requireNonNegative(port);
+        this.port = requireNonNegative(port);
         synchronized (boundPorts) {
             if (boundPorts.get(port)) {
                 throw new IllegalStateException("Port " + port + " is already bound; cannot bind two input devices to the same port");
