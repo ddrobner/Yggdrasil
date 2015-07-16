@@ -72,11 +72,11 @@ public class Utils {
     }
 
     /**
-     * Assert that an int is greater than 0
+     * Assert that an int is greater than 0.
      *
      * @param in the argument which must be non-negative
      * @return the argument back
-     * @throws Assert.AssertionException if the argument is less than 0
+     * @throws IllegalArgumentException if the argument is less than 0
      */
     public static int requireNonNegative(int in) {
         if (in < 0) {
@@ -86,11 +86,11 @@ public class Utils {
     }
 
     /**
-     * Assert that a long is greater than 0
+     * Assert that a long is greater than 0.
      *
      * @param in the argument which must be non-negative
      * @return the argument back
-     * @throws Assert.AssertionException if the argument is less than 0
+     * @throws IllegalArgumentException if the argument is less than 0
      */
     public static long requireNonNegative(long in) {
         if (in < 0) {
@@ -100,11 +100,11 @@ public class Utils {
     }
 
     /**
-     * Assert that a double is greater than 0
+     * Assert that a double is greater than 0.
      *
      * @param in the argument which must be non-negative
      * @return the argument back
-     * @throws Assert.AssertionException if the argument is less than 0
+     * @throws IllegalArgumentException if the argument is less than 0
      */
     public static double requireNonNegative(double in) {
         if (in < 0) {
@@ -114,11 +114,11 @@ public class Utils {
     }
 
     /**
-     * Assert that a float is greater than 0
+     * Assert that a float is greater than 0.
      *
      * @param in the argument which must be non-negative
      * @return the argument back
-     * @throws Assert.AssertionException if the argument is less than 0
+     * @throws IllegalArgumentException if the argument is less than 0
      */
     public static float requireNonNegative(float in) {
         if (in < 0) {
