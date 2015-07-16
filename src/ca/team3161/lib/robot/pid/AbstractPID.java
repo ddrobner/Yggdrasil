@@ -25,11 +25,12 @@
 
 package ca.team3161.lib.robot.pid;
 
+import ca.team3161.lib.utils.Utils;
 import edu.wpi.first.wpilibj.PIDSource;
 
 import java.util.concurrent.TimeUnit;
 
-import static ca.team3161.lib.utils.Assert.requireNonNegative;
+import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -72,8 +73,8 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
             final int deadbandPeriod, final TimeUnit deadbandUnit,
             final float kP, final float kI, final float kD) {
         this.source = requireNonNull(source);
-        this.deadband = requireNonNegative(deadband);
-        this.deadbandPeriod = requireNonNegative(deadbandPeriod);
+        this.deadband = Utils.requireNonNegative(deadband);
+        this.deadbandPeriod = Utils.requireNonNegative(deadbandPeriod);
         this.deadbandUnit = requireNonNull(deadbandUnit);
         this.kP = kP;
         this.kI = kI;

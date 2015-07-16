@@ -26,9 +26,11 @@
 
 package ca.team3161.lib.robot.subsystem;
 
+import ca.team3161.lib.utils.Utils;
+
 import java.util.concurrent.TimeUnit;
 
-import static ca.team3161.lib.utils.Assert.requireNonNegative;
+import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,7 +43,7 @@ public abstract class RepeatingPooledSubsystem extends AbstractPooledSubsystem {
 
     public RepeatingPooledSubsystem(final long timeout, final TimeUnit timeUnit) {
         requireNonNull(timeUnit);
-        this.timeout = requireNonNegative(timeout);
+        this.timeout = Utils.requireNonNegative(timeout);
         this.timeUnit = requireNonNull(timeUnit);
     }
 
