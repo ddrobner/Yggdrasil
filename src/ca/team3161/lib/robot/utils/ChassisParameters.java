@@ -26,6 +26,7 @@
 
 package ca.team3161.lib.robot.utils;
 
+import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.lang.Double.compare;
 
 /**
@@ -45,11 +46,11 @@ public class ChassisParameters {
      */
     public ChassisParameters(final double wheelRadius, final double wheelBaseLength, final double wheelBaseWidth,
                              final double encoderWheelGearRatio, final double encoderCPR) {
-        this.wheelRadius = wheelRadius;
-        this.wheelBaseLength = wheelBaseLength;
-        this.wheelBaseWidth = wheelBaseWidth;
-        this.encoderWheelGearRatio = encoderWheelGearRatio;
-        this.encoderCPR = encoderCPR;
+        this.wheelRadius = requireNonNegative(wheelRadius);
+        this.wheelBaseLength = requireNonNegative(wheelBaseLength);
+        this.wheelBaseWidth = requireNonNegative(wheelBaseWidth);
+        this.encoderWheelGearRatio = requireNonNegative(encoderWheelGearRatio);
+        this.encoderCPR = requireNonNegative(encoderCPR);
     }
 
     /**
