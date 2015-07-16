@@ -121,7 +121,7 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
         getButtons().parallelStream().forEach(button -> buttonStates.put(button, getButton(button)));
         synchronized (controlsMapping) {
             controlsMapping.entrySet().parallelStream().forEach(mapping ->
-                                                                        mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
+                mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
         }
         synchronized (buttonBindings) {
             buttonBindings.entrySet().parallelStream().forEach(binding -> {
