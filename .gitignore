@@ -2,3 +2,5 @@ build/
 dist/
 doc/
 README.html
+checkstyle/*.jar
+checkstyle/*.xml
