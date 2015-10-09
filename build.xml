@@ -4,11 +4,8 @@
         <pathelement location="${basedir}/antlib/ant-contrib/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
-  <taskdef resource="checkstyletask.properties">
-    <classpath>
-        <pathelement location="${basedir}/checkstyle/checkstyle-6.2-all.jar"/>
-    </classpath>
-  </taskdef>
+  <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+      classpath="${basedir}/checkstyle/checkstyle-6.11.2-all.jar"/>
 
   <description>
       Apache Ant build file for Yggdrasil
@@ -27,6 +24,10 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
+    <exec executable="sh">
+        <arg value="-c"/>
+        <arg value="echo 1 | ${checkstyle}/download.sh"/>
+    </exec>
   </target>
 
   <target name="compile" depends="init"
@@ -95,7 +96,9 @@
   <target name="checkstyle-available">
       <condition property="checkstyle-jar-available">
           <resourcecount when="greater" count="0">
-              <fileset file="${checkstyle}/checkstyle*.jar"/>
+              <fileset dir="${checkstyle}">
+                  <include name="*.jar"/>
+              </fileset>
           </resourcecount>
       </condition>
   </target>
