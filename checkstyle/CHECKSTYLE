@@ -1,6 +1,6 @@
 Download the Checkstyle JAR (version 6.11.2+) and place it in this directory.
 
 The easiest way to do this is probably to run the download.sh script in this
-directory, but you will need sh for this.
+directory, but you will need bash for this.
 
 http://checkstyle.sourceforge.net/

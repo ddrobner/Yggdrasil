@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 DEFAULT_VERSION="6.11.2"
 
