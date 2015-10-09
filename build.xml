@@ -24,6 +24,10 @@
     <tstamp/>
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
+    <exec executable="sh">
+        <arg value="-c"/>
+        <arg value="echo 1 | ${checkstyle}/download.sh"/>
+    </exec>
   </target>
 
   <target name="compile" depends="init"
