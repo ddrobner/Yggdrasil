@@ -26,15 +26,14 @@
 
 package ca.team3161.lib.robot.motion.drivetrains;
 
-import ca.team3161.lib.utils.Utils;
+import static ca.team3161.lib.utils.Utils.normalizePwm;
+import static java.util.Objects.requireNonNull;
+
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.Optional;
-
-import static ca.team3161.lib.utils.Utils.normalizePwm;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A prepackaged mecanum drive solution, suitable for 4-wheeled Mecanum drivetrains.
@@ -124,6 +123,10 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
                 gyro.flatMap(g -> Optional.ofNullable(g.getAngle())).orElse(0.0));
     }
 
+    /**
+     * A Builder for mecanum drivetrains. Provides an easy way to make mecanum drivetrains without having to remember
+     * parameter order.
+     */
     public static class Builder {
         private SpeedController frontLeftController;
         private SpeedController frontRightController;
@@ -132,7 +135,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         private Gyro gyro;
 
         /**
-         * Use the given parameters and construct a MecanumDrivetrain
+         * Use the given parameters and construct a MecanumDrivetrain.
          * @return a MecanumDrivetrain instance
          */
         public MecanumDrivetrain build() {
@@ -141,7 +144,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the front left controller to use
+         * Set the front left controller to use.
          * @param frontLeftController the controller
          * @return this builder
          */
@@ -151,7 +154,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the front right controller to use
+         * Set the front right controller to use.
          * @param frontRightController the controller
          * @return this builder
          */
@@ -161,7 +164,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the back left controller to use
+         * Set the back left controller to use.
          * @param backLeftController the controller
          * @return this builder
          */
@@ -171,7 +174,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the back right controller to use
+         * Set the back right controller to use.
          * @param backRightController the controller
          * @return this builder
          */
@@ -181,7 +184,7 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the gyro to use (optional)
+         * Set the gyro to use (optional).
          * @param gyro the gyro
          * @return this builder
          */

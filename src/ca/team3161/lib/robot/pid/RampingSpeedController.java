@@ -120,6 +120,10 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
         }
     }
 
+    /**
+     * A Builder for RampingSpeedControllers. Provides an easy way to make RampingSpeedControllers without having to remember
+     * parameter order.
+     */
     public static class Builder {
 
         private SpeedController controller;
@@ -129,7 +133,7 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
         private double secondFilter = Double.MAX_VALUE;
 
         /**
-         * Use the given parameters to construct a RampingSpeedController
+         * Use the given parameters to construct a RampingSpeedController.
          * @return a RampingSpeedController instance
          */
         public RampingSpeedController build() {
@@ -138,7 +142,7 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
         }
 
         /**
-         * Set the SpeedController to use
+         * Set the SpeedController to use.
          * @param controller the controller
          * @return this builder
          */

@@ -30,6 +30,9 @@ import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Abstract parent class for prepackaged drivetrain base solutions.
+ */
 public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem {
 
     AbstractDrivetrainBase(long timeout, TimeUnit timeUnit) {

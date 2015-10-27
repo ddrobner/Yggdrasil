@@ -257,7 +257,7 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * @param leftDrive the left drive controller(s). {@see ca.team3161.lib.robot.SpeedControllerGroup}
+         * @param leftDrive the left drive controller(s). See {@link ca.team3161.lib.robot.SpeedControllerGroup}
          * @return this builder
          */
         public Builder leftDrive(SpeedController leftDrive) {

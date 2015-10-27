@@ -26,11 +26,11 @@
 
 package ca.team3161.lib.robot.motion.drivetrains;
 
-import ca.team3161.lib.robot.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.RobotDrive;
-
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 import static java.util.Objects.requireNonNull;
+
+import ca.team3161.lib.robot.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.RobotDrive;
 
 /**
  * A prepackaged tankdrive solution, suitable for standard 4, 6, or even 8-wheeled tank drive variants.
@@ -102,12 +102,16 @@ public class TankDrivetrain extends AbstractDrivetrainBase {
         drivebase.tankDrive(leftTarget, rightTarget);
     }
 
+    /**
+     * A Builder for tank drivetrains. Provides an easy way to make tank drivetrains without having to remember
+     * parameter order.
+     */
     public static class Builder {
         private SpeedControllerGroup leftControllers;
         private SpeedControllerGroup rightControllers;
 
         /**
-         * Use the given parameters and construct a TankDrivetrain
+         * Use the given parameters and construct a TankDrivetrain.
          * @return a TankDrivetrain instance
          */
         public TankDrivetrain build() {
@@ -116,7 +120,7 @@ public class TankDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the left-side SpeedControllerGroup to use. A group can contain one or more SpeedControllers
+         * Set the left-side SpeedControllerGroup to use. A group can contain one or more SpeedControllers.
          * @param leftControllers the left controllers
          * @return this builder
          */
@@ -126,7 +130,7 @@ public class TankDrivetrain extends AbstractDrivetrainBase {
         }
 
         /**
-         * Set the right-side SpeedControllerGroup to use. A group can contain one or more SpeedControllers
+         * Set the right-side SpeedControllerGroup to use. A group can contain one or more SpeedControllers.
          * @param rightControllers the right controllers
          * @return this builder
          */

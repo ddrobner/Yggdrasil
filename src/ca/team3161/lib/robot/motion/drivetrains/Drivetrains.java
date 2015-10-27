@@ -26,15 +26,26 @@
 
 package ca.team3161.lib.robot.motion.drivetrains;
 
+/**
+ * Static helper methods for setting up prepackaged drivetrain solutions.
+ */
 public final class Drivetrains {
 
     private Drivetrains() {}
 
-    public static TankDrivetrain.Builder tankdriveWithoutPid() {
+    /**
+     * Make a new tank drivetrain base.
+     * @return a tank drivetrain
+     */
+    public static TankDrivetrain.Builder tankdrive() {
         return new TankDrivetrain.Builder();
     }
 
-    public static MecanumDrivetrain.Builder mecanumDrivetrainWithPid() {
+    /**
+     * Make a new mecanum drivetrain base.
+     * @return a mecanum drivetrain
+     */
+    public static MecanumDrivetrain.Builder mecanum() {
         return new MecanumDrivetrain.Builder();
     }
 
