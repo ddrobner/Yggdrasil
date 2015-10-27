@@ -68,8 +68,8 @@ public abstract class AbstractSubsystem implements Subsystem {
     @SuppressWarnings("unchecked")
     public final void require(final Object resource) {
         Objects.requireNonNull(resource);
-        resourceLocks.add(ResourceTracker.track(resource));
-        if (resource instanceof ComposedComponent) {
+        boolean alreadyTracked = !resourceLocks.add(ResourceTracker.track(resource));
+        if (!alreadyTracked && (resource instanceof ComposedComponent)) {
             ComposedComponent cc = (ComposedComponent) resource;
             cc.getComposedComponents().forEach(this::require);
         }
