@@ -41,39 +41,39 @@ import java.util.stream.Collectors;
 /**
  * Implements a container for SpeedControllers.
  */
-public final class Drivetrain implements SpeedController, ComposedComponent<Set<SpeedController>> {
+public final class SpeedControllerGroup implements SpeedController, ComposedComponent<Set<SpeedController>> {
 
     private final Set<SpeedController> speedControllers = new HashSet<>();
     private float inversion = 1.0f;
 
     /**
-     * Create a new Drivetrain instance.
+     * Create a new SpeedControllerGroup instance.
      *
      * @param controllers a varargs list or array of SpeedController objects. May be
      *                    all the same type, or may be mixed.
      */
-    public Drivetrain(final SpeedController... controllers) {
+    public SpeedControllerGroup(final SpeedController... controllers) {
         this(Arrays.asList(controllers));
     }
 
     /**
-     * Create a new Drivetrain instance.
+     * Create a new SpeedControllerGroup instance.
      *
-     * @param controllers a collection of SpeedControllers for this Drivetrain to manage
+     * @param controllers a collection of SpeedControllers for this SpeedControllerGroup to manage
      */
-    public Drivetrain(final Collection<SpeedController> controllers) {
+    public SpeedControllerGroup(final Collection<SpeedController> controllers) {
         Objects.requireNonNull(controllers);
-        Assert.assertTrue("Must have at least one SpeedController per Drivetrain", controllers.size() > 0);
+        Assert.assertTrue("Must have at least one SpeedController per SpeedControllerGroup", controllers.size() > 0);
         speedControllers.addAll(controllers);
     }
 
     /**
-     * Invert all PWM values for this Drivetrain.
+     * Invert all PWM values for this SpeedControllerGroup.
      *
      * @param inverted whether the PWM values should be inverted or not
-     * @return this Drivetrain instance
+     * @return this SpeedControllerGroup instance
      */
-    public Drivetrain setInverted(final boolean inverted) {
+    public SpeedControllerGroup setInverted(final boolean inverted) {
         if (inverted) {
             inversion = -1.0f;
         } else {
@@ -83,7 +83,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
     }
 
     /**
-     * The current speed of this Drivetrain.
+     * The current speed of this SpeedControllerGroup.
      *
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
      */
@@ -95,7 +95,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
     }
 
     /**
-     * Return the list of SpeedControllers which this Drivetrain was constructed with.
+     * Return the list of SpeedControllers which this SpeedControllerGroup was constructed with.
      *
      * @return the SpeedControllers.
      */
@@ -105,7 +105,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
     }
 
     /**
-     * The speeds of all SpeedControllers within this Drivetrain.
+     * The speeds of all SpeedControllers within this SpeedControllerGroup.
      * They should all be nearly identical, other than error due to floating point
      * precision.
      *

@@ -24,20 +24,24 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.pid;
+package ca.team3161.lib.robot.motion.drivetrains;
 
 import static java.util.Objects.requireNonNull;
 
-import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
+import ca.team3161.lib.robot.pid.GyroAnglePIDSrc;
+import ca.team3161.lib.robot.pid.PID;
+import ca.team3161.lib.robot.pid.SimplePID;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
+
 import java.util.concurrent.TimeUnit;
 
 /**
- * A Drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
+ * A drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
+ * WARNING! This class is only intended and designed for autonomous usage!
  */
-public final class PIDDrivetrain extends RepeatingPooledSubsystem {
+public final class PIDDrivetrain extends AbstractDrivetrainBase {
 
     public static final long SUBSYSTEM_TASK_PERIOD = 20L;
     private final SpeedController leftDrive, rightDrive;
@@ -79,6 +83,17 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
         this.turningPid = requireNonNull(turningPid);
         this.bearingPid = requireNonNull(bearingPid);
         this.notifier = new Object();
+    }
+
+    /**
+     * Create a new PIDDrivetrain instance from a Builder.
+     * @param builder the PIDDrivetrain.Builder which contains all the parameters
+     *                of this PIDDrivetrain.
+     */
+    public PIDDrivetrain(Builder builder) {
+        this(builder.leftDrive, builder.rightDrive,
+                builder.leftPidController, builder.rightPidController,
+                builder.turningPid, builder.bearingPid);
     }
 
     /**
@@ -145,8 +160,22 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
     /**
      * Iteratively PID loop.
      */
+    @Override
     public void task() {
-        t.run();
+        if (t != null) {
+            t.run();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void stop() {
+        t = null;
+        reset();
+        leftDrive.disable();
+        rightDrive.disable();
     }
 
     /**
@@ -205,6 +234,97 @@ public final class PIDDrivetrain extends RepeatingPooledSubsystem {
                 turningPid.clear();
             }
         }
+    }
+
+    /**
+     * A Builder to facilitate easy instantation of PIDDrivetrains.
+     */
+    public static class Builder {
+        private SpeedController leftDrive;
+        private SpeedController rightDrive;
+        private PID<? extends Encoder, Integer> leftPidController;
+        private PID<? extends Encoder, Integer> rightPidController;
+        private PID<? extends Gyro, Float> turningPid;
+        private PID<? extends Gyro, Float> bearingPid;
+
+        /**
+         * Verify components and create the PIDDrivetrain.
+         * @return the PIDDrivetrain instance.
+         */
+        public PIDDrivetrain build() {
+            verify();
+            return new PIDDrivetrain(this);
+        }
+
+        /**
+         * @param leftDrive the left drive controller(s). {@see ca.team3161.lib.robot.SpeedControllerGroup}
+         * @return this builder
+         */
+        public Builder leftDrive(SpeedController leftDrive) {
+            this.leftDrive = leftDrive;
+            return this;
+        }
+
+        /**
+         * @param rightDrive the right drive controller(s). See {@link ca.team3161.lib.robot.SpeedControllerGroup}
+         * @return this builder
+         */
+        public Builder rightDrive(SpeedController rightDrive) {
+            this.rightDrive = rightDrive;
+            return this;
+        }
+
+        /**
+         * @param leftPidController left PID-enabled controller. See {@link ca.team3161.lib.robot.pid.VelocityController}
+         * @return this builder
+         */
+        public Builder leftPidController(PID<? extends Encoder, Integer> leftPidController) {
+            this.leftPidController = leftPidController;
+            return this;
+        }
+
+        /**
+         * @param rightPidController right PID-enabled controller. See {@link ca.team3161.lib.robot.pid.VelocityController}
+         * @return this builder
+         */
+        public Builder rightPidController(PID<? extends Encoder, Integer> rightPidController) {
+            this.rightPidController = rightPidController;
+            return this;
+        }
+
+        /**
+         * @param turningPid turning-tracking PID source for turning tasks. See
+         *                   {@link SimplePID} and {@link GyroAnglePIDSrc}
+         * @return this builder
+         */
+        private Builder turningPid(PID<? extends Gyro, Float> turningPid) {
+            this.turningPid = turningPid;
+            return this;
+        }
+
+        /**
+         * @param bearingPid bearing-tracking PID source for driving straight in driving tasks. See
+         *                   {@link SimplePID} and {@link GyroAnglePIDSrc}
+         * @return this builder
+         */
+        private Builder bearingPid(PID<? extends Gyro, Float> bearingPid) {
+            this.bearingPid = bearingPid;
+            return this;
+        }
+
+        private void verify() {
+            requireNonNull(leftDrive, error("leftDrive"));
+            requireNonNull(rightDrive, error("rightDrive"));
+            requireNonNull(leftPidController, error("leftPidController"));
+            requireNonNull(rightPidController, error("rightPidController"));
+            requireNonNull(turningPid, error("turningPid"));
+            requireNonNull(bearingPid, error("bearingPid"));
+        }
+
+        private static String error(String component) {
+            return component + " cannot be null!";
+        }
+
     }
 
 }

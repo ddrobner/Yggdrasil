@@ -26,8 +26,10 @@
 
 package ca.team3161.lib.robot;
 
+import ca.team3161.lib.robot.motion.drivetrains.AbstractDrivetrainBase;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -45,8 +47,10 @@ public abstract class TitanBot extends IterativeRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
+    private Optional<AbstractDrivetrainBase> drivetrainBase;
 
     /**
+     * DO NOT CALL THIS MANUALLY!
      * At the start of the autonomous period, start a new background task
      * using the behaviour described in the concrete subclass implementation's
      * autonomousRoutine() method.
@@ -94,6 +98,7 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     /**
+     * DO NOT CALL THIS MANUALLY!
      * Handles running teleopRoutine periodically.
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
@@ -110,16 +115,49 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     /**
-     * Called once when the robot enters the teleop mode.
+     * DO NOT CALL THIS MANUALLY!
      */
     @Override
-    public abstract void teleopInit();
+    public final void teleopInit() {
+        drivetrainBase.ifPresent(AbstractDrivetrainBase::start);
+        teleopSetup();
+    }
+
+    /**
+     * Called once when the robot enters the teleop mode.
+     */
+    public abstract void teleopSetup();
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
+     */
+    @Override
+    public final void robotInit() {
+        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
+        robotSetup();
+    }
 
     /**
      * Called once each time the robot is turned on.
      */
+    public abstract void robotSetup();
+
+    /**
+     * Called once when the robot enters the disabled state.
+     */
+    public abstract void disabledSetup();
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
+     */
     @Override
-    public abstract void robotInit();
+    public final void disabledInit() {
+        drivetrainBase.ifPresent(base -> {
+            base.stop();
+            base.cancel();
+        });
+        disabledSetup();
+    }
 
     /**
      * Periodically called during robot teleop mode to enable operator control.
@@ -143,4 +181,11 @@ public abstract class TitanBot extends IterativeRobot {
      * @return the length of the Autonomous period, in seconds.
      */
     public abstract int getAutonomousPeriodLengthSeconds();
+
+    /**
+     * Define the drivetrain base (see {@link ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain},
+     * {@link ca.team3161.lib.robot.motion.drivetrains.MecanumDrivetrain} to use. If none desired then this method
+     * should simply return null.
+     */
+    public abstract AbstractDrivetrainBase getDrivetrainBase();
 }
