@@ -33,8 +33,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
- * to ensure separation of task runs
+ * Tracks robot resources (sensors, motor controllers, etc.) to allow Subsystems
+ * to ensure separation of task runs.
  */
 public final class ResourceTracker {
 
