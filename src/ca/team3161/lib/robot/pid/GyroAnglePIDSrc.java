@@ -41,30 +41,49 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
 
     private final Gyro gyro;
 
+    /**
+     * Create a new GyroAnglePIDSrc instance.
+     * @param gyro a Gyro object to use as a PIDSrc.
+     */
     public GyroAnglePIDSrc(final Gyro gyro) {
         this.gyro = requireNonNull(gyro);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getPIDValue() {
         return (float) gyro.getAngle();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getMinAngle() {
         return 0f;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getMaxAngle() {
         return 360f;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Gyro getSensor() {
         return gyro;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<Gyro> getComposedComponents() {
         return Collections.singleton(gyro);

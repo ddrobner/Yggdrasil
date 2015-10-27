@@ -51,9 +51,7 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder>, ComposedComp
     }
 
     /**
-     * Retrieve the original sensor used to construct this PIDSrc.
-     *
-     * @return the Encoder
+     * {@inheritDoc}
      */
     @Override
     public Encoder getSensor() {
@@ -68,6 +66,9 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder>, ComposedComp
         return (float) enc.getRate();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<Encoder> getComposedComponents() {
         return Collections.singleton(enc);

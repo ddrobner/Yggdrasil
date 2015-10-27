@@ -26,10 +26,9 @@
 
 package ca.team3161.lib.robot.pid;
 
-import ca.team3161.lib.utils.ComposedComponent;
-
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;

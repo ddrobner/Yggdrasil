@@ -53,6 +53,10 @@ public interface PIDSrc<T extends PIDSource, V extends Number> extends PIDSource
      */
     V getPIDValue();
 
+    /**
+     * Get the PID value measured by this sensor.
+     * @return the PID value.
+     */
     default double pidGet() {
         return getPIDValue().doubleValue();
     }

@@ -63,9 +63,7 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     }
 
     /**
-     * Retrieve the original sensor used to construct this PIDSrc.
-     *
-     * @return the Potentiometer
+     * {@inheritDoc}
      */
     @Override
     public Potentiometer getSensor() {
@@ -73,9 +71,7 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     }
 
     /**
-     * Inherited from PIDSrc.
-     *
-     * @return the measured value of this PIDSrc
+     * {@inheritDoc}
      */
     public Float getAngle() {
         final float slope = (maxAngle - minAngle) / (maxVolt - minVolt);
@@ -89,9 +85,7 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     }
 
     /**
-     * Inherited from AnglePidSrc.
-     *
-     * @return the minimal angle of this sensor
+     * {@inheritDoc}
      */
     @Override
     public Float getMinAngle() {
@@ -99,15 +93,16 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     }
 
     /**
-     * Inherited from AnglePidSrc.
-     *
-     * @return the maximal angle of this sensor
+     * {@inheritDoc}
      */
     @Override
     public Float getMaxAngle() {
         return maxAngle;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<Potentiometer> getComposedComponents() {
         return Collections.singleton(pot);

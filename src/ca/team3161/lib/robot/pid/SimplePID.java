@@ -92,6 +92,9 @@ public class SimplePID extends AbstractPID<PIDSource, Float> implements Composed
         return normalizePwm(output);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<PIDSrc<PIDSource, Float>> getComposedComponents() {
         return Collections.singleton(source);

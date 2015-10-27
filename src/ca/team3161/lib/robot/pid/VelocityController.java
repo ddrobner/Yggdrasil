@@ -115,6 +115,9 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.set(pid(target * maxRotationalRate), b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getRate() {
         return source.getPIDValue();
@@ -152,11 +155,17 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.pidWrite(v);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<Object> getComposedComponents() {
         return Arrays.asList(speedController, source);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float pid(final Float target) {
         float kErr;
@@ -194,11 +203,17 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         return normalizePwm(output);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Encoder getSensor() {
         return source.getSensor();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getPIDValue() {
         return getRate();
