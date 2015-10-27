@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Implements a container for SpeedControllers.
  */
-public final class SpeedControllerGroup implements SpeedController, ComposedComponent<Set<SpeedController>> {
+public final class SpeedControllerGroup implements SpeedController, ComposedComponent<SpeedController> {
 
     private final Set<SpeedController> speedControllers = new HashSet<>();
     private float inversion = 1.0f;
@@ -100,7 +100,7 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
      * @return the SpeedControllers.
      */
     @Override
-    public Set<SpeedController> getComposedComponent() {
+    public Collection<SpeedController> getComposedComponents() {
         return new HashSet<>(speedControllers);
     }
 

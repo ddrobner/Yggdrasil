@@ -28,12 +28,16 @@ package ca.team3161.lib.robot.pid;
 
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A PID source that returns values as encoder rates.
  */
-public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
+public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder>, ComposedComponent<Encoder> {
 
     private final Encoder enc;
 
@@ -62,5 +66,10 @@ public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder> {
     @Override
     public Float getPIDValue() {
         return (float) enc.getRate();
+    }
+
+    @Override
+    public Collection<Encoder> getComposedComponents() {
+        return Collections.singleton(enc);
     }
 }

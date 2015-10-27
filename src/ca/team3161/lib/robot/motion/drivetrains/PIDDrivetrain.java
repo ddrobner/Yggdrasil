@@ -31,17 +31,20 @@ import static java.util.Objects.requireNonNull;
 import ca.team3161.lib.robot.pid.GyroAnglePIDSrc;
 import ca.team3161.lib.robot.pid.PID;
 import ca.team3161.lib.robot.pid.SimplePID;
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 /**
  * A drivetrain controller that uses PID objects and is able to accurately drive straight and turn by degrees.
  * WARNING! This class is only intended and designed for autonomous usage!
  */
-public final class PIDDrivetrain extends AbstractDrivetrainBase {
+public final class PIDDrivetrain extends AbstractDrivetrainBase implements ComposedComponent<Object> {
 
     public static final long SUBSYSTEM_TASK_PERIOD = 20L;
     private final SpeedController leftDrive, rightDrive;
@@ -187,6 +190,14 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase {
         synchronized (notifier) {
             notifier.wait();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Object> getComposedComponents() {
+        return Arrays.asList(leftDrive, rightDrive, leftEncoder, rightEncoder, turningPid, bearingPid);
     }
 
     /**

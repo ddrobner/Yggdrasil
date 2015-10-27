@@ -28,14 +28,18 @@ package ca.team3161.lib.robot.pid;
 
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.PIDSource;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 /**
  * A plain, general PID implementation.
  * {@inheritDoc}
  */
-public class SimplePID extends AbstractPID<PIDSource, Float> {
+public class SimplePID extends AbstractPID<PIDSource, Float> implements ComposedComponent<PIDSrc<PIDSource, Float>> {
 
     /**
      * Create a new SimplePID instance.
@@ -88,4 +92,8 @@ public class SimplePID extends AbstractPID<PIDSource, Float> {
         return normalizePwm(output);
     }
 
+    @Override
+    public Collection<PIDSrc<PIDSource, Float>> getComposedComponents() {
+        return Collections.singleton(source);
+    }
 }

@@ -27,6 +27,8 @@
 package ca.team3161.lib.robot.subsystem;
 
 import ca.team3161.lib.robot.ResourceTracker;
+import ca.team3161.lib.utils.ComposedComponent;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -63,9 +65,14 @@ public abstract class AbstractSubsystem implements Subsystem {
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     public final void require(final Object resource) {
         Objects.requireNonNull(resource);
         resourceLocks.add(ResourceTracker.track(resource));
+        if (resource instanceof ComposedComponent) {
+            ComposedComponent cc = (ComposedComponent) resource;
+            cc.getComposedComponents().forEach(this::require);
+        }
     }
 
     /**

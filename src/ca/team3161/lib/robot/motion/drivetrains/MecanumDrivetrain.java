@@ -29,17 +29,22 @@ package ca.team3161.lib.robot.motion.drivetrains;
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
  * A prepackaged mecanum drive solution, suitable for 4-wheeled Mecanum drivetrains.
  * See {@link ca.team3161.lib.robot.pid.VelocityController} for a recommended SpeedController to use for each wheel.
  */
-public class MecanumDrivetrain extends AbstractDrivetrainBase {
+public class MecanumDrivetrain extends AbstractDrivetrainBase implements ComposedComponent<Object> {
 
     private final SpeedController frontLeftController;
     private final SpeedController frontRightController;
@@ -121,6 +126,17 @@ public class MecanumDrivetrain extends AbstractDrivetrainBase {
     public void task() throws Exception {
         drivebase.mecanumDrive_Cartesian(strafeTarget, forwardTarget, rotateTarget,
                 gyro.flatMap(g -> Optional.ofNullable(g.getAngle())).orElse(0.0));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Object> getComposedComponents() {
+        List<Object> components = new ArrayList<>();
+        components.addAll(Arrays.asList(frontLeftController, frontRightController, backLeftController, backRightController));
+        gyro.ifPresent(components::add);
+        return components;
     }
 
     /**

@@ -28,12 +28,16 @@ package ca.team3161.lib.robot.pid;
 
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Gyro;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A PID source that returns values as gyroscope angles.
  */
-public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro> {
+public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro>, ComposedComponent<Gyro> {
 
     private final Gyro gyro;
 
@@ -59,5 +63,10 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
     @Override
     public Gyro getSensor() {
         return gyro;
+    }
+
+    @Override
+    public Collection<Gyro> getComposedComponents() {
+        return Collections.singleton(gyro);
     }
 }

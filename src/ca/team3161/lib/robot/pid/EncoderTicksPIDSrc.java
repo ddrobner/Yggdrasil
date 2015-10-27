@@ -28,12 +28,16 @@ package ca.team3161.lib.robot.pid;
 
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A PID source that returns values as encoder ticks.
  */
-public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer> {
+public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer>, ComposedComponent<Encoder> {
 
     private final Encoder enc;
 
@@ -62,5 +66,13 @@ public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer> {
     @Override
     public Integer getPIDValue() {
         return enc.get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Encoder> getComposedComponents() {
+        return Collections.singleton(enc);
     }
 }

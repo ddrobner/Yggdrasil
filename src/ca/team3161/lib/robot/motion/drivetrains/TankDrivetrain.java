@@ -30,14 +30,18 @@ import static ca.team3161.lib.utils.Utils.normalizePwm;
 import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.robot.SpeedControllerGroup;
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.RobotDrive;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * A prepackaged tankdrive solution, suitable for standard 4, 6, or even 8-wheeled tank drive variants.
  * Various types and numbers of speed controllers can be used by providing different customized SpeedControllers.
  * See {@link ca.team3161.lib.robot.SpeedControllerGroup}, {@link ca.team3161.lib.robot.pid.VelocityController}.
  */
-public class TankDrivetrain extends AbstractDrivetrainBase {
+public class TankDrivetrain extends AbstractDrivetrainBase implements ComposedComponent<SpeedControllerGroup> {
 
     private final SpeedControllerGroup leftControllers;
     private final SpeedControllerGroup rightControllers;
@@ -100,6 +104,14 @@ public class TankDrivetrain extends AbstractDrivetrainBase {
     @Override
     public void task() throws Exception {
         drivebase.tankDrive(leftTarget, rightTarget);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<SpeedControllerGroup> getComposedComponents() {
+        return Arrays.asList(leftControllers, rightControllers);
     }
 
     /**

@@ -26,20 +26,23 @@
 
 package ca.team3161.lib.utils;
 
+import java.util.Collection;
+
 /**
  * Interface describing a logical component which is composed of (or wrapped around) another component, either
  * logical or physical. Physical components cannot be wrapped around other components - these include WPI base
  * classes such as SpeedControllers (including Talons, Jaguars, etc), Potentiometers, Gyros, etc.
  *
- * @param <T> the type of component which this component is wrapped around
+ * @param <T> the type of component which this component is wrapped around. For some complex types,
+ *           more than one component is being wrapped and so this parameter may not carry much useful information.
  */
 public interface ComposedComponent<T> {
 
     /**
-     * Get the composed component within this one.
+     * Get the composed components within this one.
      *
-     * @return the composed component.
+     * @return the composed components.
      */
-    T getComposedComponent();
+    Collection<T> getComposedComponents();
 
 }

@@ -28,13 +28,17 @@ package ca.team3161.lib.robot.pid;
 
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A PID source that converts a rotary potentiometer's voltage output into degrees of
  * rotation.
  */
-public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potentiometer> {
+public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potentiometer>, ComposedComponent<Potentiometer> {
 
     private final Potentiometer pot;
     private final float minVolt, maxVolt, minAngle, maxAngle;
@@ -104,4 +108,8 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
         return maxAngle;
     }
 
+    @Override
+    public Collection<Potentiometer> getComposedComponents() {
+        return Collections.singleton(pot);
+    }
 }

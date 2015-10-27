@@ -33,6 +33,9 @@ import static java.util.Objects.requireNonNull;
 import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * A SpeedController implementation which enforces a maximum change in target speed. When run in a loop,
  * this results in software-controlled acceleration profiles for the composed speed controller.
@@ -97,8 +100,8 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
      * {@inheritDoc}
      */
     @Override
-    public SpeedController getComposedComponent() {
-        return controller;
+    public Collection<SpeedController> getComposedComponents() {
+        return Collections.singleton(controller);
     }
 
     private double adjust(final double target) {

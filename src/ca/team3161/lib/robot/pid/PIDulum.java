@@ -26,8 +26,12 @@
 
 package ca.team3161.lib.robot.pid;
 
+import ca.team3161.lib.utils.ComposedComponent;
+
 import static ca.team3161.lib.utils.Utils.normalizePwm;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @param <V> the specific source type which provides angle measurements for this PIDulum.
  */
-public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V, Float> {
+public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V, Float> implements ComposedComponent<PIDSrc<V, Float>> {
 
     private final float offsetAngle;
     private final float torqueConstant;
@@ -97,4 +101,11 @@ public final class PIDulum<V extends PIDAngleValueSrc<?>> extends AbstractPID<V,
         return normalizePwm(output);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<PIDSrc<V, Float>> getComposedComponents() {
+        return Collections.singleton(source);
+    }
 }
