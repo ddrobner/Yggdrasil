@@ -47,7 +47,21 @@ public abstract class TitanBot extends IterativeRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
-    private Optional<AbstractDrivetrainBase> drivetrainBase;
+    protected Optional<AbstractDrivetrainBase> drivetrainBase;
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
+     */
+    @Override
+    public final void robotInit() {
+        robotSetup();
+        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
+    }
+
+    /**
+     * Called once each time the robot is turned on.
+     */
+    public abstract void robotSetup();
 
     /**
      * DO NOT CALL THIS MANUALLY!
@@ -62,6 +76,7 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void autonomousInit() {
+        autonomousSetup();
         accumulatedTime = 0;
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
             try {
@@ -74,6 +89,18 @@ public abstract class TitanBot extends IterativeRobot {
             }
         });
     }
+
+    /**
+     * Called once each time before {@link TitanBot#autonomousRoutine()} is called.
+     */
+    public abstract void autonomousSetup();
+
+    /**
+     * The one-shot autonomous "script" to be run in a new Thread.
+     *
+     * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
+     */
+    public abstract void autonomousRoutine() throws Exception;
 
     /**
      * Add a delay to the autonomous routine.
@@ -129,18 +156,13 @@ public abstract class TitanBot extends IterativeRobot {
     public abstract void teleopSetup();
 
     /**
-     * DO NOT CALL THIS MANUALLY!
+     * Periodically called during robot teleop mode to enable operator control.
+     * This is the only way teleop mode should be handled - do not directly call
+     * teleopPeriodic from within this method or unbounded recursion will occur,
+     * resulting in a stack overflow and crashed robot code. teleopContinuous
+     * is likewise unsupported.
      */
-    @Override
-    public final void robotInit() {
-        robotSetup();
-        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
-    }
-
-    /**
-     * Called once each time the robot is turned on.
-     */
-    public abstract void robotSetup();
+    public abstract void teleopRoutine();
 
     /**
      * Called once when the robot enters the disabled state.
@@ -158,22 +180,6 @@ public abstract class TitanBot extends IterativeRobot {
         });
         disabledSetup();
     }
-
-    /**
-     * Periodically called during robot teleop mode to enable operator control.
-     * This is the only way teleop mode should be handled - do not directly call
-     * teleopPeriodic from within this method or unbounded recursion will occur,
-     * resulting in a stack overflow and crashed robot code. teleopContinuous
-     * is likewise unsupported.
-     */
-    public abstract void teleopRoutine();
-
-    /**
-     * The one-shot autonomous "script" to be run in a new Thread.
-     *
-     * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
-     */
-    public abstract void autonomousRoutine() throws Exception;
 
     /**
      * Define the length of the Autonomous period, in seconds.
