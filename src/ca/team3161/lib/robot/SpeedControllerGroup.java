@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -91,7 +92,9 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
         // so simply get the value of the first one.
-        return inversion * speedControllers.toArray(new SpeedController[speedControllers.size()])[0].get();
+        return inversion * speedControllers.stream().findFirst()
+                .flatMap(controller -> Optional.ofNullable(controller.get()))
+                .orElse(0.0);
     }
 
     /**
