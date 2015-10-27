@@ -133,8 +133,8 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void robotInit() {
-        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
         robotSetup();
+        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
     }
 
     /**
