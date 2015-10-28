@@ -26,7 +26,6 @@
 
 package ca.team3161.lib.robot.subsystem;
 
-import ca.team3161.lib.robot.ResourceTracker;
 import ca.team3161.lib.utils.ComposedComponent;
 
 import java.util.HashSet;
@@ -48,7 +47,7 @@ public abstract class AbstractSubsystem implements Subsystem {
     /**
      * A list of resourceLocks which this Subsystem requires.
      *
-     * @see ca.team3161.lib.robot.ResourceTracker
+     * @see ResourceTracker
      */
     protected final Set<Lock> resourceLocks = new HashSet<>();
 
