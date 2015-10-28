@@ -30,7 +30,7 @@ package ca.team3161.lib.robot.subsystem;
  * A Subsystem whose task is only normally run once. The task can however
  * be manually forced to run again by calling {OneshotSubsystem#start} again.
  */
-public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
+public abstract class OneShotPooledSubsystem extends AbstractPooledSubsystem {
 
     /**
      * {@inheritDoc}
