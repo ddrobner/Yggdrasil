@@ -84,7 +84,7 @@ public abstract class AbstractPositionEstimator extends RepeatingPooledSubsystem
                                      final Accelerometer accelerometer, final Gyro gyro,
                                      final Encoder frontLeftEncoder, final Encoder frontRightEncoder,
                                      final Encoder backLeftEncoder, final Encoder backRightEncoder) {
-        super(10, TimeUnit.MILLISECONDS);
+        super(100, TimeUnit.MILLISECONDS);
         this.chassisParameters = requireNonNull(chassisParameters);
         this.accelerometer = requireNonNull(accelerometer);
         this.gyro = requireNonNull(gyro);
