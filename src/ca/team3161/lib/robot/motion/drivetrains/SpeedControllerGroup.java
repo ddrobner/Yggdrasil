@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.motion.drivetrains;
 
 import ca.team3161.lib.utils.Assert;
 import ca.team3161.lib.utils.ComposedComponent;

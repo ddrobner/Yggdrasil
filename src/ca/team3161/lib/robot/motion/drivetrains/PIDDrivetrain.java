@@ -268,7 +268,7 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase implements Compo
         }
 
         /**
-         * @param leftDrive the left drive controller(s). See {@link ca.team3161.lib.robot.SpeedControllerGroup}
+         * @param leftDrive the left drive controller(s). See {@link SpeedControllerGroup}
          * @return this builder
          */
         public Builder leftDrive(SpeedController leftDrive) {
@@ -277,7 +277,7 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase implements Compo
         }
 
         /**
-         * @param rightDrive the right drive controller(s). See {@link ca.team3161.lib.robot.SpeedControllerGroup}
+         * @param rightDrive the right drive controller(s). See {@link SpeedControllerGroup}
          * @return this builder
          */
         public Builder rightDrive(SpeedController rightDrive) {
