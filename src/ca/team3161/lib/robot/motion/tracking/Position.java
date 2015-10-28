@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.motion;
+package ca.team3161.lib.robot.motion.tracking;
 
 import static java.lang.Double.compare;
 

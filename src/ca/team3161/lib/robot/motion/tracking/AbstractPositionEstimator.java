@@ -30,7 +30,6 @@ import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.util.Objects.requireNonNull;
 
-import ca.team3161.lib.robot.motion.Position;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;
