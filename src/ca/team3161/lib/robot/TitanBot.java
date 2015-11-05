@@ -26,8 +26,10 @@
 
 package ca.team3161.lib.robot;
 
+import ca.team3161.lib.robot.motion.drivetrains.AbstractDrivetrainBase;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -45,8 +47,24 @@ public abstract class TitanBot extends IterativeRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
+    protected Optional<AbstractDrivetrainBase> drivetrainBase;
 
     /**
+     * DO NOT CALL THIS MANUALLY!
+     */
+    @Override
+    public final void robotInit() {
+        robotSetup();
+        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
+    }
+
+    /**
+     * Called once each time the robot is turned on.
+     */
+    public abstract void robotSetup();
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
      * At the start of the autonomous period, start a new background task
      * using the behaviour described in the concrete subclass implementation's
      * autonomousRoutine() method.
@@ -58,6 +76,7 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void autonomousInit() {
+        autonomousSetup();
         accumulatedTime = 0;
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
             try {
@@ -70,6 +89,18 @@ public abstract class TitanBot extends IterativeRobot {
             }
         });
     }
+
+    /**
+     * Called once each time before {@link TitanBot#autonomousRoutine()} is called.
+     */
+    public abstract void autonomousSetup();
+
+    /**
+     * The one-shot autonomous "script" to be run in a new Thread.
+     *
+     * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
+     */
+    public abstract void autonomousRoutine() throws Exception;
 
     /**
      * Add a delay to the autonomous routine.
@@ -94,6 +125,7 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     /**
+     * DO NOT CALL THIS MANUALLY!
      * Handles running teleopRoutine periodically.
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
@@ -110,16 +142,18 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     /**
-     * Called once when the robot enters the teleop mode.
+     * DO NOT CALL THIS MANUALLY!
      */
     @Override
-    public abstract void teleopInit();
+    public final void teleopInit() {
+        drivetrainBase.ifPresent(AbstractDrivetrainBase::start);
+        teleopSetup();
+    }
 
     /**
-     * Called once each time the robot is turned on.
+     * Called once when the robot enters the teleop mode.
      */
-    @Override
-    public abstract void robotInit();
+    public abstract void teleopSetup();
 
     /**
      * Periodically called during robot teleop mode to enable operator control.
@@ -131,11 +165,21 @@ public abstract class TitanBot extends IterativeRobot {
     public abstract void teleopRoutine();
 
     /**
-     * The one-shot autonomous "script" to be run in a new Thread.
-     *
-     * @throws Exception this method failing should never catch the caller unaware - may lead to unpredictable behaviour if so
+     * Called once when the robot enters the disabled state.
      */
-    public abstract void autonomousRoutine() throws Exception;
+    public abstract void disabledSetup();
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
+     */
+    @Override
+    public final void disabledInit() {
+        drivetrainBase.ifPresent(base -> {
+            base.stop();
+            base.cancel();
+        });
+        disabledSetup();
+    }
 
     /**
      * Define the length of the Autonomous period, in seconds.
@@ -143,4 +187,13 @@ public abstract class TitanBot extends IterativeRobot {
      * @return the length of the Autonomous period, in seconds.
      */
     public abstract int getAutonomousPeriodLengthSeconds();
+
+    /**
+     * Define the drivetrain base (see {@link ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain},
+     * {@link ca.team3161.lib.robot.motion.drivetrains.MecanumDrivetrain} to use. If none desired then this method
+     * should simply return null.
+     */
+    public AbstractDrivetrainBase getDrivetrainBase() {
+        return null;
+    }
 }

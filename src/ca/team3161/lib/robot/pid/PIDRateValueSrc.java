@@ -35,6 +35,10 @@ import edu.wpi.first.wpilibj.PIDSource;
  */
 public interface PIDRateValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
+    /**
+     * Get the rate measured by this sensor.
+     * @return the rate value.
+     */
     default Float getRate() {
         return getPIDValue();
     }

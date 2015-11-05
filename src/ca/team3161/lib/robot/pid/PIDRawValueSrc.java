@@ -35,6 +35,10 @@ import edu.wpi.first.wpilibj.PIDSource;
  */
 public interface PIDRawValueSrc<T extends PIDSource> extends PIDSrc<T, Float> {
 
+    /**
+     * Get the raw value measured by this sensor.
+     * @return the raw value.
+     */
     default Float getValue() {
         return getPIDValue();
     }

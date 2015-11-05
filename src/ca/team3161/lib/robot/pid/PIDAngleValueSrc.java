@@ -50,6 +50,10 @@ public interface PIDAngleValueSrc<T extends PIDSource> extends PIDSrc<T, Float> 
      */
     Float getMaxAngle();
 
+    /**
+     * Get the angle measured by this sensor.
+     * @return the angle value.
+     */
     default Float getAngle() {
         return getPIDValue();
     }

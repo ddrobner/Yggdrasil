@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, FRC3161
+ * Copyright (c) 2015-2015, FRC3161.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -24,37 +24,31 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
-
-import java.util.Map;
-import java.util.Objects;
-import java.util.WeakHashMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+package ca.team3161.lib.robot.subsystem;
 
 /**
- * Tracks robot RESOURCES (sensors, motor controllers, etc.) to allow Subsystems.
- * to ensure separation of task runs
+ * A Subsystem whose task is only normally run once. The task can however
+ * be manually forced to run again by calling {OneshotSubsystem#start} again.
  */
-public final class ResourceTracker {
+public abstract class OneShotPooledSubsystem extends AbstractPooledSubsystem {
 
-    private static final Map<Object, ReentrantLock> RESOURCES = new WeakHashMap<>();
-
-    private ResourceTracker() {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start() {
+        if (job != null) {
+            job.cancel(true);
+        }
+        job = getExecutorService().submit(new RunTask());
     }
 
     /**
-     * Acquire the unique lock associated with a resource.
-     *
-     * @param resource the resource required
-     * @return a unique associated lock
+     * {@inheritDoc}
      */
-    public static Lock track(final Object resource) {
-        Objects.requireNonNull(resource);
-        synchronized (RESOURCES) {
-            RESOURCES.putIfAbsent(resource, new ReentrantLock());
-            return RESOURCES.get(resource);
-        }
+    @Override
+    public boolean isDone() {
+        return job != null && job.isDone();
     }
 
 }

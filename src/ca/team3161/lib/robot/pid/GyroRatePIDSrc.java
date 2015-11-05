@@ -28,36 +28,64 @@ package ca.team3161.lib.robot.pid;
 
 import static java.util.Objects.requireNonNull;
 
+import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Gyro;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A PID source that returns values as gyroscope rates.
  */
-public class GyroRatePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro> {
+public class GyroRatePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro>, ComposedComponent<Gyro> {
 
     private final Gyro gyro;
 
+    /**
+     * Create a new GyroRatePIDSrc instance.
+     * @param gyro a Gyro object to use as a PIDSrc
+     */
     public GyroRatePIDSrc(final Gyro gyro) {
         this.gyro = requireNonNull(gyro);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getPIDValue() {
         return (float) gyro.getRate();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getMinAngle() {
         return 0f;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getMaxAngle() {
         return 360f;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Gyro getSensor() {
         return gyro;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Collection<Gyro> getComposedComponents() {
+        return Collections.singleton(gyro);
     }
 }

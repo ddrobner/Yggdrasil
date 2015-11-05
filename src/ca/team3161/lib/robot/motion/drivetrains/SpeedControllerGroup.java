@@ -24,7 +24,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot;
+package ca.team3161.lib.robot.motion.drivetrains;
 
 import ca.team3161.lib.utils.Assert;
 import ca.team3161.lib.utils.ComposedComponent;
@@ -35,45 +35,46 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Implements a container for SpeedControllers.
  */
-public final class Drivetrain implements SpeedController, ComposedComponent<Set<SpeedController>> {
+public final class SpeedControllerGroup implements SpeedController, ComposedComponent<SpeedController> {
 
     private final Set<SpeedController> speedControllers = new HashSet<>();
     private float inversion = 1.0f;
 
     /**
-     * Create a new Drivetrain instance.
+     * Create a new SpeedControllerGroup instance.
      *
      * @param controllers a varargs list or array of SpeedController objects. May be
      *                    all the same type, or may be mixed.
      */
-    public Drivetrain(final SpeedController... controllers) {
+    public SpeedControllerGroup(final SpeedController... controllers) {
         this(Arrays.asList(controllers));
     }
 
     /**
-     * Create a new Drivetrain instance.
+     * Create a new SpeedControllerGroup instance.
      *
-     * @param controllers a collection of SpeedControllers for this Drivetrain to manage
+     * @param controllers a collection of SpeedControllers for this SpeedControllerGroup to manage
      */
-    public Drivetrain(final Collection<SpeedController> controllers) {
+    public SpeedControllerGroup(final Collection<SpeedController> controllers) {
         Objects.requireNonNull(controllers);
-        Assert.assertTrue("Must have at least one SpeedController per Drivetrain", controllers.size() > 0);
+        Assert.assertTrue("Must have at least one SpeedController per SpeedControllerGroup", controllers.size() > 0);
         speedControllers.addAll(controllers);
     }
 
     /**
-     * Invert all PWM values for this Drivetrain.
+     * Invert all PWM values for this SpeedControllerGroup.
      *
      * @param inverted whether the PWM values should be inverted or not
-     * @return this Drivetrain instance
+     * @return this SpeedControllerGroup instance
      */
-    public Drivetrain setInverted(final boolean inverted) {
+    public SpeedControllerGroup setInverted(final boolean inverted) {
         if (inverted) {
             inversion = -1.0f;
         } else {
@@ -83,7 +84,7 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
     }
 
     /**
-     * The current speed of this Drivetrain.
+     * The current speed of this SpeedControllerGroup.
      *
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
      */
@@ -91,21 +92,23 @@ public final class Drivetrain implements SpeedController, ComposedComponent<Set<
     public double get() {
         // All of the SpeedControllers will always be set to the same value,
         // so simply get the value of the first one.
-        return inversion * speedControllers.toArray(new SpeedController[speedControllers.size()])[0].get();
+        return inversion * speedControllers.stream().findFirst()
+                .flatMap(controller -> Optional.ofNullable(controller.get()))
+                .orElse(0.0);
     }
 
     /**
-     * Return the list of SpeedControllers which this Drivetrain was constructed with.
+     * Return the list of SpeedControllers which this SpeedControllerGroup was constructed with.
      *
      * @return the SpeedControllers.
      */
     @Override
-    public Set<SpeedController> getComposedComponent() {
+    public Collection<SpeedController> getComposedComponents() {
         return new HashSet<>(speedControllers);
     }
 
     /**
-     * The speeds of all SpeedControllers within this Drivetrain.
+     * The speeds of all SpeedControllers within this SpeedControllerGroup.
      * They should all be nearly identical, other than error due to floating point
      * precision.
      *

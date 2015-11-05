@@ -34,6 +34,9 @@ import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 /**
  * A SpeedController implementation which treats its input and output values as proportions of PID velocity targets,
  * using an Encoder to measure the rotational rate of the associated SpeedController (ex Talon, Victor, Jaguar).
@@ -42,7 +45,7 @@ import edu.wpi.first.wpilibj.SpeedController;
  * will only return the adjusted value for the next PID iteration; this value represents an actual motor output value,
  * but is not automatically applied to the backing SpeedController instance.
  */
-public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController, PIDRateValueSrc<Encoder>, ComposedComponent<SpeedController> {
+public class VelocityController extends AbstractPID<Encoder, Float> implements SpeedController, PIDRateValueSrc<Encoder>, ComposedComponent<Object> {
 
     protected final SpeedController speedController;
     protected float maxRotationalRate = 0;
@@ -112,6 +115,9 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.set(pid(target * maxRotationalRate), b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getRate() {
         return source.getPIDValue();
@@ -121,7 +127,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      * Set the target rotational rate of this VelocityController.
      * This method should be called very frequently, as the PID loop only iterates when this method
      * or {@link ca.team3161.lib.robot.pid.VelocityController#set(double, byte)} is called.
-     *
+     *new EncoderRatePIDSrc(encoder)
      * @param v target value.
      */
     @Override
@@ -149,11 +155,17 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         speedController.pidWrite(v);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public SpeedController getComposedComponent() {
-        return speedController;
+    public Collection<Object> getComposedComponents() {
+        return Arrays.asList(speedController, source);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float pid(final Float target) {
         float kErr;
@@ -191,11 +203,17 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
         return normalizePwm(output);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Encoder getSensor() {
         return source.getSensor();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Float getPIDValue() {
         return getRate();

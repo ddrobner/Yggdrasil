@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2015, FRC3161.
+ * Copyright (c) 2014-2015, FRC3161
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -24,31 +24,28 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.subsystem;
+package ca.team3161.lib.robot.motion.drivetrains;
+
+import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
+
+import java.util.concurrent.TimeUnit;
 
 /**
- * A Subsystem whose task is only normally run once. The task can however
- * be manually forced to run again by calling {OneshotSubsystem#start} again.
+ * Abstract parent class for prepackaged drivetrain base solutions.
  */
-public abstract class OneshotPooledSubsystem extends AbstractPooledSubsystem {
+public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void start() {
-        if (job != null) {
-            job.cancel(true);
-        }
-        job = getExecutorService().submit(new RunTask());
+    AbstractDrivetrainBase(long timeout, TimeUnit timeUnit) {
+        super(timeout, timeUnit);
+    }
+
+    AbstractDrivetrainBase() {
+        this(10, TimeUnit.MILLISECONDS);
     }
 
     /**
-     * {@inheritDoc}
+     * Stop all movement by setting all motor target values to 0 and disabling them.
      */
-    @Override
-    public boolean isDone() {
-        return job != null && job.isDone();
-    }
+    public abstract void stop();
 
 }

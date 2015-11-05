@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2015, FRC3161.
+ * Copyright (c) 2014-2015, FRC3161
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -24,41 +24,37 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.pid;
+package ca.team3161.lib.robot.subsystem;
 
-import edu.wpi.first.wpilibj.PIDSource;
+import java.util.Map;
+import java.util.Objects;
+import java.util.WeakHashMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Interface for PID sources. On their own, these can only return back
- * the sensor they represent. This interface is intended to be extended
- * by interfaces which represent specific abilities of a type of sensor
- * and thus of a type of PID source.
- *
- * @param <T> the type of sensor, eg Encoder or Gyro, used for this PID source.
- * @param <V> the return type of this PID source.
+ * Tracks robot resources (sensors, motor controllers, etc.) to allow Subsystems
+ * to ensure separation of task runs.
  */
-public interface PIDSrc<T extends PIDSource, V extends Number> extends PIDSource {
+public final class ResourceTracker {
+
+    private static final Map<Object, ReentrantLock> RESOURCES = new WeakHashMap<>();
+
+    private ResourceTracker() {
+    }
 
     /**
-     * Get the sensor behind this PIDSrc.
+     * Acquire the unique lock associated with a resource.
      *
-     * @return the sensor.
+     * @param resource the resource required
+     * @return a unique associated lock
      */
-    T getSensor();
-
-    /**
-     * Get the measured value of the sensor behind this PIDSrc.
-     *
-     * @return the value.
-     */
-    V getPIDValue();
-
-    /**
-     * Get the PID value measured by this sensor.
-     * @return the PID value.
-     */
-    default double pidGet() {
-        return getPIDValue().doubleValue();
+    public static Lock track(final Object resource) {
+        Objects.requireNonNull(resource);
+        synchronized (RESOURCES) {
+            RESOURCES.putIfAbsent(resource, new ReentrantLock());
+            return RESOURCES.get(resource);
+        }
     }
 
 }

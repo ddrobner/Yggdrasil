@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2015, FRC3161.
+ * Copyright (c) 2014-2015, FRC3161
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -24,41 +24,29 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package ca.team3161.lib.robot.pid;
-
-import edu.wpi.first.wpilibj.PIDSource;
+package ca.team3161.lib.robot.motion.drivetrains;
 
 /**
- * Interface for PID sources. On their own, these can only return back
- * the sensor they represent. This interface is intended to be extended
- * by interfaces which represent specific abilities of a type of sensor
- * and thus of a type of PID source.
- *
- * @param <T> the type of sensor, eg Encoder or Gyro, used for this PID source.
- * @param <V> the return type of this PID source.
+ * Static helper methods for setting up prepackaged drivetrain solutions.
  */
-public interface PIDSrc<T extends PIDSource, V extends Number> extends PIDSource {
+public final class Drivetrains {
+
+    private Drivetrains() {}
 
     /**
-     * Get the sensor behind this PIDSrc.
-     *
-     * @return the sensor.
+     * Make a new tank drivetrain base.
+     * @return a tank drivetrain
      */
-    T getSensor();
+    public static TankDrivetrain.Builder tankdrive() {
+        return new TankDrivetrain.Builder();
+    }
 
     /**
-     * Get the measured value of the sensor behind this PIDSrc.
-     *
-     * @return the value.
+     * Make a new mecanum drivetrain base.
+     * @return a mecanum drivetrain
      */
-    V getPIDValue();
-
-    /**
-     * Get the PID value measured by this sensor.
-     * @return the PID value.
-     */
-    default double pidGet() {
-        return getPIDValue().doubleValue();
+    public static MecanumDrivetrain.Builder mecanum() {
+        return new MecanumDrivetrain.Builder();
     }
 
 }
