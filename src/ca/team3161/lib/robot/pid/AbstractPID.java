@@ -74,8 +74,8 @@ public abstract class AbstractPID<T extends PIDSource, V extends Number> impleme
                        final int deadbandPeriod, final TimeUnit deadbandUnit,
                        final float kP, final float kI, final float kD) {
         this.source = requireNonNull(source);
-        this.deadband = requireNonNegative(deadband);
-        this.deadbandPeriod = requireNonNegative(deadbandPeriod);
+        this.deadband = deadband;
+        this.deadbandPeriod = deadbandPeriod;
         this.deadbandUnit = requireNonNull(deadbandUnit);
         this.kP = kP;
         this.kI = kI;
