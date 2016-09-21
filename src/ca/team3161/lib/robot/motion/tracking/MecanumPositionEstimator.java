@@ -28,8 +28,8 @@ package ca.team3161.lib.robot.motion.tracking;
 
 import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 
 /**
  * A Position Estimator for Mecanum drivetrains.

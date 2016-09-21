@@ -32,6 +32,7 @@ import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedController;
 
 import java.util.Arrays;
@@ -53,6 +54,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
     protected float target = 0;
     protected final float maxIntegralError;
     protected final float deadband;
+    protected boolean inverted = false;
 
     /**
      * Construct a new VelocityController instance.
@@ -68,7 +70,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      */
     public VelocityController(final SpeedController speedController, final Encoder encoder, final float maxRotationalRate,
                               final float kP, final float kI, final float kD, final float maxIntegralError, final float deadband) {
-        this(speedController, new EncoderRatePIDSrc(encoder), maxRotationalRate, kP, kI, kD, maxIntegralError, deadband);
+        this(speedController, new EncoderPIDSrc(encoder), maxRotationalRate, kP, kI, kD, maxIntegralError, deadband);
     }
 
     /**
@@ -112,7 +114,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      */
     @Override
     public void set(final double v, final byte b) {
-        this.target = (float) v;
+        this.target = inverted ? (float) -v : (float) v;
         speedController.set(pid(target * maxRotationalRate), b);
     }
 
@@ -133,7 +135,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      */
     @Override
     public void set(final double v) {
-        this.target = (float) v;
+        this.target = inverted ? (float) -v : (float) v;
         speedController.set(pid(target * maxRotationalRate));
     }
 
@@ -153,7 +155,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
      */
     @Override
     public void pidWrite(final double v) {
-        speedController.pidWrite(v);
+        speedController.pidWrite(inverted ? -v : v);
     }
 
     /**
@@ -218,5 +220,30 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
     @Override
     public Float getPIDValue() {
         return getRate();
+    }
+
+    @Override
+    public void setPIDSourceType(final PIDSourceType pidSourceType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kRate;
+    }
+
+    @Override
+    public void setInverted(final boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    @Override
+    public boolean getInverted() {
+        return inverted;
+    }
+
+    @Override
+    public void stopMotor() {
+        speedController.stopMotor();
     }
 }

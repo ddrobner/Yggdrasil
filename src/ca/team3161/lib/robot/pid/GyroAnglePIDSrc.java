@@ -26,26 +26,30 @@
 
 package ca.team3161.lib.robot.pid;
 
+import static ca.team3161.lib.robot.pid.PIDUtils.validate;
 import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.utils.ComposedComponent;
-import edu.wpi.first.wpilibj.Gyro;
 
+import edu.wpi.first.wpilibj.GyroBase;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import java.util.Collection;
 import java.util.Collections;
 
 /**
- * A PID source that returns values as gyroscope angles.
+ * A PID source backed by a physical Gyroscope. Defaults to returning gyroscope angle values.
  */
-public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gyro>, ComposedComponent<Gyro> {
+public class GyroAnglePIDSrc implements PIDSrc<GyroBase, Float>, PIDAngleValueSrc<GyroBase>, ComposedComponent<Gyro> {
 
-    private final Gyro gyro;
+    private final GyroBase gyro;
+    private PIDSourceType sourceType = PIDSourceType.kDisplacement;
 
     /**
      * Create a new GyroAnglePIDSrc instance.
      * @param gyro a Gyro object to use as a PIDSrc.
      */
-    public GyroAnglePIDSrc(final Gyro gyro) {
+    public GyroAnglePIDSrc(final GyroBase gyro) {
         this.gyro = requireNonNull(gyro);
     }
 
@@ -54,7 +58,15 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
      */
     @Override
     public Float getPIDValue() {
-        return (float) gyro.getAngle();
+
+        switch (sourceType) {
+            case kDisplacement:
+                return (float) gyro.getAngle();
+            case kRate:
+                return (float) gyro.getRate();
+            default:
+                throw new PIDUtils.InvalidPIDSourceTypeException(sourceType);
+        }
     }
 
     /**
@@ -77,7 +89,7 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
      * {@inheritDoc}
      */
     @Override
-    public Gyro getSensor() {
+    public GyroBase getSensor() {
         return gyro;
     }
 
@@ -87,5 +99,15 @@ public class GyroAnglePIDSrc implements PIDSrc<Gyro, Float>, PIDAngleValueSrc<Gy
     @Override
     public Collection<Gyro> getComposedComponents() {
         return Collections.singleton(gyro);
+    }
+
+    @Override
+    public void setPIDSourceType(final PIDSourceType pidSourceType) {
+        this.sourceType = validate(pidSourceType);
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return sourceType;
     }
 }

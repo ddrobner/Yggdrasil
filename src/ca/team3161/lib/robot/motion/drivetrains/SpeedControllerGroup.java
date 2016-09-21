@@ -44,8 +44,11 @@ import java.util.stream.Collectors;
  */
 public final class SpeedControllerGroup implements SpeedController, ComposedComponent<SpeedController> {
 
+    private static final float INVERTED = -1.0f;
+    private static final float NON_INVERTED = 1.0f;
+
     private final Set<SpeedController> speedControllers = new HashSet<>();
-    private float inversion = 1.0f;
+    private float inversion = NON_INVERTED;
 
     /**
      * Create a new SpeedControllerGroup instance.
@@ -72,15 +75,13 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
      * Invert all PWM values for this SpeedControllerGroup.
      *
      * @param inverted whether the PWM values should be inverted or not
-     * @return this SpeedControllerGroup instance
      */
-    public SpeedControllerGroup setInverted(final boolean inverted) {
+    public void setInverted(final boolean inverted) {
         if (inverted) {
-            inversion = -1.0f;
+            inversion = INVERTED;
         } else {
-            inversion = 1.0f;
+            inversion = NON_INVERTED;
         }
-        return this;
     }
 
     /**
@@ -157,4 +158,13 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
         speedControllers.forEach(c -> c.pidWrite(output));
     }
 
+    @Override
+    public boolean getInverted() {
+        return inversion == INVERTED;
+    }
+
+    @Override
+    public void stopMotor() {
+        speedControllers.forEach(SpeedController::stopMotor);
+    }
 }

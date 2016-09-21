@@ -29,6 +29,7 @@ package ca.team3161.lib.robot.pid;
 import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.utils.ComposedComponent;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 import java.util.Collection;
@@ -106,5 +107,15 @@ public final class PotentiometerVoltagePIDSrc implements PIDAngleValueSrc<Potent
     @Override
     public Collection<Potentiometer> getComposedComponents() {
         return Collections.singleton(pot);
+    }
+
+    @Override
+    public void setPIDSourceType(final PIDSourceType pidSourceType) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kDisplacement;
     }
 }

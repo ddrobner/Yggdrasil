@@ -26,7 +26,6 @@
 
 package ca.team3161.lib.robot.pid;
 
-import static ca.team3161.lib.utils.Utils.requireNonNegative;
 import static java.util.Objects.requireNonNull;
 
 import edu.wpi.first.wpilibj.PIDSource;

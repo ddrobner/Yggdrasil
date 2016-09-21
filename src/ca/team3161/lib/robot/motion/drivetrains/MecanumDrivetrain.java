@@ -30,10 +30,10 @@ import static ca.team3161.lib.utils.Utils.normalizePwm;
 import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.utils.ComposedComponent;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

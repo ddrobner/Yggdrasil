@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2015-2015, FRC3161.
+ * Copyright (c) 2016, FRC3161.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
  *
- * * Redistributions of source code must retain the above copyright notice, this
+ *  Redistributions of source code must retain the above copyright notice, this
  *   list of conditions and the following disclaimer.
  *
- * * Redistributions in binary form must reproduce the above copyright notice, this
+ *  Redistributions in binary form must reproduce the above copyright notice, this
  *   list of conditions and the following disclaimer in the documentation and/or
  *   other materials provided with the distribution.
  *
@@ -26,51 +26,21 @@
 
 package ca.team3161.lib.robot.pid;
 
-import static java.util.Objects.requireNonNull;
+import edu.wpi.first.wpilibj.PIDSourceType;
 
-import ca.team3161.lib.utils.ComposedComponent;
-import edu.wpi.first.wpilibj.Encoder;
+class PIDUtils {
 
-import java.util.Collection;
-import java.util.Collections;
-
-/**
- * A PID source that returns values as encoder rates.
- */
-public class EncoderRatePIDSrc implements PIDRateValueSrc<Encoder>, ComposedComponent<Encoder> {
-
-    private final Encoder enc;
-
-    /**
-     * Create a new EncoderPidSrc instance.
-     *
-     * @param enc an Encoder object to use as a PIDSrc
-     */
-    public EncoderRatePIDSrc(final Encoder enc) {
-        this.enc = requireNonNull(enc);
+    static PIDSourceType validate(PIDSourceType sourceType) {
+        if (!PIDSourceType.kRate.equals(sourceType) && !PIDSourceType.kDisplacement.equals(sourceType)) {
+            throw new InvalidPIDSourceTypeException(sourceType);
+        }
+        return sourceType;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Encoder getSensor() {
-        return enc;
+    static class InvalidPIDSourceTypeException extends IllegalArgumentException {
+        InvalidPIDSourceTypeException(PIDSourceType sourceType) {
+            super("Unknown PIDSourceType: " + sourceType);
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Float getPIDValue() {
-        return (float) enc.getRate();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<Encoder> getComposedComponents() {
-        return Collections.singleton(enc);
-    }
 }

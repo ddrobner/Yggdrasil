@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, FRC3161
+ * Copyright (c) 2015-2015, FRC3161.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -26,34 +26,35 @@
 
 package ca.team3161.lib.robot.pid;
 
+import static ca.team3161.lib.robot.pid.PIDUtils.validate;
 import static java.util.Objects.requireNonNull;
 
 import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
 
+import edu.wpi.first.wpilibj.PIDSourceType;
 import java.util.Collection;
 import java.util.Collections;
 
 /**
- * A PID source that returns values as encoder ticks.
+ * A PID source backed by a physical Encoder. Defaults to returning encoder rate values.
  */
-public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer>, ComposedComponent<Encoder> {
+public class EncoderPIDSrc implements PIDRateValueSrc<Encoder>, ComposedComponent<Encoder> {
 
     private final Encoder enc;
+    private PIDSourceType sourceType = PIDSourceType.kRate;
 
     /**
      * Create a new EncoderPidSrc instance.
      *
      * @param enc an Encoder object to use as a PIDSrc
      */
-    public EncoderTicksPIDSrc(final Encoder enc) {
+    public EncoderPIDSrc(final Encoder enc) {
         this.enc = requireNonNull(enc);
     }
 
     /**
-     * Retrieve the original sensor used to construct this PIDSrc.
-     *
-     * @return the Encoder
+     * {@inheritDoc}
      */
     @Override
     public Encoder getSensor() {
@@ -64,8 +65,15 @@ public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer>, ComposedCom
      * {@inheritDoc}
      */
     @Override
-    public Integer getPIDValue() {
-        return enc.get();
+    public Float getPIDValue() {
+        switch (sourceType) {
+            case kRate:
+                return (float) enc.getRate();
+            case kDisplacement:
+                return (float) enc.get();
+            default:
+                throw new PIDUtils.InvalidPIDSourceTypeException(sourceType);
+        }
     }
 
     /**
@@ -75,4 +83,17 @@ public class EncoderTicksPIDSrc implements PIDSrc<Encoder, Integer>, ComposedCom
     public Collection<Encoder> getComposedComponents() {
         return Collections.singleton(enc);
     }
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return sourceType;
+    }
+
+    @Override
+    public void setPIDSourceType(final PIDSourceType pidSourceType) {
+        this.sourceType = validate(pidSourceType);
+    }
+
+
+
 }

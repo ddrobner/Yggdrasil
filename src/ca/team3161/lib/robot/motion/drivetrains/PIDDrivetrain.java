@@ -33,9 +33,9 @@ import ca.team3161.lib.robot.pid.PID;
 import ca.team3161.lib.robot.pid.SimplePID;
 import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SpeedController;
 
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;

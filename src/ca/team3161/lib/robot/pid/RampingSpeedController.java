@@ -47,6 +47,7 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
     private final double rampRatio;
     private final double firstFilter;
     private final double secondFilter;
+    private boolean inverted = false;
 
     private RampingSpeedController(final Builder builder) {
         this.controller = builder.controller;
@@ -61,7 +62,8 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
      */
     @Override
     public void pidWrite(final double output) {
-        controller.pidWrite(normalizePwm(adjust(normalizePwm(output))));
+        final double val = normalizePwm(adjust(normalizePwm(output)));
+        controller.pidWrite(inverted ? -val : val);
     }
 
     /**
@@ -77,7 +79,8 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
      */
     @Override
     public void set(final double speed, final byte syncGroup) {
-        controller.set(normalizePwm(adjust(normalizePwm(speed))), syncGroup);
+        final double val = normalizePwm(adjust(normalizePwm(speed)));
+        controller.set(inverted ? -val : val, syncGroup);
     }
 
     /**
@@ -85,7 +88,8 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
      */
     @Override
     public void set(final double speed) {
-        controller.set(normalizePwm(adjust(normalizePwm(speed))));
+        final double val = normalizePwm(adjust(normalizePwm(speed)));
+        controller.set(inverted ? -val : val);
     }
 
     /**
@@ -121,6 +125,21 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
         } else {
             return target;
         }
+    }
+
+    @Override
+    public void setInverted(final boolean inverted) {
+        this.inverted = inverted;
+    }
+
+    @Override
+    public boolean getInverted() {
+        return inverted;
+    }
+
+    @Override
+    public void stopMotor() {
+        controller.stopMotor();
     }
 
     /**

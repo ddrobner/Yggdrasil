@@ -33,8 +33,8 @@ import static java.util.Objects.requireNonNull;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import ca.team3161.lib.robot.utils.ChassisParameters;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import java.util.concurrent.TimeUnit;
 
 /**
