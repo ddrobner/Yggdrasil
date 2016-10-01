@@ -192,6 +192,7 @@ public abstract class TitanBot extends IterativeRobot {
      * Define the drivetrain base (see {@link ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain},
      * {@link ca.team3161.lib.robot.motion.drivetrains.MecanumDrivetrain} to use. If none desired then this method
      * should simply return null.
+     * @return the drivetrain base
      */
     public AbstractDrivetrainBase getDrivetrainBase() {
         return null;
