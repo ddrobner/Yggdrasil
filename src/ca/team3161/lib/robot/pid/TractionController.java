@@ -47,7 +47,7 @@ public class TractionController extends VelocityController {
 
     /**
      * Enable traction control
-     * @param tractionEnabled
+     * @param tractionEnabled whether to enable traction control
      */
     public void setTractionEnabled(boolean tractionEnabled) {
         this.tractionEnabled = tractionEnabled;
@@ -55,7 +55,7 @@ public class TractionController extends VelocityController {
 
     /**
      * Check if traction control is enabled
-     * @return
+     * @return the current traction control state
      */
     public boolean isTractionEnabled() {
         return tractionEnabled;
