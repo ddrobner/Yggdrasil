@@ -34,6 +34,14 @@ public final class Drivetrains {
     private Drivetrains() {}
 
     /**
+     * Make a new arcade drivetrain base.
+     * @return an arcade drivetrain
+     */
+    public static ArcadeDrivetrain.Builder arcade() {
+        return new ArcadeDrivetrain.Builder();
+    }
+
+    /**
      * Make a new tank drivetrain base.
      * @return a tank drivetrain
      */
