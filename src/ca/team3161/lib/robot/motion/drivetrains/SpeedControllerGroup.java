@@ -85,6 +85,16 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
     }
 
     /**
+     * Same as {@link SpeedControllerGroup#setInverted(boolean)}, but returns "this" rather than void.
+     * @param inversion whether the PWM values should be inverted or not
+     * @return this
+     */
+    public SpeedControllerGroup setInversion(final boolean inversion) {
+        setInverted(inversion);
+        return this;
+    }
+
+    /**
      * The current speed of this SpeedControllerGroup.
      *
      * @return the current PWM value of the SpeedController collection (-1.0 to 1.0)
