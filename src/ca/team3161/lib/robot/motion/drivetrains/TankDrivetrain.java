@@ -32,6 +32,7 @@ import static java.util.Objects.requireNonNull;
 import ca.team3161.lib.utils.ComposedComponent;
 import edu.wpi.first.wpilibj.RobotDrive;
 
+import edu.wpi.first.wpilibj.SpeedController;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -140,6 +141,10 @@ public class TankDrivetrain extends AbstractDrivetrainBase implements ComposedCo
             return this;
         }
 
+        public Builder leftControllers(SpeedController... leftControllers) {
+            return leftControllers(new SpeedControllerGroup(leftControllers));
+        }
+
         /**
          * Set the right-side SpeedControllerGroup to use. A group can contain one or more SpeedControllers.
          * @param rightControllers the right controllers
@@ -148,6 +153,10 @@ public class TankDrivetrain extends AbstractDrivetrainBase implements ComposedCo
         public Builder rightControllers(SpeedControllerGroup rightControllers) {
             this.rightControllers = rightControllers;
             return this;
+        }
+
+        public Builder rightControllers(SpeedController... rightControllers) {
+            return rightControllers(new SpeedControllerGroup(rightControllers));
         }
 
         private void verify() {
