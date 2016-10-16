@@ -26,6 +26,8 @@
 
 package ca.team3161.lib.utils.controls;
 
+import static java.time.chrono.JapaneseEra.values;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -193,6 +195,18 @@ public final class LogitechAttack3 extends AbstractController {
         Objects.requireNonNull(function);
         validate(mapping, "Joystick on port " + this.port + " setMode() called with invalid mapping " + mapping);
         controlsModeMap.put(mapping, function);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setMode(final Function<Double, Double> function) {
+        for (LogitechAttack3Control control : LogitechAttack3Control.values()) {
+            for (LogitechAttack3Axis axis : LogitechAttack3Axis.values()) {
+                setMode(control, axis, function);
+            }
+        }
     }
 
     /**

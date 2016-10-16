@@ -200,6 +200,18 @@ public final class LogitechDualAction extends AbstractController {
      * {@inheritDoc}
      */
     @Override
+    public void setMode(final Function<Double, Double> function) {
+        for (LogitechControl control : LogitechControl.values()) {
+            for (LogitechAxis axis : LogitechAxis.values()) {
+                setMode(control, axis, function);
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void map(final Mapping mapping, final Consumer<Double> consumer) {
         Objects.requireNonNull(consumer);
         validate(mapping, "Gamepad on port " + getPort() + " map() called with invalid mapping " + mapping);

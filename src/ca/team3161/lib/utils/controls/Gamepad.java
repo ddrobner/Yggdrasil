@@ -113,7 +113,26 @@ public interface Gamepad {
         setMode(new Mapping(control, axis), function);
     }
 
+    /**
+     * Set a function to adjust input on one of the controls of this Gamepad. Controls
+     * should be provided by Gamepad implementations supplying their own valid
+     * possible values. Controls defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations. Likewise for axes.
+     *
+     * @param mapping  the mapping for which to set a mode
+     * @param function the function to apply
+     */
     void setMode(Mapping mapping, Function<Double, Double> function);
+
+    /**
+     * Set a function to adjust input on one of the controls of this Gamepad. Controls
+     * should be provided by Gamepad implementations supplying their own valid
+     * possible values. Controls defined by one Gamepad implementation should
+     * not be used as parameters to other Gamepad implementations. Likewise for axes.
+     *
+     * @param function the function to apply to all controls and all axes of this Gamepad
+     */
+    void setMode(Function<Double, Double> function);
 
     /**
      * Map a control/axis pair to a function.
