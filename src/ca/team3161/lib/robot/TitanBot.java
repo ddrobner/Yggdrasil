@@ -28,8 +28,9 @@ package ca.team3161.lib.robot;
 
 import ca.team3161.lib.robot.motion.drivetrains.AbstractDrivetrainBase;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +48,8 @@ public abstract class TitanBot extends IterativeRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
-    protected Optional<AbstractDrivetrainBase> drivetrainBase;
+    private LifecycleEvent lifecycleEvent = LifecycleEvent.NONE;
+    private final Collection<LifecycleListener> lifecycleAwareComponents = new ArrayList<>();
 
     /**
      * DO NOT CALL THIS MANUALLY!
@@ -55,7 +57,9 @@ public abstract class TitanBot extends IterativeRobot {
     @Override
     public final void robotInit() {
         robotSetup();
-        this.drivetrainBase = Optional.ofNullable(getDrivetrainBase());
+        registerLifecycleComponent(getDrivetrainBase());
+        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_INIT));
+        lifecycleEvent = LifecycleEvent.ON_INIT;
     }
 
     /**
@@ -77,6 +81,8 @@ public abstract class TitanBot extends IterativeRobot {
     @Override
     public final void autonomousInit() {
         autonomousSetup();
+        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_AUTO));
+        lifecycleEvent = LifecycleEvent.ON_AUTO;
         accumulatedTime = 0;
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
             try {
@@ -146,8 +152,9 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void teleopInit() {
-        drivetrainBase.ifPresent(AbstractDrivetrainBase::start);
         teleopSetup();
+        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_TELEOP));
+        lifecycleEvent = LifecycleEvent.ON_TELEOP;
     }
 
     /**
@@ -174,11 +181,9 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void disabledInit() {
-        drivetrainBase.ifPresent(base -> {
-            base.stop();
-            base.cancel();
-        });
         disabledSetup();
+        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_DISABLED));
+        lifecycleEvent = LifecycleEvent.ON_DISABLED;
     }
 
     /**
@@ -188,13 +193,12 @@ public abstract class TitanBot extends IterativeRobot {
      */
     public abstract int getAutonomousPeriodLengthSeconds();
 
-    /**
-     * Define the drivetrain base (see {@link ca.team3161.lib.robot.motion.drivetrains.TankDrivetrain},
-     * {@link ca.team3161.lib.robot.motion.drivetrains.MecanumDrivetrain} to use. If none desired then this method
-     * should simply return null.
-     * @return the drivetrain base
-     */
+    @Deprecated
     public AbstractDrivetrainBase getDrivetrainBase() {
         return null;
+    }
+
+    public void registerLifecycleComponent(LifecycleListener lifecycleListener) {
+        lifecycleAwareComponents.add(lifecycleListener);
     }
 }

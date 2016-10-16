@@ -26,6 +26,8 @@
 
 package ca.team3161.lib.robot.motion.drivetrains;
 
+import ca.team3161.lib.robot.LifecycleEvent;
+import ca.team3161.lib.robot.LifecycleListener;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 
 import java.util.concurrent.TimeUnit;
@@ -33,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Abstract parent class for prepackaged drivetrain base solutions.
  */
-public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem {
+public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem implements LifecycleListener {
 
     AbstractDrivetrainBase(long timeout, TimeUnit timeUnit) {
         super(timeout, timeUnit);
@@ -48,4 +50,19 @@ public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem {
      */
     public abstract void stop();
 
+    @Override
+    public void lifecycleStatusChanged(final LifecycleEvent previous, final LifecycleEvent current) {
+        switch (current) {
+            case NONE:
+            case ON_INIT:
+            case ON_DISABLED:
+                stop();
+                break;
+            case ON_AUTO:
+            case ON_TELEOP:
+            case ON_TEST:
+                start();
+                break;
+        }
+    }
 }

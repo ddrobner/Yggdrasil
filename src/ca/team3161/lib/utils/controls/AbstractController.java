@@ -28,6 +28,8 @@ package ca.team3161.lib.utils.controls;
 
 import static ca.team3161.lib.utils.Utils.requireNonNegative;
 
+import ca.team3161.lib.robot.LifecycleEvent;
+import ca.team3161.lib.robot.LifecycleListener;
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -43,7 +45,7 @@ import java.util.function.Function;
 /**
  * A Gamepad which allows button bindings and control modes.
  */
-public abstract class AbstractController extends RepeatingPooledSubsystem implements Gamepad {
+public abstract class AbstractController extends RepeatingPooledSubsystem implements Gamepad, LifecycleListener {
 
     /* The actual FIRST-provided input device that we are implementing a
     * convenience wrapper around.
@@ -152,6 +154,22 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
                                                                    + " has binding for unknown button press type " + pressType);
                 }
             });
+        }
+    }
+
+    @Override
+    public void lifecycleStatusChanged(final LifecycleEvent previous, final LifecycleEvent current) {
+        switch (current) {
+            case NONE:
+            case ON_INIT:
+            case ON_DISABLED:
+            case ON_AUTO:
+                disableBindings();
+                break;
+            case ON_TELEOP:
+            case ON_TEST:
+                enableBindings();
+                break;
         }
     }
 
