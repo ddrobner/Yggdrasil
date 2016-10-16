@@ -198,7 +198,7 @@ public abstract class TitanBot extends IterativeRobot {
         return null;
     }
 
-    public void registerLifecycleComponent(LifecycleListener lifecycleListener) {
+    public <T extends LifecycleListener> void registerLifecycleComponent(T lifecycleListener) {
         lifecycleAwareComponents.add(lifecycleListener);
     }
 }
