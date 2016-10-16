@@ -50,4 +50,12 @@ public interface JoystickMode extends Function<Double, Double> {
         return adjust(value);
     }
 
+    default JoystickMode compose(JoystickMode before) {
+        return raw -> adjust(before.adjust(raw));
+    }
+
+    default JoystickMode andThen(JoystickMode after) {
+        return raw -> after.adjust(adjust(raw));
+    }
+
 }
