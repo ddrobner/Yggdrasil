@@ -48,7 +48,7 @@ public abstract class TitanBot extends IterativeRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
-    private LifecycleEvent lifecycleEvent = LifecycleEvent.NONE;
+    private LifecycleShifter lifecycleShifter = new LifecycleShifter();
     private final Collection<LifecycleListener> lifecycleAwareComponents = new ArrayList<>();
 
     /**
@@ -56,10 +56,17 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void robotInit() {
-        robotSetup();
-        registerLifecycleComponent(getDrivetrainBase());
-        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_INIT));
-        lifecycleEvent = LifecycleEvent.ON_INIT;
+        super.robotInit();
+        try {
+            robotSetup();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        AbstractDrivetrainBase drivetrainBase = getDrivetrainBase();
+        if (drivetrainBase != null) {
+            registerLifecycleComponent(drivetrainBase);
+        }
+        transitionLifecycle(LifecycleEvent.ON_INIT);
     }
 
     /**
@@ -80,16 +87,16 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void autonomousInit() {
+        super.autonomousInit();
         autonomousSetup();
-        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_AUTO));
-        lifecycleEvent = LifecycleEvent.ON_AUTO;
+        transitionLifecycle(LifecycleEvent.ON_AUTO);
         accumulatedTime = 0;
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
             try {
                 modeLock.lockInterruptibly();
                 autonomousRoutine();
             } catch (final Exception e) {
-                e.printStackTrace();
+                handleException(e);
             } finally {
                 modeLock.unlock();
             }
@@ -100,6 +107,11 @@ public abstract class TitanBot extends IterativeRobot {
      * Called once each time before {@link TitanBot#autonomousRoutine()} is called.
      */
     public abstract void autonomousSetup();
+
+    @Override
+    public final void autonomousPeriodic() {
+        super.autonomousPeriodic();
+    }
 
     /**
      * The one-shot autonomous "script" to be run in a new Thread.
@@ -132,6 +144,25 @@ public abstract class TitanBot extends IterativeRobot {
 
     /**
      * DO NOT CALL THIS MANUALLY!
+     */
+    @Override
+    public final void teleopInit() {
+        super.teleopInit();
+        try {
+            teleopSetup();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        transitionLifecycle(LifecycleEvent.ON_TELEOP);
+    }
+
+    /**
+     * Called once when the robot enters the teleop mode.
+     */
+    public abstract void teleopSetup();
+
+    /**
+     * DO NOT CALL THIS MANUALLY!
      * Handles running teleopRoutine periodically.
      * Do not override this in subclasses, or else there may be no guarantee
      * that the autonomous thread and the main robot thread, executing teleop
@@ -139,28 +170,19 @@ public abstract class TitanBot extends IterativeRobot {
      */
     @Override
     public final void teleopPeriodic() {
+        super.teleopPeriodic();
         if (autoJob != null) {
             autoJob.cancel(true);
         }
-        modeLock.lock();
-        teleopRoutine();
-        modeLock.unlock();
+        try {
+            modeLock.lock();
+            teleopRoutine();
+        } catch (Exception e) {
+            handleException(e);
+        } finally {
+            modeLock.unlock();
+        }
     }
-
-    /**
-     * DO NOT CALL THIS MANUALLY!
-     */
-    @Override
-    public final void teleopInit() {
-        teleopSetup();
-        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_TELEOP));
-        lifecycleEvent = LifecycleEvent.ON_TELEOP;
-    }
-
-    /**
-     * Called once when the robot enters the teleop mode.
-     */
-    public abstract void teleopSetup();
 
     /**
      * Periodically called during robot teleop mode to enable operator control.
@@ -172,19 +194,72 @@ public abstract class TitanBot extends IterativeRobot {
     public abstract void teleopRoutine();
 
     /**
-     * Called once when the robot enters the disabled state.
-     */
-    public abstract void disabledSetup();
-
-    /**
      * DO NOT CALL THIS MANUALLY!
      */
     @Override
     public final void disabledInit() {
-        disabledSetup();
-        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleEvent, LifecycleEvent.ON_DISABLED));
-        lifecycleEvent = LifecycleEvent.ON_DISABLED;
+        super.disabledInit();
+        try {
+            disabledSetup();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        transitionLifecycle(LifecycleEvent.ON_DISABLED);
     }
+
+    /**
+     * Called once when the robot enters the disabled state.
+     */
+    public abstract void disabledSetup();
+
+    @Override
+    public final void disabledPeriodic() {
+        super.disabledPeriodic();
+        if (autoJob != null) {
+            autoJob.cancel(true);
+        }
+        try {
+            modeLock.lock();
+            disabledRoutine();
+        } catch (Exception e) {
+            handleException(e);
+        } finally {
+            modeLock.unlock();
+        }
+    }
+
+    public abstract void disabledRoutine();
+
+    @Override
+    public final void testInit() {
+        super.testInit();
+        try {
+            testSetup();
+        } catch (Exception e) {
+            handleException(e);
+        }
+        transitionLifecycle(LifecycleEvent.ON_TEST);
+    }
+
+    public abstract void testSetup();
+
+    @Override
+    public final void testPeriodic() {
+        super.testPeriodic();
+        if (autoJob != null) {
+            autoJob.cancel(true);
+        }
+        try {
+            modeLock.lock();
+            testRoutine();
+        } catch (Exception e) {
+            handleException(e);
+        } finally {
+            modeLock.unlock();
+        }
+    }
+
+    public abstract void testRoutine();
 
     /**
      * Define the length of the Autonomous period, in seconds.
@@ -200,5 +275,32 @@ public abstract class TitanBot extends IterativeRobot {
 
     public <T extends LifecycleListener> void registerLifecycleComponent(T lifecycleListener) {
         lifecycleAwareComponents.add(lifecycleListener);
+    }
+
+    private void transitionLifecycle(LifecycleEvent event) {
+        lifecycleShifter.shift(event);
+        lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleShifter.getPrevious(), lifecycleShifter.getCurrent()));
+    }
+
+    private void handleException(Exception e) {
+        e.printStackTrace(); // TODO log to file as well as console. Display SmartDashboard warning?
+    }
+
+    private static class LifecycleShifter {
+        private LifecycleEvent previous = LifecycleEvent.NONE;
+        private LifecycleEvent current = LifecycleEvent.NONE;
+
+        public void shift(LifecycleEvent event) {
+            this.previous = this.current;
+            this.current = event;
+        }
+
+        public LifecycleEvent getPrevious() {
+            return previous;
+        }
+
+        public LifecycleEvent getCurrent() {
+            return current;
+        }
     }
 }
