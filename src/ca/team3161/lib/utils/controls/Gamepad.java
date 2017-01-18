@@ -29,7 +29,9 @@ package ca.team3161.lib.utils.controls;
 import static java.util.Objects.requireNonNull;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -335,8 +337,8 @@ public interface Gamepad {
          * @param buttons   the buttons
          * @param pressType the press type
          */
-        public Binding(final Set<Button> buttons, final PressType pressType) {
-            this.buttons = requireNonNull(buttons);
+        public Binding(final Collection<Button> buttons, final PressType pressType) {
+            this.buttons = new HashSet<>(requireNonNull(buttons));
             this.pressType = requireNonNull(pressType);
         }
 
