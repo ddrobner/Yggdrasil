@@ -120,13 +120,13 @@ public abstract class AbstractController extends RepeatingPooledSubsystem implem
     @Override
     public void task() throws Exception {
         final Map<Button, Boolean> previousButtonStates = new HashMap<>(buttonStates);
-        getButtons().parallelStream().forEach(button -> buttonStates.put(button, getButton(button)));
+        getButtons().forEach(button -> buttonStates.put(button, getButton(button)));
         synchronized (controlsMapping) {
-            controlsMapping.entrySet().parallelStream().forEach(mapping ->
+            controlsMapping.entrySet().forEach(mapping ->
                 mapping.getValue().accept(getValue(mapping.getKey().getControl(), mapping.getKey().getAxis())));
         }
         synchronized (buttonBindings) {
-            buttonBindings.entrySet().parallelStream().forEach(binding -> {
+            buttonBindings.entrySet().forEach(binding -> {
                 final Set<Button> buttons = binding.getKey().getButtons();
                 final PressType pressType = binding.getKey().getPressType();
                 final Runnable action = binding.getValue();
