@@ -78,15 +78,6 @@ public class RampingSpeedController implements SpeedController, ComposedComponen
      * {@inheritDoc}
      */
     @Override
-    public void set(final double speed, final byte syncGroup) {
-        final double val = normalizePwm(adjust(normalizePwm(speed)));
-        controller.set(inverted ? -val : val, syncGroup);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void set(final double speed) {
         final double val = normalizePwm(adjust(normalizePwm(speed)));
         controller.set(inverted ? -val : val);

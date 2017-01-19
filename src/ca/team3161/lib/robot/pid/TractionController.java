@@ -62,15 +62,6 @@ public class TractionController extends VelocityController {
     }
 
     @Override
-    public void set(final double v, final byte b) {
-        if (tractionEnabled) {
-            super.set(v, b);
-        } else {
-            speedController.set(v, b);
-        }
-    }
-
-    @Override
     public void set(final double v) {
         if (tractionEnabled) {
             super.set(v);

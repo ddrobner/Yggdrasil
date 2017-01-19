@@ -105,20 +105,6 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
     }
 
     /**
-     * Set the target rotational rate of this VelocityController.
-     * This method should be called very frequently, as the PID loop only iterates when this method
-     * or {@link ca.team3161.lib.robot.pid.VelocityController#set(double)} is called.
-     *
-     * @param v target value.
-     * @param b syncgroup.
-     */
-    @Override
-    public void set(final double v, final byte b) {
-        this.target = inverted ? (float) -v : (float) v;
-        speedController.set(pid(target * maxRotationalRate), b);
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -128,9 +114,7 @@ public class VelocityController extends AbstractPID<Encoder, Float> implements S
 
     /**
      * Set the target rotational rate of this VelocityController.
-     * This method should be called very frequently, as the PID loop only iterates when this method
-     * or {@link ca.team3161.lib.robot.pid.VelocityController#set(double, byte)} is called.
-     *new EncoderRatePIDSrc(encoder)
+     * This method should be called very frequently, as the PID loop only iterates when this method is called.
      * @param v target value.
      */
     @Override

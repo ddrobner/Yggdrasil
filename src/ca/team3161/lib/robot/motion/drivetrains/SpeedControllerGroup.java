@@ -140,17 +140,6 @@ public final class SpeedControllerGroup implements SpeedController, ComposedComp
     }
 
     /**
-     * You probably shouldn't use this. Only included as required by SpeedController interface.
-     *
-     * @param pwm       the PWM value to assign to each SpeedController in the collection
-     * @param syncGroup the update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.
-     */
-    @Override
-    public void set(final double pwm, final byte syncGroup) {
-        speedControllers.forEach(c -> c.set(inversion * Utils.normalizePwm(pwm), syncGroup));
-    }
-
-    /**
      * Disable each SpeedController in the collection.
      */
     @Override
