@@ -12,18 +12,14 @@ visit link:http://team3161.ca[3161's Homepage].
 
 Pre-built JARs, ready to be included directly into your own FRC Java projects, are
 available
-link:http://cloud.team3161.ca/download/yggdrasil/[here]. You can also download a
+link:http://andrewazor.es/frc3161/yggdrasil[here]. You can also download a
 '-all' ZIP, which contains the JARs for Yggdrasil's classes and its Javadoc
 documentation - this is probably the easiest to deal with.
-Build status (and alternative download links) are available
-link:http://cloud.team3161.ca:8080/dashboard[here].
-'Release' builds will be made available through the first
-direct download link, rather than through CruiseControl, and will be named with
--RELEASE included in the JAR name.
 
 Development for Yggdrasil happens on link:https://github.com/FRC3161/Yggdrasil[our GitHub].
 
-Versions 0.8 and up are compatible with the 2015 FRC Control Systems Update and
+Versions 0.8 and up are compatible with the 2015 FRC Control Systems Update
+(or subsequent yearly updates - strict 2015 compatibility is not guaranteed) and
 Java 8. If for some reason you need to remain compatible with the previous Java
 1.4 Micro Edition environment and the cRIO, you will need to use an older 0.2.x
 version of Yggdrasil.
@@ -43,23 +39,21 @@ concepts behind the Yggdrasil libraries.
 
 === Download
 See
-link:http://cloud.team3161.ca/download/yggdrasil/latest[here] for the latest release
+link:http://andrewazor.es/frc3161/yggdrasil/latest[here] for the latest release
 downloads. Pick a ZIP and download it! The ZIPs contain the compiled class JARs
 as well as the corresponding Javadoc JAR, so this is probably the easiest way
 to make sure that your documentation matches the library you've downloaded.
 Once you've downloaded an '-all' ZIP, unzip it and take note of its contents.
-Then, in your own robot project's main directory, create a subdirectory
-(folder) called 'lib'. Copy the two Yggdrasil JARs into this new 'lib' folder.
-Copy the 'eclipse-build.xml' into your own robot project directory and replace
-the existing 'build.xml' by removing it, then renaming 'eclipse-build.xml' to
-'build.xml'. You're all set and ready to go!
+Copy all of the contents into your $USER/wpilib/user/userLibs directory, and
+uncomment the line in your robot code project's build.properties file pointing
+to this library directory.
 
 For an example of this, please see
 link:https://github.com/FRC3161/Nidhoggr[Nidhoggr].
 
 === Documentation
 Javadoc documentation for the latest release is available online
-link:http://cloud.team3161.ca/download/yggdrasil/latest/javadoc[here].
+link:http://andrewazor.es/frc3161/yggdrasil/latest/javadoc[here].
 
 === Development
 Do you want to help contribute to Yggdrasil? Awesome! Please visit our
@@ -70,7 +64,7 @@ proper credit!
 
 == Design
 The design intended by these libraries are a main robot class, subclassed
-from Titanbow, which defines the robot's behaviour in autonomous,
+from Titanbot, which defines the robot's behaviour in autonomous,
 teleoperated, and disabled modes, in a manner very similar to the standard
 IterativeRobot provided by FRC. This base class provides for a robot's
 autonomous routine to be performed in a separate thread from the main robot
@@ -84,9 +78,11 @@ ensured, for example, by having a background thread monitor a limit switch
 to ensure that a motor controller shuts off, even if the main robot
 class' logic fails to check for this condition.
 
-For an example of a complete FRC robot software project using an earlier (and
-no longer maintained) version of this library, please see
-link:https://github.com/FRC3161/Iapetus2014[Iapetus].
+For an example of a complete FRC robot software project using this library,
+please see
+link:https://github.com/FRC3161/Iapetus2014[Iapetus],
+link:https://github.com/FRC3161/Fenrir[Fenrir],
+link:https://github.com/FRC3161/Toblerone2016[Toblerone].
 
 == Other Libraries
 Late in the 2014 season, 3161 forked Team 254's
@@ -99,7 +95,7 @@ versions.
 
 == Class Overview
 Javadocs for all of these classes are available
-link:http://cloud.team3161.ca/download/yggdrasil/release/latest/javadoc[here
+link:http://andrewazor.es/frc3161/yggdrasil/release/latest/javadoc[here
 (latest release - click here if viewing this page on GitHub or from 3161's homepage)] or
 link:./javadoc/index.html[here (the current build you're in -
 click here if viewing this page through CruiseControl)].

@@ -1,9 +1,2 @@
-- Update lib directory (new 2015 FRC library JARs)
-
-- Add basic Eclipse configuration for quick first time setup for developers
-
-- Port src to Java 8/new FRC libraries (awaiting kickoff and 2015 Control
-Systems release)
-
 - Remove 'Class Overview' from README, or at least pare it down - javadocs
 should be sufficient
