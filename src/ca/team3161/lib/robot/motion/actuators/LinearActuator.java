@@ -37,8 +37,8 @@ public abstract class LinearActuator extends PWM {
 
     private static final String LIVE_WINDOW_TYPE = "LinearActuator";
 
-    private ITable m_table;
-    private ITableListener m_tableListener;
+    private ITable liveWindowTable;
+    private ITableListener liveWindowTableListener;
 
     public LinearActuator(final int channel) {
         super(channel);
@@ -63,31 +63,27 @@ public abstract class LinearActuator extends PWM {
 
     @Override
     public void initTable(ITable subtable) {
-        m_table = subtable;
+        liveWindowTable = subtable;
         updateTable();
     }
 
     @Override
     public void updateTable() {
-        if (m_table != null) {
-            m_table.putNumber("Value", get());
+        if (liveWindowTable != null) {
+            liveWindowTable.putNumber("Value", get());
         }
     }
 
     @Override
     public void startLiveWindowMode() {
-        m_tableListener = new ITableListener() {
-            public void valueChanged(ITable itable, String key, Object value, boolean bln) {
-                setPosition(((Double) value).doubleValue());
-            }
-        };
-        m_table.addTableListener("Value", m_tableListener, true);
+        liveWindowTableListener = (itable, key, value, bln) -> setPosition((Double) value);
+        liveWindowTable.addTableListener("Value", liveWindowTableListener, true);
     }
 
     @Override
     public void stopLiveWindowMode() {
         // TODO: Broken, should only remove the listener from "Value" only.
-        m_table.removeTableListener(m_tableListener);
+        liveWindowTable.removeTableListener(liveWindowTableListener);
     }
 
 }
