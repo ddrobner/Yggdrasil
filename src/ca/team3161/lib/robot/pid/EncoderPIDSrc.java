@@ -39,7 +39,7 @@ import java.util.Collections;
 /**
  * A PID source backed by a physical Encoder. Defaults to returning encoder rate values.
  */
-public class EncoderPIDSrc implements PIDRateValueSrc<Encoder>, ComposedComponent<Encoder> {
+public class EncoderPIDSrc implements PIDRateValueSrc<Encoder>, PIDRawValueSrc<Encoder>, ComposedComponent<Encoder> {
 
     private final Encoder enc;
     private PIDSourceType sourceType = PIDSourceType.kRate;
