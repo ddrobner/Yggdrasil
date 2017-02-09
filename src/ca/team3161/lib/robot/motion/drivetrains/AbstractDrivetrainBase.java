@@ -37,11 +37,11 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class AbstractDrivetrainBase extends RepeatingPooledSubsystem implements LifecycleListener {
 
-    AbstractDrivetrainBase(long timeout, TimeUnit timeUnit) {
+    protected AbstractDrivetrainBase(long timeout, TimeUnit timeUnit) {
         super(timeout, timeUnit);
     }
 
-    AbstractDrivetrainBase() {
+    protected AbstractDrivetrainBase() {
         this(10, TimeUnit.MILLISECONDS);
     }
 
