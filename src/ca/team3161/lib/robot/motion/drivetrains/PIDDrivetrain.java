@@ -308,7 +308,7 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase implements Compo
          *                   {@link SimplePID} and {@link GyroAnglePIDSrc}
          * @return this builder
          */
-        private Builder turningPid(PID<? extends Gyro, Float> turningPid) {
+        public Builder turningPid(PID<? extends Gyro, Float> turningPid) {
             this.turningPid = turningPid;
             return this;
         }
@@ -318,7 +318,7 @@ public final class PIDDrivetrain extends AbstractDrivetrainBase implements Compo
          *                   {@link SimplePID} and {@link GyroAnglePIDSrc}
          * @return this builder
          */
-        private Builder bearingPid(PID<? extends Gyro, Float> bearingPid) {
+        public Builder bearingPid(PID<? extends Gyro, Float> bearingPid) {
             this.bearingPid = bearingPid;
             return this;
         }
