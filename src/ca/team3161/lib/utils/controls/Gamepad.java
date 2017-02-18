@@ -166,6 +166,11 @@ public interface Gamepad {
         bind(button, PressType.PRESS, binding);
     }
 
+    default void bind(Button button, Consumer<Boolean> binding) {
+        bind(button, PressType.PRESS, () -> binding.accept(true));
+        bind(button, PressType.RELEASE, () -> binding.accept(false));
+    }
+
     /**
      * Bind a button press on this gamepad to an action to be performed when the button
      * is pressed, released, or periodically while the button is held. Buttons should be
