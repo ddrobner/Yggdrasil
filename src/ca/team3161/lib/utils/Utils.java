@@ -127,4 +127,20 @@ public class Utils {
         return in;
     }
 
+    public static boolean between(double a, double val, double b) {
+        return a <= val && val <= b;
+    }
+
+    public static boolean between(float a, float val, float b) {
+        return a <= val && val <= b;
+    }
+
+    public static boolean between(int a, int val, int b) {
+        return a <= val && val <= b;
+    }
+
+    public static boolean between(long a, long val, long b) {
+        return a <= val && val <= b;
+    }
+
 }
