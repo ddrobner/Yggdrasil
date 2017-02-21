@@ -274,7 +274,9 @@ public abstract class TitanBot extends IterativeRobot {
     }
 
     public <T extends LifecycleListener> void registerLifecycleComponent(T lifecycleListener) {
-        lifecycleAwareComponents.add(lifecycleListener);
+        if (!lifecycleAwareComponents.contains(lifecycleListener)) {
+            lifecycleAwareComponents.add(lifecycleListener);
+        }
     }
 
     private void transitionLifecycle(LifecycleEvent event) {
