@@ -14,9 +14,10 @@ else
 fi
 
 DOWNLOAD_LOCATION="$(dirname $(readlink -f "$0"))"
-FILENAME="checkstyle-$VERSION-all.jar"
+PREFIX="checkstyle-$VERSION"
+FILENAME="$PREFIX-all.jar"
 USER_AGENT="Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/31.0"
-DOWNLOAD_URL="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-$VERSION/checkstyle-$VERSION-all.jar"
+DOWNLOAD_URL="https://github.com/checkstyle/checkstyle/releases/download/$PREFIX/$FILENAME"
 
 if [ -e "$DOWNLOAD_LOCATION/$FILENAME" ]; then
     echo "$DOWNLOAD_LOCATION/$FILENAME already exists. Aborting."
