@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DEFAULT_VERSION="6.11.2"
+DEFAULT_VERSION="8.14"
 
 if [ $# -gt 1 ]; then
     echo "Expected no arguments (download default) or one argument (specify version)"
@@ -16,7 +16,7 @@ fi
 DOWNLOAD_LOCATION="$(dirname $(readlink -f "$0"))"
 FILENAME="checkstyle-$VERSION-all.jar"
 USER_AGENT="Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/31.0"
-DOWNLOAD_URL="http://sourceforge.net/projects/checkstyle/files/checkstyle/$VERSION/checkstyle-$VERSION-all.jar/download"
+DOWNLOAD_URL="https://github.com/checkstyle/checkstyle/releases/download/checkstyle-$VERSION/checkstyle-$VERSION-all.jar"
 
 if [ -e "$DOWNLOAD_LOCATION/$FILENAME" ]; then
     echo "$DOWNLOAD_LOCATION/$FILENAME already exists. Aborting."
