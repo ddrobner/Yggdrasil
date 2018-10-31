@@ -4,8 +4,6 @@
         <pathelement location="${basedir}/antlib/ant-contrib/ant-contrib-1.0b3.jar"/>
     </classpath>
   </taskdef>
-  <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-      classpath="${basedir}/checkstyle/checkstyle-8.14-all.jar"/>
 
   <description>
       Apache Ant build file for Yggdrasil
@@ -94,6 +92,8 @@
   </target>
 
   <target name="checkstyle-available">
+      <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+          classpath="${basedir}/checkstyle/checkstyle-8.14-all.jar"/>
       <condition property="checkstyle-jar-available">
           <resourcecount when="greater" count="0">
               <fileset dir="${checkstyle}">
