@@ -34,6 +34,11 @@ concepts behind the Yggdrasil libraries.
 For an example of this, please see
 link:https://github.com/FRC3161/Nidhoggr[Nidhoggr].
 
+== Documentation
+
+`./gradlew javadoc` will produce Javadocs within `build/docs/javadoc`.
+You can open the `index.html` in that directory with your web browser of choice.
+
 === Development
 Do you want to help contribute to Yggdrasil? Awesome! Please visit our
 link:https://github.com/FRC3161/Yggdrasil[GitHub]. From there you can fork Yggdrasil,
@@ -43,7 +48,7 @@ proper credit!
 
 === Building
 Yggdrasil can be built by simply running `./gradlew build` in the root of this
-project. A local dependency on WPILibJ is expected to be available.
+project.
 
 == Design
 The design intended by these libraries are a main robot class, subclassed
