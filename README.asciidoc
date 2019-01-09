@@ -1,6 +1,6 @@
 = Yggdrasil
 Team 3161
-v0.10.0, 27 October 2015
+v0.11.0, 8 January 2019
 :sectanchors:
 
 == What is this?
@@ -10,17 +10,11 @@ based upon the software developed by 3161 for the 2014 season. For more informat
 about the team, or the robot for which this code was originally written, please
 visit link:http://team3161.ca[3161's Homepage].
 
-Pre-built JARs, ready to be included directly into your own FRC Java projects, are
-available
-link:http://andrewazor.es/frc3161/yggdrasil[here]. You can also download a
-'-all' ZIP, which contains the JARs for Yggdrasil's classes and its Javadoc
-documentation - this is probably the easiest to deal with.
-
 Development for Yggdrasil happens on link:https://github.com/FRC3161/Yggdrasil[our GitHub].
 
 Versions 0.8 and up are compatible with the 2015 FRC Control Systems Update
 (or subsequent yearly updates - strict 2015 compatibility is not guaranteed) and
-Java 8. If for some reason you need to remain compatible with the previous Java
+Java 8+. If for some reason you need to remain compatible with the previous Java
 1.4 Micro Edition environment and the cRIO, you will need to use an older 0.2.x
 version of Yggdrasil.
 
@@ -37,23 +31,8 @@ concepts behind the Yggdrasil libraries.
 
 == QuickStart
 
-=== Download
-See
-link:http://andrewazor.es/frc3161/yggdrasil/latest[here] for the latest release
-downloads. Pick a ZIP and download it! The ZIPs contain the compiled class JARs
-as well as the corresponding Javadoc JAR, so this is probably the easiest way
-to make sure that your documentation matches the library you've downloaded.
-Once you've downloaded an '-all' ZIP, unzip it and take note of its contents.
-Copy all of the contents into your $USER/wpilib/user/userLibs directory, and
-uncomment the line in your robot code project's build.properties file pointing
-to this library directory.
-
 For an example of this, please see
 link:https://github.com/FRC3161/Nidhoggr[Nidhoggr].
-
-=== Documentation
-Javadoc documentation for the latest release is available online
-link:http://andrewazor.es/frc3161/yggdrasil/latest/javadoc[here].
 
 === Development
 Do you want to help contribute to Yggdrasil? Awesome! Please visit our
@@ -61,6 +40,10 @@ link:https://github.com/FRC3161/Yggdrasil[GitHub]. From there you can fork Yggdr
 make changes to your copy, and submit pull requests. Please give us your name and
 team number (if applicable) when you submit your pull request so we can give you
 proper credit!
+
+=== Building
+Yggdrasil can be built by simply running `./gradlew build` in the root of this
+project. A local dependency on WPILibJ is expected to be available.
 
 == Design
 The design intended by these libraries are a main robot class, subclassed
@@ -92,13 +75,6 @@ routine with hotgoal detection. Parts of this forked repository are included
 in this repository, as cheesyvision.py in the root and the src/com/team254
 source directory. These have been modified from Team 254's originally published
 versions.
-
-== Class Overview
-Javadocs for all of these classes are available
-link:http://andrewazor.es/frc3161/yggdrasil/release/latest/javadoc[here
-(latest release - click here if viewing this page on GitHub or from 3161's homepage)] or
-link:./javadoc/index.html[here (the current build you're in -
-click here if viewing this page through CruiseControl)].
 
 === Main package (ca.team3161.lib.robot)
 The main, starting-point package.
@@ -428,4 +404,3 @@ A position estimator for robots using a mecanum drive configuration.
 
 ==== SkidSteerPositionEstimator
 A position estimator for robots using a skid steer drive configuration.
-
