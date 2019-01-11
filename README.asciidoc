@@ -35,6 +35,8 @@ concepts behind the Yggdrasil libraries.
 
 For an example of this, please see
 link:https://github.com/FRC3161/Nidhoggr[Nidhoggr].
+Javadocs for this project are available on
+link:https://frc3161.github.io/Yggdrasil/[GitHub Pages].
 
 == Documentation
 
