@@ -31,6 +31,14 @@ such class has at least skeleton documentation explaining its purpose, but for
 ease of reference and a high-level overview, this document will explain the
 concepts behind the Yggdrasil libraries.
 
+Please note that the basis of Yggdrasil was written in the cRIO days of FRC,
+and many additions were added the first year that the RoboRIO was introduced.
+At that time, (the author(s) felt that) WPILibJ was lacking functionality in
+some ways or defined its various interfaces and classes in a way that made
+extensibility difficult. More recent versions of WPILib have corrected many
+of the perceived flaws from earlier years, so parts of Yggdrasil have become
+redundant. These will eventually be marked as deprecated.
+
 == QuickStart
 
 For an example of this, please see
