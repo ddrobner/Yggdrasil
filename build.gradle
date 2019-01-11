@@ -1,6 +1,7 @@
 plugins {
     id 'java-library'
     id 'checkstyle'
+    id 'org.ajoberstar.git-publish' version '2.0.0'
 }
 
 checkstyle {
@@ -20,4 +21,16 @@ dependencies {
     api 'edu.wpi.first.wpilibj:wpilibj-java:2019+'
     api 'edu.wpi.first.hal:hal-java:2019+'
     api 'edu.wpi.first.ntcore:ntcore-java:2019+'
+}
+
+gitPublish {
+    repoUri = 'git@github.com:FRC3161/Yggdrasil.git'
+
+    branch = 'gh-pages'
+
+    contents {
+        from (javadoc) {
+            into 'api'
+        }
+    }
 }
