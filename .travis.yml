@@ -3,6 +3,13 @@ language: java
 script: ./gradlew check javadoc
 
 deploy:
+    provider: releases
+    api_key:
+      secure: G+4Fojne7TQbu8/lDn+8TpN/C62TVE0prdM1N8Ht12NRn3PPtnpNXtqqSRm2Ul7XeICLIpX5SUvoWe9DbL/cAVijic8qGvpoMdBG7rC87XMxeTQ78SspkHAovwZxQd9iwKK9IpR13+2vEog/07peVvGR026w2TuuFLCXMtfoTGTYJ3sU4OR6nAhMq2QjXnihb5ne15xvltaYi8uMTnQSIL6Y+wqJ6P0c7NsdtW/0rXwsyP7PvjmtUIVouxp64nLOwYek4tcqrNZDToDgpuu/webgtuRw4PFtKeWCX6qjNeacXjjsCUJec5bzKk206kyHTsi9tVG3uCxr98XJmeB6nlan1zs/9JCth1cwiKohaR5S6joEAZiOTbd0DsXhXBtbX8925kev8vLDG436U7MWbtxL2hsl3EH49r2isbaTBPGVafCGIMvv0BbnqR+lPHrZ7go9mgBIh6fMTx3tkYjoSRy3Fa/MufZRNrKK+6NrEB9vu4apvdssrtApeMYitNdY7usT6gUk2Uih+DCBhr7nNZnZIKjkga5x4uGb7qh4WTPW8qWNeq0jsGMwef4ZPoYkVwxODZZuveLQ2DFytSr4tooHgJn0YPqPeG87tV8/QF3JI2cEZ3gPCn15qZbiY6J1qGnjiZUNd2sgbgH5h4YFmnpJKCtw/cvwK4K/snAFL1M=
+    file: build/libs/yggdrasil.jar
+    on:
+      repo: FRC3161/Yggdrasil
+
     provider: pages
     skip-cleanup: true
     github-token: $GITHUB_TOKEN
