@@ -84,7 +84,10 @@ For an example of a complete FRC robot software project using this library,
 please see
 link:https://github.com/FRC3161/Iapetus2014[Iapetus],
 link:https://github.com/FRC3161/Fenrir[Fenrir],
-link:https://github.com/FRC3161/Toblerone2016[Toblerone].
+link:https://github.com/FRC3161/Toblerone2016[Toblerone],
+link:https://github.com/FRC3161/Nidhoggr2017[Nidhoggr],
+link:https://github.com/FRC3161/Slibinas2018[Slibinas],
+link:https://github.com/FRC3161/Heimdall2019[Heimdall].
 
 == Other Libraries
 Late in the 2014 season, 3161 forked Team 254's
