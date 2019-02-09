@@ -7,7 +7,7 @@ page at http://checkstyle.sourceforge.net/config.html -->
 <module name="Checker">
 
   <module name="Header">
-    <property name="headerFile" value="${basedir}/LICENSE.j"/>
+    <property name="headerFile" value="${baseDir}/LICENSE.j"/>
     <property name="ignoreLines" value="2"/>
     <property name="fileExtensions" value="java"/>
   </module>

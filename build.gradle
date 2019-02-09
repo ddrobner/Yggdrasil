@@ -6,6 +6,9 @@ plugins {
 checkstyle {
     toolVersion '8.14'
     configFile = rootProject.file('checkstyle.xml')
+    configProperties = [
+        'baseDir': rootDir
+    ]
     ignoreFailures = true
 }
 
