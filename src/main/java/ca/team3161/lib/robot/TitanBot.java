@@ -27,7 +27,7 @@
 package ca.team3161.lib.robot;
 
 import ca.team3161.lib.robot.motion.drivetrains.AbstractDrivetrainBase;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -38,12 +38,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * A subclass of IterativeRobot. Autonomous is run in a new Thread, leaving the main robot thread
+ * A subclass of TimedRobot. Autonomous is run in a new Thread, leaving the main robot thread
  * responsible (generally) solely for handling FMS events, Watchdog, etc. This allows
  * autonomous scripts to use convenient semantics such as Thread sleeping rather than periodically
  * checking Timer objects.
  */
-public abstract class TitanBot extends IterativeRobot {
+public abstract class TitanBot extends TimedRobot {
 
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
