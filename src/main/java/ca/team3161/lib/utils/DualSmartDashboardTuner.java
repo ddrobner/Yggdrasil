@@ -1,7 +1,7 @@
 package ca.team3161.lib.utils;
 
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import ca.team3161.lib.robot.LifecycleEvent;
 import ca.team3161.lib.robot.LifecycleListener;
@@ -9,22 +9,28 @@ import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SmartDashboardTuner extends RepeatingPooledSubsystem implements LifecycleListener {
+public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements LifecycleListener {
 
     protected final Preferences prefs;
-    protected final String label;
-    protected final double defaultValue;
-    protected final Consumer<Double> consumer;
+    protected final String labelA;
+    protected final String labelB;
+    protected final double defaultValueA;
+    protected final double defaultValueB;
+    protected final BiConsumer<Double, Double> consumer;
 
-    public SmartDashboardTuner(String label, double defaultValue, Consumer<Double> consumer) {
+    public DualSmartDashboardTuner(String labelA, String labelB, double defaultValueA, double defaultValueB,
+            BiConsumer<Double, Double> consumer) {
         super(500, TimeUnit.MILLISECONDS);
         this.prefs = Preferences.getInstance();
-        this.label = label;
+        this.labelA = labelA;
+        this.labelB = labelB;
         this.consumer = consumer;
 
-        this.defaultValue = prefs.getDouble(label, defaultValue);
+        this.defaultValueA = prefs.getDouble(labelA, defaultValueA);
+        this.defaultValueB = prefs.getDouble(labelB, defaultValueB);
 
-        SmartDashboard.putNumber(label, this.defaultValue);
+        SmartDashboard.putNumber(labelA, this.defaultValueA);
+        SmartDashboard.putNumber(labelB, this.defaultValueB);
     }
 
     @Override
@@ -32,7 +38,9 @@ public class SmartDashboardTuner extends RepeatingPooledSubsystem implements Lif
 
     @Override
     public void task() {
-        consumer.accept(SmartDashboard.getNumber(label, this.defaultValue));
+        double valA = SmartDashboard.getNumber(labelA, defaultValueA);
+        double valB = SmartDashboard.getNumber(labelB, defaultValueB);
+        consumer.accept(valA, valB);
     }
 
     @Override

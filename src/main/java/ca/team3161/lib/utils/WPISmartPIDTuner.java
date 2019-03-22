@@ -1,6 +1,12 @@
 package ca.team3161.lib.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import ca.team3161.lib.robot.LifecycleEvent;
 import ca.team3161.lib.robot.LifecycleListener;
@@ -9,32 +15,17 @@ import edu.wpi.first.wpilibj.PIDController;
 
 public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements LifecycleListener {
 
-    protected final String prefix;
     protected final PIDController pid;
-    protected final SmartDashboardTuner pTuner;
-    protected final SmartDashboardTuner iTuner;
-    protected final SmartDashboardTuner dTuner;
+    protected final List<LifecycleListener> tuners;
 
-    public WPISmartPIDTuner(String prefix, PIDController pid, double defaultKP, double defaultKI, double defaultKD) {
+    protected WPISmartPIDTuner(PIDController pid, List<LifecycleListener> tuners) {
         super(500, TimeUnit.MILLISECONDS);
-        this.prefix = prefix;
         this.pid = pid;
-
-        this.pTuner = new SmartDashboardTuner(getKPLabel(), defaultKP, pid::setP);
-        this.iTuner = new SmartDashboardTuner(getKILabel(), defaultKI, pid::setI);
-        this.dTuner = new SmartDashboardTuner(getKDLabel(), defaultKD, pid::setD);
+        this.tuners = tuners;
     }
 
-    protected String getKPLabel() {
-        return prefix + "-kP";
-    }
-
-    protected String getKILabel() {
-        return prefix + "-kI";
-    }
-
-    protected String getKDLabel() {
-        return prefix + "-kD";
+    protected void addTuner(SmartDashboardTuner tuner) {
+        this.tuners.add(tuner);
     }
 
     @Override
@@ -47,9 +38,7 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
 
     @Override
     public void lifecycleStatusChanged(LifecycleEvent previous, LifecycleEvent current) {
-        this.pTuner.lifecycleStatusChanged(previous, current);
-        this.iTuner.lifecycleStatusChanged(previous, current);
-        this.dTuner.lifecycleStatusChanged(previous, current);
+        tuners.forEach(t -> t.lifecycleStatusChanged(previous, current));
         switch (current) {
             case NONE:
             case ON_INIT:
@@ -63,6 +52,74 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
                 break;
             default:
                 throw new IllegalStateException(current.toString());
+        }
+    }
+
+    public static class Builder {
+        private final List<Function<String, Function<PIDController, LifecycleListener>>> generators = new ArrayList<>();
+
+        private void addTuner(String label, double defaultValue, Function<PIDController, Consumer<Double>> consumer) {
+            generators.add(
+                prefix -> controller -> new SmartDashboardTuner(prefix + "-" + label, defaultValue, consumer.apply(controller))
+            );
+        }
+
+        private void addDualTuner(String labelA, double defaultValueA, String labelB, double defaultValueB, Function<PIDController, BiConsumer<Double, Double>> consumer) {
+            generators.add(
+                    prefix ->
+                        controller -> new DualSmartDashboardTuner(prefix + "-" + labelA, prefix + "-" + labelB,
+                            defaultValueA, defaultValueB, consumer.apply(controller))
+            );
+        }
+
+        public Builder kP(double kP) {
+            addTuner("kP", kP, controller -> d -> controller.setP(d));
+            return this;
+        }
+
+        public Builder kI(double kI) {
+            addTuner("kI", kI, controller -> d -> controller.setI(d));
+            return this;
+        }
+
+        public Builder kD(double kD) {
+            addTuner("kI", kD, controller -> d -> controller.setD(d));
+            return this;
+        }
+
+        public Builder kF(double kF) {
+            addTuner("kF", kF, controller -> d -> controller.setF(d));
+            return this;
+        }
+
+        public Builder absoluteTolerance(double tol) {
+            addTuner("absTolerance", tol, controller -> d -> controller.setAbsoluteTolerance(d));
+            return this;
+        }
+
+        public Builder percentTolerance(double tol) {
+            addTuner("pctTolerance", tol, controller -> d -> controller.setPercentTolerance(d));
+            return this;
+        }
+
+        public Builder outputRange(double min, double max) {
+            addDualTuner("minOutput", min, "maxOutput", max, controller -> (d1, d2) -> controller.setOutputRange(d1, d2));
+            return this;
+        }
+
+        public Builder inputRange(double min, double max) {
+            addDualTuner("minInput", min, "maxInput", max, controller -> (d1, d2) -> controller.setInputRange(d1, d2));
+            return this;
+        }
+
+        public WPISmartPIDTuner build(PIDController controller, String prefix) {
+            List<LifecycleListener> tuners
+                = generators
+                    .stream()
+                    .map(g -> g.apply(prefix))
+                    .map(f -> f.apply(controller))
+                    .collect(Collectors.toList());
+            return new WPISmartPIDTuner(controller, tuners);
         }
     }
 
