@@ -83,7 +83,7 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
         }
 
         public Builder kD(double kD) {
-            addTuner("kI", kD, controller -> d -> controller.setD(d));
+            addTuner("kD", kD, controller -> d -> controller.setD(d));
             return this;
         }
 
