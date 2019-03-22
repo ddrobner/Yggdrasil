@@ -34,6 +34,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import ca.team3161.lib.utils.Utils;
+
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
  */
@@ -215,7 +217,7 @@ public final class LogitechDualAction extends AbstractController {
     public void map(final Mapping mapping, final Consumer<Double> consumer) {
         Objects.requireNonNull(consumer);
         validate(mapping, "Gamepad on port " + getPort() + " map() called with invalid mapping " + mapping);
-        controlsMapping.put(mapping, consumer);
+        controlsMapping.put(mapping, Utils.safeExec(mapping.toString(), consumer));
     }
 
     /**
@@ -225,7 +227,7 @@ public final class LogitechDualAction extends AbstractController {
     public void bind(final Binding binding, final Runnable action) {
         Objects.requireNonNull(action);
         validate(binding, "Gamepad on port " + getPort() + " bind() called with invalid binding" + binding);
-        buttonBindings.put(binding, action);
+        buttonBindings.put(binding, () -> Utils.safeExec(binding.toString(), action));
     }
 
     /**

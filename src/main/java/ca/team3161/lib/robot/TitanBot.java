@@ -27,6 +27,7 @@
 package ca.team3161.lib.robot;
 
 import ca.team3161.lib.robot.motion.drivetrains.AbstractDrivetrainBase;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +49,7 @@ public abstract class TitanBot extends TimedRobot {
     private volatile int accumulatedTime = 0;
     private final Lock modeLock = new ReentrantLock();
     private Future<?> autoJob;
-    private LifecycleShifter lifecycleShifter = new LifecycleShifter();
+    private final LifecycleShifter lifecycleShifter = new LifecycleShifter();
     private final Collection<LifecycleListener> lifecycleAwareComponents = new ArrayList<>();
 
     /**
@@ -60,7 +61,7 @@ public abstract class TitanBot extends TimedRobot {
         try {
             robotSetup();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in robotSetup", e);
         }
         AbstractDrivetrainBase drivetrainBase = getDrivetrainBase();
         if (drivetrainBase != null) {
@@ -88,7 +89,14 @@ public abstract class TitanBot extends TimedRobot {
     @Override
     public final void autonomousInit() {
         super.autonomousInit();
-        autonomousSetup();
+        try {
+            modeLock.lockInterruptibly();
+            autonomousSetup();
+        } catch (final Exception e) {
+            handleException("Exceotion in autonomousSetup", e);
+        } finally {
+            modeLock.unlock();
+        }
         transitionLifecycle(LifecycleEvent.ON_AUTO);
         accumulatedTime = 0;
         autoJob = Executors.newSingleThreadExecutor().submit(() -> {
@@ -96,7 +104,7 @@ public abstract class TitanBot extends TimedRobot {
                 modeLock.lockInterruptibly();
                 autonomousRoutine();
             } catch (final Exception e) {
-                handleException(e);
+                handleException("Exceotion in autonomousRoutine", e);
             } finally {
                 modeLock.unlock();
             }
@@ -151,7 +159,7 @@ public abstract class TitanBot extends TimedRobot {
         try {
             teleopSetup();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in teleopSetup", e);
         }
         transitionLifecycle(LifecycleEvent.ON_TELEOP);
     }
@@ -178,7 +186,7 @@ public abstract class TitanBot extends TimedRobot {
             modeLock.lock();
             teleopRoutine();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in teleopRoutine", e);
         } finally {
             modeLock.unlock();
         }
@@ -202,7 +210,7 @@ public abstract class TitanBot extends TimedRobot {
         try {
             disabledSetup();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in disabledSetup", e);
         }
         transitionLifecycle(LifecycleEvent.ON_DISABLED);
     }
@@ -222,7 +230,7 @@ public abstract class TitanBot extends TimedRobot {
             modeLock.lock();
             disabledRoutine();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in disabledRoutine", e);
         } finally {
             modeLock.unlock();
         }
@@ -236,7 +244,7 @@ public abstract class TitanBot extends TimedRobot {
         try {
             testSetup();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in testSetup", e);
         }
         transitionLifecycle(LifecycleEvent.ON_TEST);
     }
@@ -253,7 +261,7 @@ public abstract class TitanBot extends TimedRobot {
             modeLock.lock();
             testRoutine();
         } catch (Exception e) {
-            handleException(e);
+            handleException("Exception in testRoutine", e);
         } finally {
             modeLock.unlock();
         }
@@ -284,8 +292,9 @@ public abstract class TitanBot extends TimedRobot {
         lifecycleAwareComponents.forEach(c -> c.lifecycleStatusChanged(lifecycleShifter.getPrevious(), lifecycleShifter.getCurrent()));
     }
 
-    private void handleException(Exception e) {
-        e.printStackTrace(); // TODO log to file as well as console. Display SmartDashboard warning?
+    private void handleException(String label, Exception e) {
+        DriverStation.reportError(label, e.getStackTrace());
+        e.printStackTrace(); // TODO log to file?
     }
 
     private static class LifecycleShifter {

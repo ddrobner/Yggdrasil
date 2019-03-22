@@ -26,8 +26,6 @@
 
 package ca.team3161.lib.utils.controls;
 
-import static java.time.chrono.JapaneseEra.values;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
@@ -35,6 +33,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import ca.team3161.lib.utils.Utils;
 
 /**
  * A class representing a LogitechAttack3 joystick. Allows for button bindings and axis scaling/curve modes.
@@ -216,7 +216,7 @@ public final class LogitechAttack3 extends AbstractController {
     public void map(final Mapping mapping, final Consumer<Double> consumer) {
         Objects.requireNonNull(consumer);
         validate(mapping, "Gamepad on port " + this.port + " getValue() called with invalid mapping " + mapping);
-        controlsMapping.put(mapping, consumer);
+        controlsMapping.put(mapping, Utils.safeExec(mapping.toString(), consumer));
     }
 
     /**
@@ -226,7 +226,7 @@ public final class LogitechAttack3 extends AbstractController {
     public void bind(final Binding binding, final Runnable action) {
         Objects.requireNonNull(action);
         validate(binding, "Joystick on port " + this.port + " bind() called with invalid binding " + binding);
-        buttonBindings.put(binding, action);
+        buttonBindings.put(binding, () -> Utils.safeExec(binding.toString(), action));
     }
 
     /**

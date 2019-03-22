@@ -26,6 +26,11 @@
 
 package ca.team3161.lib.utils;
 
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 /**
  * Pretty printing arrays, rounding doubles, ensuring PWM values fall within
  * the range [-1.0, 1.0], etc.
@@ -141,6 +146,40 @@ public class Utils {
 
     public static boolean between(long a, long val, long b) {
         return a <= val && val <= b;
+    }
+
+    public static <T> T safeInit(String label, Supplier<T> supplier) {
+        try {
+            T t = supplier.get();
+            if (t == null) {
+                throw new NullPointerException(String.format("\"%s\" initialized to null", label));
+            }
+            return t;
+        } catch (Exception e) {
+            DriverStation.reportError(String.format("Failed to initialize \"%s\"", label), e.getStackTrace());
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public static void safeExec(String label, Runnable runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            DriverStation.reportError(String.format("Running \"%s\" threw exception", label), e.getStackTrace());
+            e.printStackTrace();
+        }
+    }
+
+    public static <T> Consumer<T> safeExec(String label, Consumer<T> consumer) {
+        return (T t) -> {
+            try {
+                consumer.accept(t);
+            } catch (Exception e) {
+                DriverStation.reportError(String.format("Running \"%s\" threw exception", label), e.getStackTrace());
+                e.printStackTrace();
+            }
+        };
     }
 
 }
