@@ -112,7 +112,14 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
             return this;
         }
 
-        public WPISmartPIDTuner build(PIDController controller, String prefix) {
+        public WPISmartPIDTuner build(PIDController controller) {
+            final String name = controller.getName();
+            final String prefix;
+            if (name != null && !name.isEmpty()) {
+                prefix = name;
+            } else {
+                prefix = "WPISmartPIDTuner";
+            }
             List<LifecycleListener> tuners
                 = generators
                     .stream()
