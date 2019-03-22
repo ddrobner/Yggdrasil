@@ -27,6 +27,7 @@
 package ca.team3161.lib.robot.subsystem;
 
 import ca.team3161.lib.utils.ComposedComponent;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -139,6 +140,7 @@ public abstract class AbstractSubsystem implements Subsystem {
                 acquireResources();
                 task();
             } catch (final Exception e) {
+                DriverStation.reportError(e.getMessage(), e.getStackTrace());
                 e.printStackTrace();
             } finally {
                 releaseResources();
