@@ -17,7 +17,11 @@ public class SmartDashboardTuner extends RepeatingPooledSubsystem implements Lif
     protected final Consumer<Double> consumer;
 
     public SmartDashboardTuner(String label, double defaultValue, Consumer<Double> consumer) {
-        super(500, TimeUnit.MILLISECONDS);
+        this(500, label, defaultValue, consumer);
+    }
+
+    public SmartDashboardTuner(int period, String label, double defaultValue, Consumer<Double> consumer) {
+        super(period, TimeUnit.MILLISECONDS);
         this.prefs = Preferences.getInstance();
         this.label = label;
         this.consumer = consumer;

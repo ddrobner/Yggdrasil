@@ -18,9 +18,9 @@ public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements
     protected final double defaultValueB;
     protected final BiConsumer<Double, Double> consumer;
 
-    public DualSmartDashboardTuner(String labelA, String labelB, double defaultValueA, double defaultValueB,
+    public DualSmartDashboardTuner(int period, String labelA, String labelB, double defaultValueA, double defaultValueB,
             BiConsumer<Double, Double> consumer) {
-        super(500, TimeUnit.MILLISECONDS);
+        super(period, TimeUnit.MILLISECONDS);
         this.prefs = Preferences.getInstance();
         this.labelA = labelA;
         this.labelB = labelB;
@@ -31,6 +31,11 @@ public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements
 
         SmartDashboard.putNumber(labelA, this.defaultValueA);
         SmartDashboard.putNumber(labelB, this.defaultValueB);
+    }
+
+    public DualSmartDashboardTuner(String labelA, String labelB, double defaultValueA, double defaultValueB,
+            BiConsumer<Double, Double> consumer) {
+        this(500, labelA, labelB, defaultValueA, defaultValueB, consumer);
     }
 
     @Override

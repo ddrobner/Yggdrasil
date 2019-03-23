@@ -17,9 +17,10 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
 
     protected final PIDController pid;
     protected final List<LifecycleListener> tuners;
+    protected boolean isContinuous = false;
 
-    protected WPISmartPIDTuner(PIDController pid, List<LifecycleListener> tuners) {
-        super(500, TimeUnit.MILLISECONDS);
+    protected WPISmartPIDTuner(int period, PIDController pid, List<LifecycleListener> tuners) {
+        super(period, TimeUnit.MILLISECONDS);
         this.pid = pid;
         this.tuners = tuners;
     }
@@ -56,20 +57,29 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
     }
 
     public static class Builder {
-        private final List<Function<String, Function<PIDController, LifecycleListener>>> generators = new ArrayList<>();
+        private final List<Function<Integer, Function<Boolean, Function<String, Function<PIDController, LifecycleListener>>>>> generators = new ArrayList<>();
+
+        private int period = 500;
+        private boolean continuous = false;
 
         private void addTuner(String label, double defaultValue, Function<PIDController, Consumer<Double>> consumer) {
             generators.add(
-                prefix -> controller -> new SmartDashboardTuner(prefix + "-" + label, defaultValue, consumer.apply(controller))
+                period -> continuous -> prefix -> controller -> {
+                    SmartDashboardTuner tuner = new SmartDashboardTuner(period, prefix + "-" + label, defaultValue, consumer.apply(controller));
+                    // tuner.setContinuous(continuous);
+                    return tuner;
+                }
             );
         }
 
         private void addDualTuner(String labelA, double defaultValueA, String labelB, double defaultValueB, Function<PIDController, BiConsumer<Double, Double>> consumer) {
             generators.add(
-                    prefix ->
-                        controller -> new DualSmartDashboardTuner(prefix + "-" + labelA, prefix + "-" + labelB,
-                            defaultValueA, defaultValueB, consumer.apply(controller))
-            );
+                    period -> continuous -> prefix -> controller -> {
+                        DualSmartDashboardTuner tuner = new DualSmartDashboardTuner(period, prefix + "-" + labelA,
+                                prefix + "-" + labelB, defaultValueA, defaultValueB, consumer.apply(controller));
+                        // tuner.setContinuous(continuous);
+                        return tuner;
+                    });
         }
 
         public Builder kP(double kP) {
@@ -112,6 +122,11 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
             return this;
         }
 
+        public Builder updatePeriod(int ms) {
+            this.period = ms;
+            return this;
+        }
+
         public WPISmartPIDTuner build(PIDController controller) {
             final String name = controller.getName();
             final String prefix;
@@ -123,10 +138,12 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
             List<LifecycleListener> tuners
                 = generators
                     .stream()
+                    .map(p -> p.apply(period))
+                    .map(c -> c.apply(continuous))
                     .map(g -> g.apply(prefix))
                     .map(f -> f.apply(controller))
                     .collect(Collectors.toList());
-            return new WPISmartPIDTuner(controller, tuners);
+            return new WPISmartPIDTuner(period, controller, tuners);
         }
     }
 
