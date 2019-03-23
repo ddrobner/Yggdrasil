@@ -109,6 +109,28 @@ public final class LogitechDualAction extends AbstractController {
         }
     }
 
+    public enum DpadDirection {
+        NONE(-1),
+        UP(0),
+        UP_RIGHT(45),
+        RIGHT(90),
+        DOWN_RIGHT(135),
+        DOWN(180),
+        DOWN_LEFT(225),
+        LEFT(270),
+        UP_LEFT(315);
+
+        private final int angle;
+
+        DpadDirection(final int angle) {
+            this.angle = angle;
+        }
+
+        public int getAngle() {
+            return angle;
+        }
+    }
+
     /**
      * Create a new LogitechDualAction gamepad/controller.
      *
@@ -180,6 +202,15 @@ public final class LogitechDualAction extends AbstractController {
         return backingHID.getPOV();
     }
 
+    public DpadDirection getDpadDirection() {
+        for (DpadDirection direction : DpadDirection.values()) {
+            if (direction.getAngle() == getDpad()) {
+                return direction;
+            }
+        }
+        return DpadDirection.NONE;
+    }
+
     /**
      *
      */
@@ -248,4 +279,4 @@ public final class LogitechDualAction extends AbstractController {
         return buttonBindings.containsKey(binding);
     }
 
-} 
+}
