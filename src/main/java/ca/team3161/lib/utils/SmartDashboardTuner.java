@@ -1,6 +1,7 @@
 package ca.team3161.lib.utils;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 import ca.team3161.lib.robot.LifecycleEvent;
@@ -15,6 +16,9 @@ public class SmartDashboardTuner extends RepeatingPooledSubsystem implements Lif
     protected final String label;
     protected final double defaultValue;
     protected final Consumer<Double> consumer;
+    protected final ReentrantLock writeLock = new ReentrantLock();
+    protected volatile double lastValue;
+    protected volatile boolean continuous = false;
 
     public SmartDashboardTuner(String label, double defaultValue, Consumer<Double> consumer) {
         this(500, label, defaultValue, consumer);
@@ -27,8 +31,17 @@ public class SmartDashboardTuner extends RepeatingPooledSubsystem implements Lif
         this.consumer = consumer;
 
         this.defaultValue = prefs.getDouble(label, defaultValue);
+        this.lastValue = defaultValue;
 
         SmartDashboard.putNumber(label, this.defaultValue);
+    }
+
+    public void setContinuous(boolean continuous) {
+        this.continuous = continuous;
+    }
+
+    public boolean isContinuous() {
+        return this.continuous;
     }
 
     @Override
@@ -36,7 +49,18 @@ public class SmartDashboardTuner extends RepeatingPooledSubsystem implements Lif
 
     @Override
     public void task() {
-        consumer.accept(SmartDashboard.getNumber(label, this.defaultValue));
+        double currentValue = SmartDashboard.getNumber(label, this.defaultValue);
+        boolean changed = currentValue != lastValue;
+        if (!changed && !continuous) {
+            return;
+        }
+        try {
+            writeLock.lockInterruptibly();
+            consumer.accept(currentValue);
+        } catch (InterruptedException e) {
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     @Override

@@ -66,7 +66,7 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
             generators.add(
                 period -> continuous -> prefix -> controller -> {
                     SmartDashboardTuner tuner = new SmartDashboardTuner(period, prefix + "-" + label, defaultValue, consumer.apply(controller));
-                    // tuner.setContinuous(continuous);
+                    tuner.setContinuous(continuous);
                     return tuner;
                 }
             );
@@ -77,7 +77,7 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
                     period -> continuous -> prefix -> controller -> {
                         DualSmartDashboardTuner tuner = new DualSmartDashboardTuner(period, prefix + "-" + labelA,
                                 prefix + "-" + labelB, defaultValueA, defaultValueB, consumer.apply(controller));
-                        // tuner.setContinuous(continuous);
+                        tuner.setContinuous(continuous);
                         return tuner;
                     });
         }

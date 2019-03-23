@@ -1,6 +1,7 @@
 package ca.team3161.lib.utils;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiConsumer;
 
 import ca.team3161.lib.robot.LifecycleEvent;
@@ -17,6 +18,10 @@ public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements
     protected final double defaultValueA;
     protected final double defaultValueB;
     protected final BiConsumer<Double, Double> consumer;
+    protected final ReentrantLock writeLock = new ReentrantLock();
+    protected volatile double lastValueA;
+    protected volatile double lastValueB;
+    protected volatile boolean continuous = false;
 
     public DualSmartDashboardTuner(int period, String labelA, String labelB, double defaultValueA, double defaultValueB,
             BiConsumer<Double, Double> consumer) {
@@ -38,6 +43,14 @@ public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements
         this(500, labelA, labelB, defaultValueA, defaultValueB, consumer);
     }
 
+    public void setContinuous(boolean continuous) {
+        this.continuous = continuous;
+    }
+
+    public boolean isContinuous() {
+        return this.continuous;
+    }
+
     @Override
     public void defineResources() { }
 
@@ -46,6 +59,23 @@ public class DualSmartDashboardTuner extends RepeatingPooledSubsystem implements
         double valA = SmartDashboard.getNumber(labelA, defaultValueA);
         double valB = SmartDashboard.getNumber(labelB, defaultValueB);
         consumer.accept(valA, valB);
+
+        double currentValueA = SmartDashboard.getNumber(labelA, this.defaultValueA);
+        double currentValueB = SmartDashboard.getNumber(labelB, this.defaultValueB);
+        boolean changedA = currentValueA != lastValueA;
+        boolean changedB = currentValueB != lastValueB;
+        boolean changed = changedA || changedB;
+
+        if (!changed && !continuous) {
+            return;
+        }
+        try {
+            writeLock.lockInterruptibly();
+            consumer.accept(currentValueA, currentValueB);
+        } catch (InterruptedException e) {
+        } finally {
+            writeLock.unlock();
+        }
     }
 
     @Override
