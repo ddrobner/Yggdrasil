@@ -127,6 +127,11 @@ public class WPISmartPIDTuner extends RepeatingPooledSubsystem implements Lifecy
             return this;
         }
 
+        public Builder continuous(boolean continuous) {
+            this.continuous = continuous;
+            return this;
+        }
+
         public WPISmartPIDTuner build(PIDController controller) {
             final String name = controller.getName();
             final String prefix;
