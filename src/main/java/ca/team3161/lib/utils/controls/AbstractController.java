@@ -30,7 +30,7 @@ import static ca.team3161.lib.utils.Utils.requireNonNegative;
 
 import ca.team3161.lib.robot.LifecycleEvent;
 import ca.team3161.lib.robot.LifecycleListener;
-import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
+import ca.team3161.lib.robot.subsystem.RepeatingIndependentSubsystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import java.util.BitSet;
@@ -45,7 +45,7 @@ import java.util.function.Function;
 /**
  * A Gamepad which allows button bindings and control modes.
  */
-public abstract class AbstractController extends RepeatingPooledSubsystem implements Gamepad, LifecycleListener {
+public abstract class AbstractController extends RepeatingIndependentSubsystem implements Gamepad, LifecycleListener {
 
     /* The actual FIRST-provided input device that we are implementing a
     * convenience wrapper around.
