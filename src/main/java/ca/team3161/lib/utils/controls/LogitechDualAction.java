@@ -39,7 +39,7 @@ import ca.team3161.lib.utils.Utils;
 /**
  * A Gamepad implementation describing the Logitech DualAction gamepad.
  */
-public final class LogitechDualAction extends AbstractController {
+public class LogitechDualAction extends AbstractController {
 
     /**
      * {@inheritDoc}.

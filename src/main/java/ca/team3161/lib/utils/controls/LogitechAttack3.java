@@ -39,7 +39,7 @@ import ca.team3161.lib.utils.Utils;
 /**
  * A class representing a LogitechAttack3 joystick. Allows for button bindings and axis scaling/curve modes.
  */
-public final class LogitechAttack3 extends AbstractController {
+public class LogitechAttack3 extends AbstractController {
 
     /**
      * {@inheritDoc}.
