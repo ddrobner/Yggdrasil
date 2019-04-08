@@ -93,7 +93,7 @@ public abstract class TitanBot extends TimedRobot {
             modeLock.lockInterruptibly();
             autonomousSetup();
         } catch (final Exception e) {
-            handleException("Exceotion in autonomousSetup", e);
+            handleException("Exception in autonomousSetup", e);
         } finally {
             modeLock.unlock();
         }
@@ -104,7 +104,7 @@ public abstract class TitanBot extends TimedRobot {
                 modeLock.lockInterruptibly();
                 autonomousRoutine();
             } catch (final Exception e) {
-                handleException("Exceotion in autonomousRoutine", e);
+                handleException("Exception in autonomousRoutine", e);
             } finally {
                 modeLock.unlock();
             }
