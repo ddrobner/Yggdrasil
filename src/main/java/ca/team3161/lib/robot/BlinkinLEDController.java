@@ -141,7 +141,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem {
     * Sets the Blinkin LED Controller to the given pattern
     * @param  pattern   The pattern you want to set the controller to 
     */
-    public void setLEDState(Pattern pattern) {
+    public void setLEDPattern(Pattern pattern) {
         this.state = pattern;
     }
 
