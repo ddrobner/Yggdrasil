@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.Spark;
 
 public class BlinkinLEDController extends RepeatingPooledSubsystem{
 
-    Spark blinkinController;
-    LEDControllerState state;
+    private final Spark blinkinController;
+    private volatile LEDControllerState state;
 
     public enum LEDControllerState{
         // From http://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf
