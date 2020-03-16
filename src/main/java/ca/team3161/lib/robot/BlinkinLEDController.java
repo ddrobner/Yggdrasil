@@ -117,7 +117,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem {
         SOLID_DARK_GRAY(0.97),
         SOLID_BLACK(0.99);
 
-        double PWMValue;
+        private final double PWMValue;
 
         Pattern(double PWMValue) {
             this.PWMValue = PWMValue;
@@ -132,7 +132,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem {
      * @param pwmPort   The PWM port of the Blinkin
      */
     public BlinkinLEDController(int pwmPort) {
-        super(100, TimeUnit.SECONDS); // Slower speed, LED values probably won't need to be updated that often
+        super(50, TimeUnit.MILLISECONDS);
         this.blinkinController = new Spark(pwmPort);
 
     }
