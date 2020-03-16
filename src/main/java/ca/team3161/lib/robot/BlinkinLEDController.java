@@ -1,9 +1,13 @@
 package ca.team3161.lib.robot;
 
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeUnit; 
+
 import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.Spark;
 
+/**
+ * A class wrapping around a PWM Spark to control a REV Blinkin
+ */
 public class BlinkinLEDController extends RepeatingPooledSubsystem{
 
     private final Spark blinkinController;
@@ -124,14 +128,21 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem{
         }
     }
 
+    /**
+     * @param pwmPort   The PWM port of the Blinkin
+     */
     public BlinkinLEDController(int pwmPort) {
         super(100, TimeUnit.SECONDS); // Slower speed, LED values probably won't need to be updated that often
         this.blinkinController = new Spark(pwmPort);
 
     }
 
-    public void setLEDState(Pattern state) {
-        this.state = state;
+    /**
+    * Sets the Blinkin LED Controller to the given pattern
+    * @param  pattern   The pattern you want to set the controller to 
+    */
+    public void setLEDState(Pattern pattern) {
+        this.state = pattern;
     }
 
     @Override
