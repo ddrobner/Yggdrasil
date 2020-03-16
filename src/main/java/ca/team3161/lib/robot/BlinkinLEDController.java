@@ -9,7 +9,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem{
     private final Spark blinkinController;
     private volatile LEDControllerState state;
 
-    public enum LEDControllerState{
+    public enum LEDControllerState {
         // From http://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf
         RED(0.61);
 
@@ -40,7 +40,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem{
     }
 
     @Override
-    public void task(){
+    public void task() {
         this.blinkinController.set(this.state.getPWMValue());
     }
 
