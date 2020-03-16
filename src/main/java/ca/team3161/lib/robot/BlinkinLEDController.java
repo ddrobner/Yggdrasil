@@ -6,7 +6,7 @@ import ca.team3161.lib.robot.subsystem.RepeatingPooledSubsystem;
 import edu.wpi.first.wpilibj.Spark;
 
 /**
- * A class wrapping around a PWM Spark to control a REV Blinkin
+ * A class that controls a REV Robotics Blinkin 
  */
 public class BlinkinLEDController extends RepeatingPooledSubsystem {
 
