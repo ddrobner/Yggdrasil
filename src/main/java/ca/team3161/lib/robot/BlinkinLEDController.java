@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Spark;
 /**
  * A class wrapping around a PWM Spark to control a REV Blinkin
  */
-public class BlinkinLEDController extends RepeatingPooledSubsystem{
+public class BlinkinLEDController extends RepeatingPooledSubsystem {
 
     private final Spark blinkinController;
     private volatile Pattern state;
