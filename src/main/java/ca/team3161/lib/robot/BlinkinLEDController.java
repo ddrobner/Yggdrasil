@@ -7,15 +7,15 @@ import edu.wpi.first.wpilibj.Spark;
 public class BlinkinLEDController extends RepeatingPooledSubsystem{
 
     private final Spark blinkinController;
-    private volatile LEDControllerState state;
+    private volatile Pattern state;
 
-    public enum LEDControllerState {
+    public enum Pattern {
         // From http://www.revrobotics.com/content/docs/REV-11-1105-UM.pdf
         RED(0.61);
 
         double PWMValue;
 
-        LEDControllerState(double PWMValue) {
+        Pattern(double PWMValue) {
             this.PWMValue = PWMValue;
         }
 
@@ -30,7 +30,7 @@ public class BlinkinLEDController extends RepeatingPooledSubsystem{
 
     }
 
-    public void setLEDState(LEDControllerState state) {
+    public void setLEDState(Pattern state) {
         this.state = state;
     }
 
